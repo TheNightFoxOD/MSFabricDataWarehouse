@@ -24,14 +24,14 @@
   },
   "connections": [
     {
-      "path": "od-master.crm4.dynamics.com",
-      "kind": "CommonDataService",
-      "connectionId": "{\"ClusterId\":\"bca9cb2b-be6f-49fa-9a08-546b769d087c\",\"DatasourceId\":\"482038ae-8c50-43fe-a930-fea9a68282e6\"}"
-    },
-    {
       "path": "Warehouse",
       "kind": "Warehouse",
       "connectionId": "{\"ClusterId\":\"bca9cb2b-be6f-49fa-9a08-546b769d087c\",\"DatasourceId\":\"5dacacb5-cd05-4dc5-84fe-88b29f9514e8\"}"
+    },
+    {
+      "path": "od-master.crm4.dynamics.com",
+      "kind": "CommonDataService",
+      "connectionId": "{\"ClusterId\":\"bca9cb2b-be6f-49fa-9a08-546b769d087c\",\"DatasourceId\":\"47553726-c8ed-444b-a11b-9915574eac39\"}"
     }
   ]
 }

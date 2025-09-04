@@ -19,14 +19,14 @@
   },
   "connections": [
     {
-      "path": "od-master.crm4.dynamics.com",
-      "kind": "CommonDataService",
-      "connectionId": "{\"ClusterId\":\"bca9cb2b-be6f-49fa-9a08-546b769d087c\",\"DatasourceId\":\"482038ae-8c50-43fe-a930-fea9a68282e6\"}"
-    },
-    {
       "path": "Lakehouse",
       "kind": "Lakehouse",
       "connectionId": "{\"ClusterId\":\"bca9cb2b-be6f-49fa-9a08-546b769d087c\",\"DatasourceId\":\"849023ca-ddf6-46e7-9a1f-13b9d6f9962b\"}"
+    },
+    {
+      "path": "od-master.crm4.dynamics.com",
+      "kind": "CommonDataService",
+      "connectionId": "{\"ClusterId\":\"bca9cb2b-be6f-49fa-9a08-546b769d087c\",\"DatasourceId\":\"47553726-c8ed-444b-a11b-9915574eac39\"}"
     }
   ]
 }
