@@ -1,0 +1,37 @@
+{
+  "formatVersion": "202502",
+  "computeEngineSettings": {},
+  "name": "Dataflow Copy Bronze Master to DW",
+  "queryGroups": [],
+  "documentLocale": "en-US",
+  "queriesMetadata": {
+    "account": {
+      "queryId": "76b8b7f6-3d20-4273-9cb2-30a07385ec30",
+      "queryName": "account"
+    },
+    "DefaultDestination": {
+      "queryId": "2da8c6d1-4a67-4b7c-9353-a8fc79f17460",
+      "queryName": "DefaultDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    },
+    "account_DataDestination": {
+      "queryId": "02affe95-8c97-476b-b401-308f83e9904b",
+      "queryName": "account_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    }
+  },
+  "connections": [
+    {
+      "path": "od-master.crm4.dynamics.com",
+      "kind": "CommonDataService",
+      "connectionId": "{\"ClusterId\":\"bca9cb2b-be6f-49fa-9a08-546b769d087c\",\"DatasourceId\":\"482038ae-8c50-43fe-a930-fea9a68282e6\"}"
+    },
+    {
+      "path": "Warehouse",
+      "kind": "Warehouse",
+      "connectionId": "{\"ClusterId\":\"bca9cb2b-be6f-49fa-9a08-546b769d087c\",\"DatasourceId\":\"5dacacb5-cd05-4dc5-84fe-88b29f9514e8\"}"
+    }
+  ]
+}

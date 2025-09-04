@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Warehouse",
+    "displayName": "Master-bronze-dw"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "2386a982-2ef2-a846-4667-ac3d1d1f1c5d"
+  }
+}

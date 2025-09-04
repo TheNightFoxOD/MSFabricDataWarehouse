@@ -1,0 +1,4987 @@
+{
+  "name": "{{Dataset_Name}}",
+  "compatibilityLevel": 1604,
+  "model": {
+    "name": "{{Dataset_Name}}",
+    "culture": "en-US",
+    "collation": "Latin1_General_100_BIN2_UTF8",
+    "dataAccessOptions": {
+      "legacyRedirects": true,
+      "returnErrorValuesAsNull": true
+    },
+    "defaultPowerBIDataSourceVersion": "powerBI_V3",
+    "sourceQueryCulture": "en-US",
+    "tables": [
+      {
+        "name": "account",
+        "sourceLineageTag": "[dbo].[account]",
+        "columns": [
+          {
+            "name": "accountid",
+            "dataType": "string",
+            "sourceColumn": "accountid",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "accountid",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "accountcategorycode",
+            "dataType": "int64",
+            "sourceColumn": "accountcategorycode",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "accountcategorycode",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "customersizecode",
+            "dataType": "int64",
+            "sourceColumn": "customersizecode",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "customersizecode",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "preferredcontactmethodcode",
+            "dataType": "int64",
+            "sourceColumn": "preferredcontactmethodcode",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "preferredcontactmethodcode",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "customertypecode",
+            "dataType": "int64",
+            "sourceColumn": "customertypecode",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "customertypecode",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "accountratingcode",
+            "dataType": "int64",
+            "sourceColumn": "accountratingcode",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "accountratingcode",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "industrycode",
+            "dataType": "int64",
+            "sourceColumn": "industrycode",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "industrycode",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "territorycode",
+            "dataType": "int64",
+            "sourceColumn": "territorycode",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "territorycode",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "accountclassificationcode",
+            "dataType": "int64",
+            "sourceColumn": "accountclassificationcode",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "accountclassificationcode",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "businesstypecode",
+            "dataType": "int64",
+            "sourceColumn": "businesstypecode",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "businesstypecode",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "owningbusinessunit",
+            "dataType": "string",
+            "sourceColumn": "owningbusinessunit",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "owningbusinessunit",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "traversedpath",
+            "dataType": "string",
+            "sourceColumn": "traversedpath",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "traversedpath",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "owninguser",
+            "dataType": "string",
+            "sourceColumn": "owninguser",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "owninguser",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "paymenttermscode",
+            "dataType": "int64",
+            "sourceColumn": "paymenttermscode",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "paymenttermscode",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "shippingmethodcode",
+            "dataType": "int64",
+            "sourceColumn": "shippingmethodcode",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "shippingmethodcode",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "primarycontactid",
+            "dataType": "string",
+            "sourceColumn": "primarycontactid",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "primarycontactid",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "participatesinworkflow",
+            "dataType": "boolean",
+            "sourceColumn": "participatesinworkflow",
+            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+            "sourceProviderType": "bit",
+            "sourceLineageTag": "participatesinworkflow",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "name",
+            "dataType": "string",
+            "sourceColumn": "name",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "name",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "accountnumber",
+            "dataType": "string",
+            "sourceColumn": "accountnumber",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "accountnumber",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "numberofemployees",
+            "dataType": "int64",
+            "sourceColumn": "numberofemployees",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "numberofemployees",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "description",
+            "dataType": "string",
+            "sourceColumn": "description",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "description",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "sic",
+            "dataType": "string",
+            "sourceColumn": "sic",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "sic",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ownershipcode",
+            "dataType": "int64",
+            "sourceColumn": "ownershipcode",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ownershipcode",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "sharesoutstanding",
+            "dataType": "int64",
+            "sourceColumn": "sharesoutstanding",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "sharesoutstanding",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "tickersymbol",
+            "dataType": "string",
+            "sourceColumn": "tickersymbol",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "tickersymbol",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "stockexchange",
+            "dataType": "string",
+            "sourceColumn": "stockexchange",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "stockexchange",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "websiteurl",
+            "dataType": "string",
+            "sourceColumn": "websiteurl",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "websiteurl",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ftpsiteurl",
+            "dataType": "string",
+            "sourceColumn": "ftpsiteurl",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "ftpsiteurl",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "emailaddress1",
+            "dataType": "string",
+            "sourceColumn": "emailaddress1",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "emailaddress1",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "emailaddress2",
+            "dataType": "string",
+            "sourceColumn": "emailaddress2",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "emailaddress2",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "emailaddress3",
+            "dataType": "string",
+            "sourceColumn": "emailaddress3",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "emailaddress3",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "donotphone",
+            "dataType": "boolean",
+            "sourceColumn": "donotphone",
+            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+            "sourceProviderType": "bit",
+            "sourceLineageTag": "donotphone",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "donotfax",
+            "dataType": "boolean",
+            "sourceColumn": "donotfax",
+            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+            "sourceProviderType": "bit",
+            "sourceLineageTag": "donotfax",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "telephone1",
+            "dataType": "string",
+            "sourceColumn": "telephone1",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "telephone1",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "donotemail",
+            "dataType": "boolean",
+            "sourceColumn": "donotemail",
+            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+            "sourceProviderType": "bit",
+            "sourceLineageTag": "donotemail",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "telephone2",
+            "dataType": "string",
+            "sourceColumn": "telephone2",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "telephone2",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "fax",
+            "dataType": "string",
+            "sourceColumn": "fax",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "fax",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "telephone3",
+            "dataType": "string",
+            "sourceColumn": "telephone3",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "telephone3",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "donotpostalmail",
+            "dataType": "boolean",
+            "sourceColumn": "donotpostalmail",
+            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+            "sourceProviderType": "bit",
+            "sourceLineageTag": "donotpostalmail",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "donotbulkemail",
+            "dataType": "boolean",
+            "sourceColumn": "donotbulkemail",
+            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+            "sourceProviderType": "bit",
+            "sourceLineageTag": "donotbulkemail",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "donotbulkpostalmail",
+            "dataType": "boolean",
+            "sourceColumn": "donotbulkpostalmail",
+            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+            "sourceProviderType": "bit",
+            "sourceLineageTag": "donotbulkpostalmail",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "creditonhold",
+            "dataType": "boolean",
+            "sourceColumn": "creditonhold",
+            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+            "sourceProviderType": "bit",
+            "sourceLineageTag": "creditonhold",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "createdon",
+            "dataType": "dateTime",
+            "sourceColumn": "createdon",
+            "formatString": "General Date",
+            "sourceProviderType": "datetime2",
+            "sourceLineageTag": "createdon",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "createdby",
+            "dataType": "string",
+            "sourceColumn": "createdby",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "createdby",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "modifiedon",
+            "dataType": "dateTime",
+            "sourceColumn": "modifiedon",
+            "formatString": "General Date",
+            "sourceProviderType": "datetime2",
+            "sourceLineageTag": "modifiedon",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "modifiedby",
+            "dataType": "string",
+            "sourceColumn": "modifiedby",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "modifiedby",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "parentaccountid",
+            "dataType": "string",
+            "sourceColumn": "parentaccountid",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "parentaccountid",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "statecode",
+            "dataType": "int64",
+            "sourceColumn": "statecode",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "statecode",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "statuscode",
+            "dataType": "int64",
+            "sourceColumn": "statuscode",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "statuscode",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "primarycontactidname",
+            "dataType": "string",
+            "sourceColumn": "primarycontactidname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "primarycontactidname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "parentaccountidname",
+            "dataType": "string",
+            "sourceColumn": "parentaccountidname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "parentaccountidname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address1_addressid",
+            "dataType": "string",
+            "sourceColumn": "address1_addressid",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "address1_addressid",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address1_addresstypecode",
+            "dataType": "int64",
+            "sourceColumn": "address1_addresstypecode",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "address1_addresstypecode",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address1_name",
+            "dataType": "string",
+            "sourceColumn": "address1_name",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "address1_name",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address1_primarycontactname",
+            "dataType": "string",
+            "sourceColumn": "address1_primarycontactname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "address1_primarycontactname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address1_line1",
+            "dataType": "string",
+            "sourceColumn": "address1_line1",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "address1_line1",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address1_line2",
+            "dataType": "string",
+            "sourceColumn": "address1_line2",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "address1_line2",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address1_line3",
+            "dataType": "string",
+            "sourceColumn": "address1_line3",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "address1_line3",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address1_city",
+            "dataType": "string",
+            "sourceColumn": "address1_city",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "address1_city",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address1_stateorprovince",
+            "dataType": "string",
+            "sourceColumn": "address1_stateorprovince",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "address1_stateorprovince",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address1_county",
+            "dataType": "string",
+            "sourceColumn": "address1_county",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "address1_county",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address1_country",
+            "dataType": "string",
+            "sourceColumn": "address1_country",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "address1_country",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address1_postofficebox",
+            "dataType": "string",
+            "sourceColumn": "address1_postofficebox",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "address1_postofficebox",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address1_postalcode",
+            "dataType": "string",
+            "sourceColumn": "address1_postalcode",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "address1_postalcode",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address1_utcoffset",
+            "dataType": "int64",
+            "sourceColumn": "address1_utcoffset",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "address1_utcoffset",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address1_freighttermscode",
+            "dataType": "int64",
+            "sourceColumn": "address1_freighttermscode",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "address1_freighttermscode",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address1_upszone",
+            "dataType": "string",
+            "sourceColumn": "address1_upszone",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "address1_upszone",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address1_latitude",
+            "dataType": "double",
+            "sourceColumn": "address1_latitude",
+            "sourceProviderType": "float",
+            "sourceLineageTag": "address1_latitude",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "address1_telephone1",
+            "dataType": "string",
+            "sourceColumn": "address1_telephone1",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "address1_telephone1",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address1_longitude",
+            "dataType": "double",
+            "sourceColumn": "address1_longitude",
+            "sourceProviderType": "float",
+            "sourceLineageTag": "address1_longitude",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "address1_shippingmethodcode",
+            "dataType": "int64",
+            "sourceColumn": "address1_shippingmethodcode",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "address1_shippingmethodcode",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address1_telephone2",
+            "dataType": "string",
+            "sourceColumn": "address1_telephone2",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "address1_telephone2",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address1_telephone3",
+            "dataType": "string",
+            "sourceColumn": "address1_telephone3",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "address1_telephone3",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address1_fax",
+            "dataType": "string",
+            "sourceColumn": "address1_fax",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "address1_fax",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address2_addressid",
+            "dataType": "string",
+            "sourceColumn": "address2_addressid",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "address2_addressid",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address2_addresstypecode",
+            "dataType": "int64",
+            "sourceColumn": "address2_addresstypecode",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "address2_addresstypecode",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address2_name",
+            "dataType": "string",
+            "sourceColumn": "address2_name",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "address2_name",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address2_primarycontactname",
+            "dataType": "string",
+            "sourceColumn": "address2_primarycontactname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "address2_primarycontactname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address2_line1",
+            "dataType": "string",
+            "sourceColumn": "address2_line1",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "address2_line1",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address2_line2",
+            "dataType": "string",
+            "sourceColumn": "address2_line2",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "address2_line2",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address2_line3",
+            "dataType": "string",
+            "sourceColumn": "address2_line3",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "address2_line3",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address2_city",
+            "dataType": "string",
+            "sourceColumn": "address2_city",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "address2_city",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address2_stateorprovince",
+            "dataType": "string",
+            "sourceColumn": "address2_stateorprovince",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "address2_stateorprovince",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address2_county",
+            "dataType": "string",
+            "sourceColumn": "address2_county",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "address2_county",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address2_country",
+            "dataType": "string",
+            "sourceColumn": "address2_country",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "address2_country",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address2_postofficebox",
+            "dataType": "string",
+            "sourceColumn": "address2_postofficebox",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "address2_postofficebox",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address2_postalcode",
+            "dataType": "string",
+            "sourceColumn": "address2_postalcode",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "address2_postalcode",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address2_utcoffset",
+            "dataType": "int64",
+            "sourceColumn": "address2_utcoffset",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "address2_utcoffset",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address2_freighttermscode",
+            "dataType": "int64",
+            "sourceColumn": "address2_freighttermscode",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "address2_freighttermscode",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address2_upszone",
+            "dataType": "string",
+            "sourceColumn": "address2_upszone",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "address2_upszone",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address2_latitude",
+            "dataType": "double",
+            "sourceColumn": "address2_latitude",
+            "sourceProviderType": "float",
+            "sourceLineageTag": "address2_latitude",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "address2_telephone1",
+            "dataType": "string",
+            "sourceColumn": "address2_telephone1",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "address2_telephone1",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address2_longitude",
+            "dataType": "double",
+            "sourceColumn": "address2_longitude",
+            "sourceProviderType": "float",
+            "sourceLineageTag": "address2_longitude",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "address2_shippingmethodcode",
+            "dataType": "int64",
+            "sourceColumn": "address2_shippingmethodcode",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "address2_shippingmethodcode",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address2_telephone2",
+            "dataType": "string",
+            "sourceColumn": "address2_telephone2",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "address2_telephone2",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address2_telephone3",
+            "dataType": "string",
+            "sourceColumn": "address2_telephone3",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "address2_telephone3",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address2_fax",
+            "dataType": "string",
+            "sourceColumn": "address2_fax",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "address2_fax",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "createdbyname",
+            "dataType": "string",
+            "sourceColumn": "createdbyname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "createdbyname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "modifiedbyname",
+            "dataType": "string",
+            "sourceColumn": "modifiedbyname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "modifiedbyname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ownerid",
+            "dataType": "string",
+            "sourceColumn": "ownerid",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "ownerid",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "owneridname",
+            "dataType": "string",
+            "sourceColumn": "owneridname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "owneridname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "donotfaxname",
+            "dataType": "string",
+            "sourceColumn": "donotfaxname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "donotfaxname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "donotphonename",
+            "dataType": "string",
+            "sourceColumn": "donotphonename",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "donotphonename",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "donotbulkpostalmailname",
+            "dataType": "string",
+            "sourceColumn": "donotbulkpostalmailname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "donotbulkpostalmailname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "creditonholdname",
+            "dataType": "string",
+            "sourceColumn": "creditonholdname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "creditonholdname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "donotemailname",
+            "dataType": "string",
+            "sourceColumn": "donotemailname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "donotemailname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "isprivatename",
+            "dataType": "string",
+            "sourceColumn": "isprivatename",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "isprivatename",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "donotpostalmailname",
+            "dataType": "string",
+            "sourceColumn": "donotpostalmailname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "donotpostalmailname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "participatesinworkflowname",
+            "dataType": "string",
+            "sourceColumn": "participatesinworkflowname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "participatesinworkflowname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "donotbulkemailname",
+            "dataType": "string",
+            "sourceColumn": "donotbulkemailname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "donotbulkemailname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address1_shippingmethodcodename",
+            "dataType": "string",
+            "sourceColumn": "address1_shippingmethodcodename",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "address1_shippingmethodcodename",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "industrycodename",
+            "dataType": "string",
+            "sourceColumn": "industrycodename",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "industrycodename",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "accountratingcodename",
+            "dataType": "string",
+            "sourceColumn": "accountratingcodename",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "accountratingcodename",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ownershipcodename",
+            "dataType": "string",
+            "sourceColumn": "ownershipcodename",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "ownershipcodename",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "accountclassificationcodename",
+            "dataType": "string",
+            "sourceColumn": "accountclassificationcodename",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "accountclassificationcodename",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "customersizecodename",
+            "dataType": "string",
+            "sourceColumn": "customersizecodename",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "customersizecodename",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "statecodename",
+            "dataType": "string",
+            "sourceColumn": "statecodename",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "statecodename",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "shippingmethodcodename",
+            "dataType": "string",
+            "sourceColumn": "shippingmethodcodename",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "shippingmethodcodename",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address1_freighttermscodename",
+            "dataType": "string",
+            "sourceColumn": "address1_freighttermscodename",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "address1_freighttermscodename",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "businesstypecodename",
+            "dataType": "string",
+            "sourceColumn": "businesstypecodename",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "businesstypecodename",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address2_freighttermscodename",
+            "dataType": "string",
+            "sourceColumn": "address2_freighttermscodename",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "address2_freighttermscodename",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "accountcategorycodename",
+            "dataType": "string",
+            "sourceColumn": "accountcategorycodename",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "accountcategorycodename",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "paymenttermscodename",
+            "dataType": "string",
+            "sourceColumn": "paymenttermscodename",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "paymenttermscodename",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "preferredcontactmethodcodename",
+            "dataType": "string",
+            "sourceColumn": "preferredcontactmethodcodename",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "preferredcontactmethodcodename",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "territorycodename",
+            "dataType": "string",
+            "sourceColumn": "territorycodename",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "territorycodename",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "statuscodename",
+            "dataType": "string",
+            "sourceColumn": "statuscodename",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "statuscodename",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "customertypecodename",
+            "dataType": "string",
+            "sourceColumn": "customertypecodename",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "customertypecodename",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address1_addresstypecodename",
+            "dataType": "string",
+            "sourceColumn": "address1_addresstypecodename",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "address1_addresstypecodename",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address2_shippingmethodcodename",
+            "dataType": "string",
+            "sourceColumn": "address2_shippingmethodcodename",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "address2_shippingmethodcodename",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address2_addresstypecodename",
+            "dataType": "string",
+            "sourceColumn": "address2_addresstypecodename",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "address2_addresstypecodename",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "preferredappointmentdaycode",
+            "dataType": "int64",
+            "sourceColumn": "preferredappointmentdaycode",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "preferredappointmentdaycode",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "preferredsystemuserid",
+            "dataType": "string",
+            "sourceColumn": "preferredsystemuserid",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "preferredsystemuserid",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "preferredappointmenttimecode",
+            "dataType": "int64",
+            "sourceColumn": "preferredappointmenttimecode",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "preferredappointmenttimecode",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "merged",
+            "dataType": "boolean",
+            "sourceColumn": "merged",
+            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+            "sourceProviderType": "bit",
+            "sourceLineageTag": "merged",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "donotsendmm",
+            "dataType": "boolean",
+            "sourceColumn": "donotsendmm",
+            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+            "sourceProviderType": "bit",
+            "sourceLineageTag": "donotsendmm",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "masterid",
+            "dataType": "string",
+            "sourceColumn": "masterid",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "masterid",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "lastusedincampaign",
+            "dataType": "dateTime",
+            "sourceColumn": "lastusedincampaign",
+            "formatString": "General Date",
+            "sourceProviderType": "datetime2",
+            "sourceLineageTag": "lastusedincampaign",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "preferredappointmenttimecodename",
+            "dataType": "string",
+            "sourceColumn": "preferredappointmenttimecodename",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "preferredappointmenttimecodename",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "preferredappointmentdaycodename",
+            "dataType": "string",
+            "sourceColumn": "preferredappointmentdaycodename",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "preferredappointmentdaycodename",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "preferredsystemuseridname",
+            "dataType": "string",
+            "sourceColumn": "preferredsystemuseridname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "preferredsystemuseridname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "mergedname",
+            "dataType": "string",
+            "sourceColumn": "mergedname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "mergedname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "masteraccountidname",
+            "dataType": "string",
+            "sourceColumn": "masteraccountidname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "masteraccountidname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "donotsendmarketingmaterialname",
+            "dataType": "string",
+            "sourceColumn": "donotsendmarketingmaterialname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "donotsendmarketingmaterialname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "exchangerate",
+            "dataType": "double",
+            "sourceColumn": "exchangerate",
+            "sourceProviderType": "decimal",
+            "sourceLineageTag": "exchangerate",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "utcconversiontimezonecode",
+            "dataType": "int64",
+            "sourceColumn": "utcconversiontimezonecode",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "utcconversiontimezonecode",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "overriddencreatedon",
+            "dataType": "dateTime",
+            "sourceColumn": "overriddencreatedon",
+            "formatString": "General Date",
+            "sourceProviderType": "datetime2",
+            "sourceLineageTag": "overriddencreatedon",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "timezoneruleversionnumber",
+            "dataType": "int64",
+            "sourceColumn": "timezoneruleversionnumber",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "timezoneruleversionnumber",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "importsequencenumber",
+            "dataType": "int64",
+            "sourceColumn": "importsequencenumber",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "importsequencenumber",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "transactioncurrencyid",
+            "dataType": "string",
+            "sourceColumn": "transactioncurrencyid",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "transactioncurrencyid",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "transactioncurrencyidname",
+            "dataType": "string",
+            "sourceColumn": "transactioncurrencyidname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "transactioncurrencyidname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "preferredsystemuseridyominame",
+            "dataType": "string",
+            "sourceColumn": "preferredsystemuseridyominame",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "preferredsystemuseridyominame",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "parentaccountidyominame",
+            "dataType": "string",
+            "sourceColumn": "parentaccountidyominame",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "parentaccountidyominame",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "masteraccountidyominame",
+            "dataType": "string",
+            "sourceColumn": "masteraccountidyominame",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "masteraccountidyominame",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "primarycontactidyominame",
+            "dataType": "string",
+            "sourceColumn": "primarycontactidyominame",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "primarycontactidyominame",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "owneridyominame",
+            "dataType": "string",
+            "sourceColumn": "owneridyominame",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "owneridyominame",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "yominame",
+            "dataType": "string",
+            "sourceColumn": "yominame",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "yominame",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "createdbyyominame",
+            "dataType": "string",
+            "sourceColumn": "createdbyyominame",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "createdbyyominame",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "modifiedbyyominame",
+            "dataType": "string",
+            "sourceColumn": "modifiedbyyominame",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "modifiedbyyominame",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "createdonbehalfby",
+            "dataType": "string",
+            "sourceColumn": "createdonbehalfby",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "createdonbehalfby",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "createdonbehalfbyname",
+            "dataType": "string",
+            "sourceColumn": "createdonbehalfbyname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "createdonbehalfbyname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "createdonbehalfbyyominame",
+            "dataType": "string",
+            "sourceColumn": "createdonbehalfbyyominame",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "createdonbehalfbyyominame",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "modifiedonbehalfby",
+            "dataType": "string",
+            "sourceColumn": "modifiedonbehalfby",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "modifiedonbehalfby",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "modifiedonbehalfbyname",
+            "dataType": "string",
+            "sourceColumn": "modifiedonbehalfbyname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "modifiedonbehalfbyname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "modifiedonbehalfbyyominame",
+            "dataType": "string",
+            "sourceColumn": "modifiedonbehalfbyyominame",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "modifiedonbehalfbyyominame",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "owningteam",
+            "dataType": "string",
+            "sourceColumn": "owningteam",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "owningteam",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "stageid",
+            "dataType": "string",
+            "sourceColumn": "stageid",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "stageid",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "processid",
+            "dataType": "string",
+            "sourceColumn": "processid",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "processid",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "entityimage_url",
+            "dataType": "string",
+            "sourceColumn": "entityimage_url",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "entityimage_url",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address2_composite",
+            "dataType": "string",
+            "sourceColumn": "address2_composite",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "address2_composite",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "address1_composite",
+            "dataType": "string",
+            "sourceColumn": "address1_composite",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "address1_composite",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "entityimageid",
+            "dataType": "string",
+            "sourceColumn": "entityimageid",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "entityimageid",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "timespentbymeonemailandmeetings",
+            "dataType": "string",
+            "sourceColumn": "timespentbymeonemailandmeetings",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "timespentbymeonemailandmeetings",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "createdbyexternalparty",
+            "dataType": "string",
+            "sourceColumn": "createdbyexternalparty",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "createdbyexternalparty",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "createdbyexternalpartyname",
+            "dataType": "string",
+            "sourceColumn": "createdbyexternalpartyname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "createdbyexternalpartyname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "createdbyexternalpartyyominame",
+            "dataType": "string",
+            "sourceColumn": "createdbyexternalpartyyominame",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "createdbyexternalpartyyominame",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "modifiedbyexternalparty",
+            "dataType": "string",
+            "sourceColumn": "modifiedbyexternalparty",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "modifiedbyexternalparty",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "modifiedbyexternalpartyname",
+            "dataType": "string",
+            "sourceColumn": "modifiedbyexternalpartyname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "modifiedbyexternalpartyname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "modifiedbyexternalpartyyominame",
+            "dataType": "string",
+            "sourceColumn": "modifiedbyexternalpartyyominame",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "modifiedbyexternalpartyyominame",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "primarysatoriid",
+            "dataType": "string",
+            "sourceColumn": "primarysatoriid",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "primarysatoriid",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "primarytwitterid",
+            "dataType": "string",
+            "sourceColumn": "primarytwitterid",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "primarytwitterid",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "slaid",
+            "dataType": "string",
+            "sourceColumn": "slaid",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "slaid",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "slaname",
+            "dataType": "string",
+            "sourceColumn": "slaname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "slaname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "slainvokedid",
+            "dataType": "string",
+            "sourceColumn": "slainvokedid",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "slainvokedid",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "onholdtime",
+            "dataType": "int64",
+            "sourceColumn": "onholdtime",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "onholdtime",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "lastonholdtime",
+            "dataType": "dateTime",
+            "sourceColumn": "lastonholdtime",
+            "formatString": "General Date",
+            "sourceProviderType": "datetime2",
+            "sourceLineageTag": "lastonholdtime",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "slainvokedidname",
+            "dataType": "string",
+            "sourceColumn": "slainvokedidname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "slainvokedidname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "followemail",
+            "dataType": "boolean",
+            "sourceColumn": "followemail",
+            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+            "sourceProviderType": "bit",
+            "sourceLineageTag": "followemail",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "followemailname",
+            "dataType": "string",
+            "sourceColumn": "followemailname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "followemailname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "marketingonly",
+            "dataType": "boolean",
+            "sourceColumn": "marketingonly",
+            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+            "sourceProviderType": "bit",
+            "sourceLineageTag": "marketingonly",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "marketingonlyname",
+            "dataType": "string",
+            "sourceColumn": "marketingonlyname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "marketingonlyname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "originatingleadid",
+            "dataType": "string",
+            "sourceColumn": "originatingleadid",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "originatingleadid",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "originatingleadidname",
+            "dataType": "string",
+            "sourceColumn": "originatingleadidname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "originatingleadidname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "originatingleadidyominame",
+            "dataType": "string",
+            "sourceColumn": "originatingleadidyominame",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "originatingleadidyominame",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "defaultpricelevelid",
+            "dataType": "string",
+            "sourceColumn": "defaultpricelevelid",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "defaultpricelevelid",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "defaultpricelevelidname",
+            "dataType": "string",
+            "sourceColumn": "defaultpricelevelidname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "defaultpricelevelidname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "preferredequipmentid",
+            "dataType": "string",
+            "sourceColumn": "preferredequipmentid",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "preferredequipmentid",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "preferredserviceid",
+            "dataType": "string",
+            "sourceColumn": "preferredserviceid",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "preferredserviceid",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "preferredequipmentidname",
+            "dataType": "string",
+            "sourceColumn": "preferredequipmentidname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "preferredequipmentidname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "preferredserviceidname",
+            "dataType": "string",
+            "sourceColumn": "preferredserviceidname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "preferredserviceidname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "territoryid",
+            "dataType": "string",
+            "sourceColumn": "territoryid",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "territoryid",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "opendeals",
+            "dataType": "int64",
+            "sourceColumn": "opendeals",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "opendeals",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "opendeals_date",
+            "dataType": "dateTime",
+            "sourceColumn": "opendeals_date",
+            "formatString": "General Date",
+            "sourceProviderType": "datetime2",
+            "sourceLineageTag": "opendeals_date",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "opendeals_state",
+            "dataType": "int64",
+            "sourceColumn": "opendeals_state",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "opendeals_state",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "openrevenue_date",
+            "dataType": "dateTime",
+            "sourceColumn": "openrevenue_date",
+            "formatString": "General Date",
+            "sourceProviderType": "datetime2",
+            "sourceLineageTag": "openrevenue_date",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "openrevenue_state",
+            "dataType": "int64",
+            "sourceColumn": "openrevenue_state",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "openrevenue_state",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "territoryidname",
+            "dataType": "string",
+            "sourceColumn": "territoryidname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "territoryidname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "teamsfollowed",
+            "dataType": "int64",
+            "sourceColumn": "teamsfollowed",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "teamsfollowed",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "cdi_accountscore",
+            "dataType": "int64",
+            "sourceColumn": "cdi_accountscore",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "cdi_accountscore",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "cdi_allowtextmessages",
+            "dataType": "boolean",
+            "sourceColumn": "cdi_allowtextmessages",
+            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+            "sourceProviderType": "bit",
+            "sourceLineageTag": "cdi_allowtextmessages",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "cdi_allowtextmessagesname",
+            "dataType": "string",
+            "sourceColumn": "cdi_allowtextmessagesname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "cdi_allowtextmessagesname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_abzone",
+            "dataType": "int64",
+            "sourceColumn": "od_abzone",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "od_abzone",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_abzonename",
+            "dataType": "string",
+            "sourceColumn": "od_abzonename",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_abzonename",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_address1_abzone",
+            "dataType": "int64",
+            "sourceColumn": "od_address1_abzone",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "od_address1_abzone",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_address1_abzonename",
+            "dataType": "string",
+            "sourceColumn": "od_address1_abzonename",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_address1_abzonename",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_address2_abzone",
+            "dataType": "int64",
+            "sourceColumn": "od_address2_abzone",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "od_address2_abzone",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_address2_abzonename",
+            "dataType": "string",
+            "sourceColumn": "od_address2_abzonename",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_address2_abzonename",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_addresschange_city",
+            "dataType": "string",
+            "sourceColumn": "od_addresschange_city",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_addresschange_city",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_addresschange_country",
+            "dataType": "string",
+            "sourceColumn": "od_addresschange_country",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_addresschange_country",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_addresschange_postalcode",
+            "dataType": "string",
+            "sourceColumn": "od_addresschange_postalcode",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_addresschange_postalcode",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_addresschange_stateorprovince",
+            "dataType": "string",
+            "sourceColumn": "od_addresschange_stateorprovince",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_addresschange_stateorprovince",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_addresschange_street1",
+            "dataType": "string",
+            "sourceColumn": "od_addresschange_street1",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_addresschange_street1",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_addresschange_street2",
+            "dataType": "string",
+            "sourceColumn": "od_addresschange_street2",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_addresschange_street2",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_addresschange_street3",
+            "dataType": "string",
+            "sourceColumn": "od_addresschange_street3",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_addresschange_street3",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_addresschangeon",
+            "dataType": "dateTime",
+            "sourceColumn": "od_addresschangeon",
+            "formatString": "General Date",
+            "sourceProviderType": "datetime2",
+            "sourceLineageTag": "od_addresschangeon",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_bankaccount1",
+            "dataType": "string",
+            "sourceColumn": "od_bankaccount1",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_bankaccount1",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_bankaccount2",
+            "dataType": "string",
+            "sourceColumn": "od_bankaccount2",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_bankaccount2",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_bankaccount3",
+            "dataType": "string",
+            "sourceColumn": "od_bankaccount3",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_bankaccount3",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_bankaccount4",
+            "dataType": "string",
+            "sourceColumn": "od_bankaccount4",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_bankaccount4",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_bankaccount5",
+            "dataType": "string",
+            "sourceColumn": "od_bankaccount5",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_bankaccount5",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_bankticketpreferredtransactionday",
+            "dataType": "int64",
+            "sourceColumn": "od_bankticketpreferredtransactionday",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "od_bankticketpreferredtransactionday",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_chamberofcommerce",
+            "dataType": "string",
+            "sourceColumn": "od_chamberofcommerce",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_chamberofcommerce",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_dayofworship",
+            "dataType": "int64",
+            "sourceColumn": "od_dayofworship",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "od_dayofworship",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_dayofworshipname",
+            "dataType": "string",
+            "sourceColumn": "od_dayofworshipname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_dayofworshipname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_denominationid",
+            "dataType": "string",
+            "sourceColumn": "od_denominationid",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_denominationid",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_financialfrequencyid",
+            "dataType": "string",
+            "sourceColumn": "od_financialfrequencyid",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_financialfrequencyid",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_financialvolumeid",
+            "dataType": "string",
+            "sourceColumn": "od_financialvolumeid",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_financialvolumeid",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_formalletterheading",
+            "dataType": "string",
+            "sourceColumn": "od_formalletterheading",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_formalletterheading",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_formalsalutation",
+            "dataType": "string",
+            "sourceColumn": "od_formalsalutation",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_formalsalutation",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_friendlyletterheading",
+            "dataType": "string",
+            "sourceColumn": "od_friendlyletterheading",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_friendlyletterheading",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_friendlysalutation",
+            "dataType": "string",
+            "sourceColumn": "od_friendlysalutation",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_friendlysalutation",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_gridrecordid",
+            "dataType": "string",
+            "sourceColumn": "od_gridrecordid",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_gridrecordid",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_grouptype",
+            "dataType": "int64",
+            "sourceColumn": "od_grouptype",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "od_grouptype",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_grouptypename",
+            "dataType": "string",
+            "sourceColumn": "od_grouptypename",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_grouptypename",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_influenceid",
+            "dataType": "string",
+            "sourceColumn": "od_influenceid",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_influenceid",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_invalidmailingaddress",
+            "dataType": "boolean",
+            "sourceColumn": "od_invalidmailingaddress",
+            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+            "sourceProviderType": "bit",
+            "sourceLineageTag": "od_invalidmailingaddress",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_invalidmailingaddressname",
+            "dataType": "string",
+            "sourceColumn": "od_invalidmailingaddressname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_invalidmailingaddressname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_language",
+            "dataType": "string",
+            "sourceColumn": "od_language",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_language",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_mediacodeid",
+            "dataType": "string",
+            "sourceColumn": "od_mediacodeid",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_mediacodeid",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_officialgroupname",
+            "dataType": "string",
+            "sourceColumn": "od_officialgroupname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_officialgroupname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_optout",
+            "dataType": "boolean",
+            "sourceColumn": "od_optout",
+            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+            "sourceProviderType": "bit",
+            "sourceLineageTag": "od_optout",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_optoutname",
+            "dataType": "string",
+            "sourceColumn": "od_optoutname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_optoutname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_preferredmailingaddress",
+            "dataType": "int64",
+            "sourceColumn": "od_preferredmailingaddress",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "od_preferredmailingaddress",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_preferredmailingaddressname",
+            "dataType": "string",
+            "sourceColumn": "od_preferredmailingaddressname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_preferredmailingaddressname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_preferredprimaryphone",
+            "dataType": "int64",
+            "sourceColumn": "od_preferredprimaryphone",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "od_preferredprimaryphone",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_preferredprimaryphonename",
+            "dataType": "string",
+            "sourceColumn": "od_preferredprimaryphonename",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_preferredprimaryphonename",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_relationshipmanager",
+            "dataType": "string",
+            "sourceColumn": "od_relationshipmanager",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_relationshipmanager",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_salutation",
+            "dataType": "string",
+            "sourceColumn": "od_salutation",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_salutation",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_schoollevel",
+            "dataType": "string",
+            "sourceColumn": "od_schoollevel",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_schoollevel",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_segmentation1",
+            "dataType": "string",
+            "sourceColumn": "od_segmentation1",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_segmentation1",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_segmentation2",
+            "dataType": "string",
+            "sourceColumn": "od_segmentation2",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_segmentation2",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_segmentation3",
+            "dataType": "string",
+            "sourceColumn": "od_segmentation3",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_segmentation3",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_segmentation4",
+            "dataType": "string",
+            "sourceColumn": "od_segmentation4",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_segmentation4",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_segmentation5",
+            "dataType": "string",
+            "sourceColumn": "od_segmentation5",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_segmentation5",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_startdate",
+            "dataType": "dateTime",
+            "sourceColumn": "od_startdate",
+            "formatString": "General Date",
+            "sourceProviderType": "datetime2",
+            "sourceLineageTag": "od_startdate",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_startremark",
+            "dataType": "string",
+            "sourceColumn": "od_startremark",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_startremark",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_stopdate",
+            "dataType": "dateTime",
+            "sourceColumn": "od_stopdate",
+            "formatString": "General Date",
+            "sourceProviderType": "datetime2",
+            "sourceLineageTag": "od_stopdate",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_suggestedbankticketamount",
+            "dataType": "double",
+            "sourceColumn": "od_suggestedbankticketamount",
+            "sourceProviderType": "decimal",
+            "sourceLineageTag": "od_suggestedbankticketamount",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "od_taxpayernumber",
+            "dataType": "string",
+            "sourceColumn": "od_taxpayernumber",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_taxpayernumber",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_userfeedback",
+            "dataType": "string",
+            "sourceColumn": "od_userfeedback",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_userfeedback",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_welcomeprocessstarted",
+            "dataType": "boolean",
+            "sourceColumn": "od_welcomeprocessstarted",
+            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+            "sourceProviderType": "bit",
+            "sourceLineageTag": "od_welcomeprocessstarted",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_welcomeprocessstartedname",
+            "dataType": "string",
+            "sourceColumn": "od_welcomeprocessstartedname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_welcomeprocessstartedname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_lastpresentationdate",
+            "dataType": "dateTime",
+            "sourceColumn": "od_lastpresentationdate",
+            "formatString": "General Date",
+            "sourceProviderType": "datetime2",
+            "sourceLineageTag": "od_lastpresentationdate",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_lastpresentationdate_date",
+            "dataType": "dateTime",
+            "sourceColumn": "od_lastpresentationdate_date",
+            "formatString": "General Date",
+            "sourceProviderType": "datetime2",
+            "sourceLineageTag": "od_lastpresentationdate_date",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_lastpresentationdate_state",
+            "dataType": "int64",
+            "sourceColumn": "od_lastpresentationdate_state",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "od_lastpresentationdate_state",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_relationshipmanagername",
+            "dataType": "string",
+            "sourceColumn": "od_relationshipmanagername",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_relationshipmanagername",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_relationshipmanageryominame",
+            "dataType": "string",
+            "sourceColumn": "od_relationshipmanageryominame",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_relationshipmanageryominame",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_financialfrequencyidname",
+            "dataType": "string",
+            "sourceColumn": "od_financialfrequencyidname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_financialfrequencyidname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_financialvolumeidname",
+            "dataType": "string",
+            "sourceColumn": "od_financialvolumeidname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_financialvolumeidname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_influenceidname",
+            "dataType": "string",
+            "sourceColumn": "od_influenceidname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_influenceidname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_languagename",
+            "dataType": "string",
+            "sourceColumn": "od_languagename",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_languagename",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_salutationname",
+            "dataType": "string",
+            "sourceColumn": "od_salutationname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_salutationname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_mediacodeidname",
+            "dataType": "string",
+            "sourceColumn": "od_mediacodeidname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_mediacodeidname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_denominationidname",
+            "dataType": "string",
+            "sourceColumn": "od_denominationidname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_denominationidname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_area",
+            "dataType": "string",
+            "sourceColumn": "od_area",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_area",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_areaname",
+            "dataType": "string",
+            "sourceColumn": "od_areaname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_areaname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_groupname",
+            "dataType": "string",
+            "sourceColumn": "od_groupname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_groupname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_sourceid",
+            "dataType": "string",
+            "sourceColumn": "od_sourceid",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_sourceid",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_markedfordeletion",
+            "dataType": "boolean",
+            "sourceColumn": "od_markedfordeletion",
+            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+            "sourceProviderType": "bit",
+            "sourceLineageTag": "od_markedfordeletion",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_markedfordeletionname",
+            "dataType": "string",
+            "sourceColumn": "od_markedfordeletionname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_markedfordeletionname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_fromwebsite",
+            "dataType": "boolean",
+            "sourceColumn": "od_fromwebsite",
+            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+            "sourceProviderType": "bit",
+            "sourceLineageTag": "od_fromwebsite",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_fromwebsitename",
+            "dataType": "string",
+            "sourceColumn": "od_fromwebsitename",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_fromwebsitename",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "owningbusinessunitname",
+            "dataType": "string",
+            "sourceColumn": "owningbusinessunitname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "owningbusinessunitname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "odstat_nr_presentationsthisyear",
+            "dataType": "int64",
+            "sourceColumn": "odstat_nr_presentationsthisyear",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "odstat_nr_presentationsthisyear",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "odstat_nr_presentationslastyear",
+            "dataType": "int64",
+            "sourceColumn": "odstat_nr_presentationslastyear",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "odstat_nr_presentationslastyear",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "odstat_nr_presentationslifetime",
+            "dataType": "int64",
+            "sourceColumn": "odstat_nr_presentationslifetime",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "odstat_nr_presentationslifetime",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "odstat_nr_recurringtransactionsbtw2412months",
+            "dataType": "int64",
+            "sourceColumn": "odstat_nr_recurringtransactionsbtw2412months",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "odstat_nr_recurringtransactionsbtw2412months",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "odstat_nr_recurringtransactionslast12months",
+            "dataType": "int64",
+            "sourceColumn": "odstat_nr_recurringtransactionslast12months",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "odstat_nr_recurringtransactionslast12months",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "odstat_nr_transactionsbtw2412months",
+            "dataType": "int64",
+            "sourceColumn": "odstat_nr_transactionsbtw2412months",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "odstat_nr_transactionsbtw2412months",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "odstat_nr_transactionslast12months",
+            "dataType": "int64",
+            "sourceColumn": "odstat_nr_transactionslast12months",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "odstat_nr_transactionslast12months",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "odstat_nr_transactionslast24months",
+            "dataType": "int64",
+            "sourceColumn": "odstat_nr_transactionslast24months",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "odstat_nr_transactionslast24months",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "odstat_nr_transactionslast36months",
+            "dataType": "int64",
+            "sourceColumn": "odstat_nr_transactionslast36months",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "odstat_nr_transactionslast36months",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "odstat_nr_transactionslast48months",
+            "dataType": "int64",
+            "sourceColumn": "odstat_nr_transactionslast48months",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "odstat_nr_transactionslast48months",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "odstat_nr_transactionslast60months",
+            "dataType": "int64",
+            "sourceColumn": "odstat_nr_transactionslast60months",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "odstat_nr_transactionslast60months",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "odstat_nr_transactionslastyear",
+            "dataType": "int64",
+            "sourceColumn": "odstat_nr_transactionslastyear",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "odstat_nr_transactionslastyear",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "odstat_nr_transactionsthisyear",
+            "dataType": "int64",
+            "sourceColumn": "odstat_nr_transactionsthisyear",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "odstat_nr_transactionsthisyear",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "odstat_nr_transactionslifetime",
+            "dataType": "int64",
+            "sourceColumn": "odstat_nr_transactionslifetime",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "odstat_nr_transactionslifetime",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "odstat_donorengagementindex",
+            "dataType": "int64",
+            "sourceColumn": "odstat_donorengagementindex",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "odstat_donorengagementindex",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "odstat_firsttransactiondate",
+            "dataType": "dateTime",
+            "sourceColumn": "odstat_firsttransactiondate",
+            "formatString": "General Date",
+            "sourceProviderType": "datetime2",
+            "sourceLineageTag": "odstat_firsttransactiondate",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "odstat_lasttransactiondate",
+            "dataType": "dateTime",
+            "sourceColumn": "odstat_lasttransactiondate",
+            "formatString": "General Date",
+            "sourceProviderType": "datetime2",
+            "sourceLineageTag": "odstat_lasttransactiondate",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "odstat_lastdonationyear",
+            "dataType": "int64",
+            "sourceColumn": "odstat_lastdonationyear",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "odstat_lastdonationyear",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "odstat_nr_yearsbtwfirstandlasttransaction",
+            "dataType": "int64",
+            "sourceColumn": "odstat_nr_yearsbtwfirstandlasttransaction",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "odstat_nr_yearsbtwfirstandlasttransaction",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "odstat_nr_daysbetweenfirstandlasttransaction",
+            "dataType": "int64",
+            "sourceColumn": "odstat_nr_daysbetweenfirstandlasttransaction",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "odstat_nr_daysbetweenfirstandlasttransaction",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_financialfrequencysub",
+            "dataType": "string",
+            "sourceColumn": "od_financialfrequencysub",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_financialfrequencysub",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_financialfrequencysubname",
+            "dataType": "string",
+            "sourceColumn": "od_financialfrequencysubname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_financialfrequencysubname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "msdyn_gdproptout",
+            "dataType": "boolean",
+            "sourceColumn": "msdyn_gdproptout",
+            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+            "sourceProviderType": "bit",
+            "sourceLineageTag": "msdyn_gdproptout",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "msdyn_gdproptoutname",
+            "dataType": "string",
+            "sourceColumn": "msdyn_gdproptoutname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "msdyn_gdproptoutname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "msdyn_segmentid",
+            "dataType": "string",
+            "sourceColumn": "msdyn_segmentid",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "msdyn_segmentid",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "msdyn_segmentidname",
+            "dataType": "string",
+            "sourceColumn": "msdyn_segmentidname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "msdyn_segmentidname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "msdyn_salesaccelerationinsightid",
+            "dataType": "string",
+            "sourceColumn": "msdyn_salesaccelerationinsightid",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "msdyn_salesaccelerationinsightid",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "msdyn_salesaccelerationinsightidname",
+            "dataType": "string",
+            "sourceColumn": "msdyn_salesaccelerationinsightidname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "msdyn_salesaccelerationinsightidname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_address1country",
+            "dataType": "string",
+            "sourceColumn": "od_address1country",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_address1country",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_address1countryname",
+            "dataType": "string",
+            "sourceColumn": "od_address1countryname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_address1countryname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_address2country",
+            "dataType": "string",
+            "sourceColumn": "od_address2country",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_address2country",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_address2countryname",
+            "dataType": "string",
+            "sourceColumn": "od_address2countryname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_address2countryname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_addresschange_country_lookup",
+            "dataType": "string",
+            "sourceColumn": "od_addresschange_country_lookup",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_addresschange_country_lookup",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_addresschange_country_lookupname",
+            "dataType": "string",
+            "sourceColumn": "od_addresschange_country_lookupname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_addresschange_country_lookupname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_supporternumber",
+            "dataType": "double",
+            "sourceColumn": "od_supporternumber",
+            "sourceProviderType": "decimal",
+            "sourceLineageTag": "od_supporternumber",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          },
+          {
+            "name": "msdyn_accountkpiid",
+            "dataType": "string",
+            "sourceColumn": "msdyn_accountkpiid",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "msdyn_accountkpiid",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "msdyn_accountkpiidname",
+            "dataType": "string",
+            "sourceColumn": "msdyn_accountkpiidname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "msdyn_accountkpiidname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "msft_datastate",
+            "dataType": "int64",
+            "sourceColumn": "msft_datastate",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "msft_datastate",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "msft_datastatename",
+            "dataType": "string",
+            "sourceColumn": "msft_datastatename",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "msft_datastatename",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "adx_createdbyipaddress",
+            "dataType": "string",
+            "sourceColumn": "adx_createdbyipaddress",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "adx_createdbyipaddress",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "adx_createdbyusername",
+            "dataType": "string",
+            "sourceColumn": "adx_createdbyusername",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "adx_createdbyusername",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "adx_modifiedbyipaddress",
+            "dataType": "string",
+            "sourceColumn": "adx_modifiedbyipaddress",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "adx_modifiedbyipaddress",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "adx_modifiedbyusername",
+            "dataType": "string",
+            "sourceColumn": "adx_modifiedbyusername",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "adx_modifiedbyusername",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "msa_managingpartnerid",
+            "dataType": "string",
+            "sourceColumn": "msa_managingpartnerid",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "msa_managingpartnerid",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "msa_managingpartneridname",
+            "dataType": "string",
+            "sourceColumn": "msa_managingpartneridname",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "msa_managingpartneridname",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "msa_managingpartneridyominame",
+            "dataType": "string",
+            "sourceColumn": "msa_managingpartneridyominame",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "msa_managingpartneridyominame",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "odstat_laststatisticscalculationdate",
+            "dataType": "dateTime",
+            "sourceColumn": "odstat_laststatisticscalculationdate",
+            "formatString": "General Date",
+            "sourceProviderType": "datetime2",
+            "sourceLineageTag": "odstat_laststatisticscalculationdate",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_address1_composite",
+            "dataType": "string",
+            "sourceColumn": "od_address1_composite",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_address1_composite",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "msdyn_primarytimezone",
+            "dataType": "int64",
+            "sourceColumn": "msdyn_primarytimezone",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "msdyn_primarytimezone",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_siren",
+            "dataType": "int64",
+            "sourceColumn": "od_siren",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "od_siren",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "od_legal_form",
+            "dataType": "string",
+            "sourceColumn": "od_legal_form",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "od_legal_form",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "account",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "dbo"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      }
+    ],
+    "expressions": [
+      {
+        "name": "DatabaseQuery",
+        "kind": "m",
+        "expression": "let\n    database = {{TDS_Endpoint}}\nin\n    database\n"
+      }
+    ],
+    "annotations": [
+      {
+        "name": "__PBI_TimeIntelligenceEnabled",
+        "value": "0"
+      },
+      {
+        "name": "SourceLineageTagType",
+        "value": "DatabaseFullyQualifiedName"
+      }
+    ]
+  }
+}

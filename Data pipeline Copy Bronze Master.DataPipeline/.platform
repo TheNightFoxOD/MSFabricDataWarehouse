@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "DataPipeline",
+    "displayName": "Data pipeline Copy Bronze Master"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "3434f04c-a7c2-845a-4f10-3cc6d022954a"
+  }
+}
