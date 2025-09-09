@@ -791,11 +791,12 @@ CREATE TABLE IF NOT EXISTS PipelineConfig (
 ```sql
 -- Insert initial pilot data (using GUID format)
 INSERT INTO PipelineConfig 
-(TableId, TableName, SchemaName, PrimaryKeyColumn, BronzeTableName, SyncEnabled, TrackDeletes, CreatedDate, ModifiedDate)
-VALUES 
-('a1b2c3d4-e5f6-7890-1234-567890abcdef', 'Account', 'dbo', 'AccountId', 'bronze_account', true, true, current_timestamp(), current_timestamp()),
-('b2c3d4e5-f6g7-8901-2345-6789012bcdef', 'Contact', 'dbo', 'ContactId', 'bronze_contact', true, true, current_timestamp(), current_timestamp()),
-('c3d4e5f6-g7h8-9012-3456-78901234cdef', 'ActivityPointer', 'dbo', 'ActivityId', 'bronze_activity', true, true, current_timestamp(), current_timestamp());
+(TableId, TableName, SchemaName, PrimaryKeyColumn, SyncEnabled, TrackDeletes, CreatedDate, ModifiedDate)
+SELECT 'a1b2c3d4-e5f6-7890-1234-567890abcdef', 'Account', 'dbo', 'AccountId', true, true, current_timestamp(), current_timestamp()
+UNION ALL
+SELECT 'b2c3d4e5-f6g7-8901-2345-6789012bcdef', 'Donation', 'dbo', 'DonationId', true, true, current_timestamp(), current_timestamp()
+UNION ALL
+SELECT 'c3d4e5f6-g7h8-9012-3456-78901234cdef', 'ActivityPointer', 'dbo', 'ActivityId', true, true, current_timestamp(), current_timestamp();
 ```
 
 ```sql
