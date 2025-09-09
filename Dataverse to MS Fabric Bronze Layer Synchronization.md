@@ -763,118 +763,185 @@ GROUP BY TableName;
 
 ## Detailed Table Structures
 
+### Setup Requirements
+1. **Create a Notebook** in your MS Fabric workspace
+2. **Attach your Lakehouse** to the notebook
+3. **Execute the Spark SQL commands** below to create metadata tables
+
+### Metadata Table Creation - Spark SQL Notebook
+
 ```sql
 -- 1. PipelineConfig: Master control table with purge tracking
-CREATE TABLE PipelineConfig (
-    TableId VARCHAR(36) NOT NULL,
-    TableName NVARCHAR(100) NOT NULL,
-    SchemaName NVARCHAR(50) NOT NULL DEFAULT 'dbo',
-    PrimaryKeyColumn NVARCHAR(100) NOT NULL,
-    BronzeTableName NVARCHAR(100) NOT NULL,
-    SyncEnabled BIT NOT NULL DEFAULT 1,
-    TrackDeletes BIT NOT NULL DEFAULT 1,
-    -- Purge management fields
-    LastPurgeDate DATETIME NULL,           -- When the last purge occurred
-    PurgeRecordCount INT NULL,             -- Estimated records purged
-    -- Sync tracking
-    LastDailySync DATETIME NULL,
-    CreatedDate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),
-    ModifiedDate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),
-    CONSTRAINT PK_PipelineConfig PRIMARY KEY (TableId)
-);
+CREATE TABLE IF NOT EXISTS PipelineConfig (
+    TableId STRING NOT NULL,
+    TableName STRING NOT NULL,
+    SchemaName STRING NOT NULL,
+    PrimaryKeyColumn STRING NOT NULL,
+    BronzeTableName STRING NOT NULL,
+    SyncEnabled BOOLEAN NOT NULL,
+    TrackDeletes BOOLEAN NOT NULL,
+    LastPurgeDate TIMESTAMP,
+    PurgeRecordCount INT,
+    LastDailySync TIMESTAMP,
+    CreatedDate TIMESTAMP NOT NULL,
+    ModifiedDate TIMESTAMP NOT NULL
+) USING DELTA;
+```
 
--- Initial data load for 3-table pilot (using GUID format)
-INSERT INTO PipelineConfig (TableId, TableName, SchemaName, PrimaryKeyColumn, BronzeTableName)
+```sql
+-- Insert initial pilot data (using GUID format)
+INSERT INTO PipelineConfig 
+(TableId, TableName, SchemaName, PrimaryKeyColumn, BronzeTableName, SyncEnabled, TrackDeletes, CreatedDate, ModifiedDate)
 VALUES 
-    ('a1b2c3d4-e5f6-7890-1234-567890abcdef', 'Account', 'dbo', 'AccountId', 'bronze_account'),
-    ('b2c3d4e5-f6g7-8901-2345-6789012bcdef', 'Contact', 'dbo', 'ContactId', 'bronze_contact'),
-    ('c3d4e5f6-g7h8-9012-3456-78901234cdef', 'ActivityPointer', 'dbo', 'ActivityId', 'bronze_activity');
+('a1b2c3d4-e5f6-7890-1234-567890abcdef', 'Account', 'dbo', 'AccountId', 'bronze_account', true, true, current_timestamp(), current_timestamp()),
+('b2c3d4e5-f6g7-8901-2345-6789012bcdef', 'Contact', 'dbo', 'ContactId', 'bronze_contact', true, true, current_timestamp(), current_timestamp()),
+('c3d4e5f6-g7h8-9012-3456-78901234cdef', 'ActivityPointer', 'dbo', 'ActivityId', 'bronze_activity', true, true, current_timestamp(), current_timestamp());
+```
 
+```sql
 -- 2. SyncAuditLog: Execution tracking
-CREATE TABLE SyncAuditLog (
-    LogId VARCHAR(36) NOT NULL,
-    PipelineRunId NVARCHAR(100) NOT NULL,
-    PipelineName NVARCHAR(100) NOT NULL,
-    TableName NVARCHAR(100) NULL,
-    Operation NVARCHAR(50) NOT NULL,
-    StartTime DATETIME NOT NULL,
-    EndTime DATETIME NULL,
-    RowsProcessed INT NULL,
-    RowsDeleted INT NULL,
-    RowsPurged INT NULL,                   -- Track purged records
-    Status NVARCHAR(20) NOT NULL,
-    ErrorMessage STRING NULL,
-    RetryCount INT NOT NULL DEFAULT 0,
-    CreatedDate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),
-    CONSTRAINT PK_SyncAuditLog PRIMARY KEY (LogId)
-);
+CREATE TABLE IF NOT EXISTS SyncAuditLog (
+    LogId STRING NOT NULL,
+    PipelineRunId STRING NOT NULL,
+    PipelineName STRING NOT NULL,
+    TableName STRING,
+    Operation STRING NOT NULL,
+    StartTime TIMESTAMP NOT NULL,
+    EndTime TIMESTAMP,
+    RowsProcessed INT,
+    RowsDeleted INT,
+    RowsPurged INT,
+    Status STRING NOT NULL,
+    ErrorMessage STRING,
+    RetryCount INT NOT NULL,
+    CreatedDate TIMESTAMP NOT NULL
+) USING DELTA;
+```
 
--- Create indexes after table creation
-CREATE INDEX IX_SyncAuditLog_PipelineRunId ON SyncAuditLog (PipelineRunId);
-CREATE INDEX IX_SyncAuditLog_Status_Date ON SyncAuditLog (Status, CreatedDate DESC);
-
+```sql
 -- 3. CheckpointHistory: Fallback management
-CREATE TABLE CheckpointHistory (
-    CheckpointId VARCHAR(36) NOT NULL,
-    CheckpointName NVARCHAR(100) NOT NULL,
-    CheckpointType NVARCHAR(20) NOT NULL,
-    CreatedDate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+CREATE TABLE IF NOT EXISTS CheckpointHistory (
+    CheckpointId STRING NOT NULL,
+    CheckpointName STRING NOT NULL,
+    CheckpointType STRING NOT NULL,
+    CreatedDate TIMESTAMP NOT NULL,
     TablesIncluded INT NOT NULL,
-    TotalRows BIGINT NULL,
-    ValidationStatus NVARCHAR(20) NOT NULL DEFAULT 'Pending',
+    TotalRows BIGINT,
+    ValidationStatus STRING NOT NULL,
     RetentionDate DATE NOT NULL,
-    IsActive BIT NOT NULL DEFAULT 1,
-    CONSTRAINT PK_CheckpointHistory PRIMARY KEY (CheckpointId),
-    CONSTRAINT UQ_CheckpointHistory_Name UNIQUE (CheckpointName)
-);
+    IsActive BOOLEAN NOT NULL
+) USING DELTA;
+```
 
--- Create indexes after table creation
-CREATE INDEX IX_CheckpointHistory_Type_Active ON CheckpointHistory (CheckpointType, IsActive);
-CREATE INDEX IX_CheckpointHistory_RetentionDate ON CheckpointHistory (RetentionDate);
-
+```sql
 -- 4. DataValidation: Quality tracking
-CREATE TABLE DataValidation (
-    ValidationId VARCHAR(36) NOT NULL,
-    ValidationDate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),
-    TableName NVARCHAR(100) NOT NULL,
-    SourceRowCount INT NULL,
+CREATE TABLE IF NOT EXISTS DataValidation (
+    ValidationId STRING NOT NULL,
+    ValidationDate TIMESTAMP NOT NULL,
+    TableName STRING NOT NULL,
+    SourceRowCount INT,
     BronzeRowCount INT NOT NULL,
     ActiveRowCount INT NOT NULL,
     DeletedRowCount INT NOT NULL,
-    PurgedRowCount INT NOT NULL,           -- Track purged records separately
-    ValidationPassed BIT NOT NULL,
-    CONSTRAINT PK_DataValidation PRIMARY KEY (ValidationId)
-);
+    PurgedRowCount INT NOT NULL,
+    ValidationPassed BOOLEAN NOT NULL
+) USING DELTA;
+```
 
--- Create indexes after table creation
-CREATE INDEX IX_DataValidation_Date_Table ON DataValidation (ValidationDate DESC, TableName);
-CREATE INDEX IX_DataValidation_Passed ON DataValidation (ValidationPassed, ValidationDate DESC);
+```sql
+-- Optimize tables for performance (equivalent to creating indexes)
+OPTIMIZE PipelineConfig;
+OPTIMIZE SyncAuditLog;
+OPTIMIZE CheckpointHistory;
+OPTIMIZE DataValidation;
+```
+
+```sql
+-- Create Z-Order optimization for frequently queried columns
+OPTIMIZE SyncAuditLog ZORDER BY (PipelineRunId, Status, CreatedDate);
+OPTIMIZE CheckpointHistory ZORDER BY (CheckpointType, IsActive);
+OPTIMIZE DataValidation ZORDER BY (ValidationDate, TableName);
+```
+
+```sql
+-- Verify all tables were created successfully
+SHOW TABLES;
+```
+
+```sql
+-- Check pilot configuration data
+SELECT TableName, BronzeTableName, SyncEnabled, TrackDeletes, CreatedDate 
+FROM PipelineConfig 
+ORDER BY TableName;
 ```
 
 ## Bronze Layer Table Structure
 
-Each table in the Bronze layer should include these additional columns:
+Each table in the Bronze layer should include these additional columns for tracking:
+
+### Spark SQL Implementation for Bronze Tables
 
 ```sql
--- Example: Bronze layer table structure for Account table
-ALTER TABLE bronze_account ADD
-    -- Purge and delete tracking
-    IsDeleted BIT DEFAULT 0,               -- Record was intentionally deleted
-    IsPurged BIT DEFAULT 0,                -- Record was removed due to age-based purge
-    DeletedDate DATETIME NULL,             -- When the deletion was detected
-    PurgedDate DATETIME NULL,              -- When the purge was detected
-    -- Metadata
-    LastSynced DATETIME DEFAULT CURRENT_TIMESTAMP(),
-    SyncDate DATETIME DEFAULT CURRENT_TIMESTAMP(),
-    -- Indexes for performance
-    INDEX IX_IsDeleted (IsDeleted),
-    INDEX IX_IsPurged (IsPurged),
-    INDEX IX_LastSynced (LastSynced DESC);
+-- Example: Adding tracking columns to Bronze layer Account table
+-- This would be done via Notebook activity in the pipeline
+-- Replace 'bronze_account' with parameterized table name: @{item().BronzeTableName}
+
+-- Check if tracking columns already exist by describing the table
+DESCRIBE bronze_account;
 ```
+
+```sql
+-- Add tracking columns if they don't exist (conditional execution)
+-- Note: In actual pipeline, wrap this in conditional logic based on DESCRIBE results
+ALTER TABLE bronze_account ADD COLUMNS (
+    IsDeleted BOOLEAN DEFAULT false,
+    IsPurged BOOLEAN DEFAULT false,
+    DeletedDate TIMESTAMP,
+    PurgedDate TIMESTAMP,
+    LastSynced TIMESTAMP DEFAULT current_timestamp(),
+    SyncDate TIMESTAMP DEFAULT current_timestamp()
+);
+```
+
+```sql
+-- Optimize table after schema changes for performance
+OPTIMIZE bronze_account;
+OPTIMIZE bronze_account ZORDER BY (IsDeleted, IsPurged, LastSynced);
+```
+
+```sql
+-- Verify tracking columns were added successfully
+DESCRIBE bronze_account;
+```
+
+```sql
+-- Example query to check tracking column functionality
+SELECT 
+    COUNT(*) as TotalRecords,
+    SUM(CASE WHEN IsDeleted = true THEN 1 ELSE 0 END) as DeletedRecords,
+    SUM(CASE WHEN IsPurged = true THEN 1 ELSE 0 END) as PurgedRecords,
+    SUM(CASE WHEN IsDeleted = false AND IsPurged = false THEN 1 ELSE 0 END) as ActiveRecords
+FROM bronze_account;
+```
+
+### Data Types Mapping: SQL Server → Spark SQL
+
+| SQL Server | Spark SQL | Notes |
+|------------|-----------|--------|
+| BIT | BOOLEAN | Default values: true/false instead of 1/0 |
+| DATETIME | TIMESTAMP | Built-in timezone awareness |
+| NVARCHAR(n) | STRING | No length limits in Delta Lake |
+| VARCHAR(36) | STRING | GUIDs stored as strings |
+| INT | INT | Same data type |
+| BIGINT | BIGINT | Same data type |
 
 ## Metadata Flow in Architecture
 
 ### Setup Phase (One-time)
+
+#### Step 1: Create Metadata Tables via Notebook
+Execute the SQL commands above in separate notebook cells using `%%sql` magic command:
+
 ```sql
 -- 1. Create all metadata tables
 -- Run scripts above
