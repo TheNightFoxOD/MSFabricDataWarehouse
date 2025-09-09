@@ -365,7 +365,6 @@ Activity 3: If Condition - Create Checkpoint
 SELECT 
     TableName, 
     PrimaryKeyColumn, 
-    BronzeTableName, 
     SchemaName,
     LastPurgeDate,
     PurgeRecordCount
@@ -390,7 +389,7 @@ ORDER BY TableName
 - Query: `SELECT * FROM @{item().SchemaName}.@{item().TableName} WHERE ModifiedOn >= DATEADD(day, -7, GETDATE())`
 **Sink**:
 - Dataset: Lakehouse
-- Table: `@{item().BronzeTableName}`
+- Table: `@{item().TableName}`
 - Write Method: Upsert
 - Key Columns: `@{item().PrimaryKeyColumn}`
 **Settings**:
@@ -405,11 +404,11 @@ ORDER BY TableName
 -- Conditional column addition - only runs if columns don't exist
 IF NOT EXISTS (
     SELECT * FROM INFORMATION_SCHEMA.COLUMNS 
-    WHERE TABLE_NAME = '@{item().BronzeTableName}' 
+    WHERE TABLE_NAME = '@{item().TableName}' 
     AND COLUMN_NAME = 'IsDeleted'
 )
 BEGIN
-    ALTER TABLE @{item().BronzeTableName} ADD 
+    ALTER TABLE @{item().TableName} ADD 
         IsDeleted BIT DEFAULT 0,
         IsPurged BIT DEFAULT 0,
         DeletedDate DATETIME NULL,
@@ -417,9 +416,9 @@ BEGIN
         LastSynced DATETIME DEFAULT CURRENT_TIMESTAMP();
     
     -- Add indexes for performance
-    CREATE INDEX IX_IsDeleted ON @{item().BronzeTableName} (IsDeleted);
-    CREATE INDEX IX_IsPurged ON @{item().BronzeTableName} (IsPurged);
-    CREATE INDEX IX_LastSynced ON @{item().BronzeTableName} (LastSynced DESC);
+    CREATE INDEX IX_IsDeleted ON @{item().TableName} (IsDeleted);
+    CREATE INDEX IX_IsPurged ON @{item().TableName} (IsPurged);
+    CREATE INDEX IX_LastSynced ON @{item().TableName} (LastSynced DESC);
 END
 ```
 
@@ -441,7 +440,7 @@ END
 DECLARE @LastPurgeDate DATETIME = '@{item().LastPurgeDate}';
 
 -- Update records based on their status
-UPDATE @{item().BronzeTableName}
+UPDATE @{item().TableName}
 SET 
     IsDeleted = CASE 
         WHEN @{item().PrimaryKeyColumn} NOT IN (
@@ -703,7 +702,7 @@ WHERE CheckpointName = '@{pipeline().parameters.CheckpointName}'
 **Inside ForEach:**
 ```sql
 -- Restore table to checkpoint
-RESTORE TABLE @{item().BronzeTableName}
+RESTORE TABLE @{item().TableName}
 TO VERSION AS OF '@{pipeline().parameters.CheckpointName}';
 
 -- Log restoration
@@ -739,7 +738,7 @@ SELECT
     COUNT(*),
     1,
     'Post-rollback validation'
-FROM @{item().BronzeTableName}
+FROM @{item().TableName}
 GROUP BY TableName;
 ```
 
@@ -777,7 +776,6 @@ CREATE TABLE IF NOT EXISTS PipelineConfig (
     TableName STRING NOT NULL,
     SchemaName STRING NOT NULL,
     PrimaryKeyColumn STRING NOT NULL,
-    BronzeTableName STRING NOT NULL,
     SyncEnabled BOOLEAN NOT NULL,
     TrackDeletes BOOLEAN NOT NULL,
     LastPurgeDate TIMESTAMP,
@@ -871,7 +869,7 @@ SHOW TABLES;
 
 ```sql
 -- Check pilot configuration data
-SELECT TableName, BronzeTableName, SyncEnabled, TrackDeletes, CreatedDate 
+SELECT TableName, SyncEnabled, TrackDeletes, CreatedDate 
 FROM PipelineConfig 
 ORDER BY TableName;
 ```
@@ -885,7 +883,7 @@ Each table in the Bronze layer should include these additional columns for track
 ```sql
 -- Example: Adding tracking columns to Bronze layer Account table
 -- This would be done via Notebook activity in the pipeline
--- Replace 'bronze_account' with parameterized table name: @{item().BronzeTableName}
+-- Replace 'bronze_account' with parameterized table name: @{item().TableName}
 
 -- Check if tracking columns already exist by describing the table
 DESCRIBE bronze_account;
