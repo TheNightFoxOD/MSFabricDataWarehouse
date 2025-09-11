@@ -1,0 +1,834 @@
+{
+  "properties": {
+    "jobMode": "Batch",
+    "fullLoadBehavior": "None",
+    "source": {
+      "type": "CommonDataServiceForAppsEntity",
+      "connectionSettings": {
+        "type": "CommonDataServiceForApps",
+        "externalReferences": {
+          "connection": "47553726-c8ed-444b-a11b-9915574eac39"
+        }
+      }
+    },
+    "destination": {
+      "type": "LakehouseTable",
+      "connectionSettings": {
+        "type": "Lakehouse",
+        "typeProperties": {
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "artifactId": "9b188807-1a81-89f3-489f-be914aee8a32",
+          "rootFolder": "Tables"
+        }
+      }
+    },
+    "policy": {
+      "timeout": "0.12:00:00"
+    }
+  },
+  "activities": [
+    {
+      "id": "f319c4d3-3bfe-40dd-ae27-63cb7e426cb9",
+      "properties": {
+        "source": {
+          "datasetSettings": {
+            "entityName": "activitypointer"
+          }
+        },
+        "destination": {
+          "writeBehavior": "Append",
+          "datasetSettings": {
+            "schema": "dataverse",
+            "table": "activitypointer"
+          }
+        },
+        "enableStaging": false,
+        "translator": {
+          "type": "TabularTranslator",
+          "mappings": [
+            {
+              "source": {
+                "name": "activityadditionalparams",
+                "type": "String"
+              },
+              "destination": {
+                "name": "activityadditionalparams",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "activityid",
+                "type": "Guid"
+              },
+              "destination": {
+                "name": "activityid",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "activitytypecode",
+                "type": "String"
+              },
+              "destination": {
+                "name": "activitytypecode",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "actualdurationminutes",
+                "type": "Int32"
+              },
+              "destination": {
+                "name": "actualdurationminutes",
+                "physicalType": "integer"
+              }
+            },
+            {
+              "source": {
+                "name": "actualend",
+                "type": "DateTime"
+              },
+              "destination": {
+                "name": "actualend",
+                "physicalType": "timestamp"
+              }
+            },
+            {
+              "source": {
+                "name": "actualstart",
+                "type": "DateTime"
+              },
+              "destination": {
+                "name": "actualstart",
+                "physicalType": "timestamp"
+              }
+            },
+            {
+              "source": {
+                "name": "community",
+                "type": "Int32"
+              },
+              "destination": {
+                "name": "community",
+                "physicalType": "integer"
+              }
+            },
+            {
+              "source": {
+                "name": "createdby",
+                "type": "Guid"
+              },
+              "destination": {
+                "name": "createdby",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "createdbyname",
+                "type": "String"
+              },
+              "destination": {
+                "name": "createdbyname",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "createdbyyominame",
+                "type": "String"
+              },
+              "destination": {
+                "name": "createdbyyominame",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "createdon",
+                "type": "DateTime"
+              },
+              "destination": {
+                "name": "createdon",
+                "physicalType": "timestamp"
+              }
+            },
+            {
+              "source": {
+                "name": "createdonbehalfby",
+                "type": "Guid"
+              },
+              "destination": {
+                "name": "createdonbehalfby",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "createdonbehalfbyname",
+                "type": "String"
+              },
+              "destination": {
+                "name": "createdonbehalfbyname",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "createdonbehalfbyyominame",
+                "type": "String"
+              },
+              "destination": {
+                "name": "createdonbehalfbyyominame",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "deliverylastattemptedon",
+                "type": "DateTime"
+              },
+              "destination": {
+                "name": "deliverylastattemptedon",
+                "physicalType": "timestamp"
+              }
+            },
+            {
+              "source": {
+                "name": "deliveryprioritycode",
+                "type": "Int32"
+              },
+              "destination": {
+                "name": "deliveryprioritycode",
+                "physicalType": "integer"
+              }
+            },
+            {
+              "source": {
+                "name": "description",
+                "type": "String"
+              },
+              "destination": {
+                "name": "description",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "descriptionblobid_name",
+                "type": "String"
+              },
+              "destination": {
+                "name": "descriptionblobid_name",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "exchangeitemid",
+                "type": "String"
+              },
+              "destination": {
+                "name": "exchangeitemid",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "exchangerate",
+                "type": "Decimal"
+              },
+              "destination": {
+                "name": "exchangerate",
+                "physicalType": "decimal"
+              }
+            },
+            {
+              "source": {
+                "name": "exchangeweblink",
+                "type": "String"
+              },
+              "destination": {
+                "name": "exchangeweblink",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "formattedscheduledend",
+                "type": "DateTime"
+              },
+              "destination": {
+                "name": "formattedscheduledend",
+                "physicalType": "timestamp"
+              }
+            },
+            {
+              "source": {
+                "name": "formattedscheduledstart",
+                "type": "DateTime"
+              },
+              "destination": {
+                "name": "formattedscheduledstart",
+                "physicalType": "timestamp"
+              }
+            },
+            {
+              "source": {
+                "name": "instancetypecode",
+                "type": "Int32"
+              },
+              "destination": {
+                "name": "instancetypecode",
+                "physicalType": "integer"
+              }
+            },
+            {
+              "source": {
+                "name": "isbilled",
+                "type": "Boolean"
+              },
+              "destination": {
+                "name": "isbilled",
+                "physicalType": "boolean"
+              }
+            },
+            {
+              "source": {
+                "name": "ismapiprivate",
+                "type": "Boolean"
+              },
+              "destination": {
+                "name": "ismapiprivate",
+                "physicalType": "boolean"
+              }
+            },
+            {
+              "source": {
+                "name": "isregularactivity",
+                "type": "Boolean"
+              },
+              "destination": {
+                "name": "isregularactivity",
+                "physicalType": "boolean"
+              }
+            },
+            {
+              "source": {
+                "name": "isworkflowcreated",
+                "type": "Boolean"
+              },
+              "destination": {
+                "name": "isworkflowcreated",
+                "physicalType": "boolean"
+              }
+            },
+            {
+              "source": {
+                "name": "lastonholdtime",
+                "type": "DateTime"
+              },
+              "destination": {
+                "name": "lastonholdtime",
+                "physicalType": "timestamp"
+              }
+            },
+            {
+              "source": {
+                "name": "leftvoicemail",
+                "type": "Boolean"
+              },
+              "destination": {
+                "name": "leftvoicemail",
+                "physicalType": "boolean"
+              }
+            },
+            {
+              "source": {
+                "name": "modifiedby",
+                "type": "Guid"
+              },
+              "destination": {
+                "name": "modifiedby",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "modifiedbyname",
+                "type": "String"
+              },
+              "destination": {
+                "name": "modifiedbyname",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "modifiedbyyominame",
+                "type": "String"
+              },
+              "destination": {
+                "name": "modifiedbyyominame",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "modifiedon",
+                "type": "DateTime"
+              },
+              "destination": {
+                "name": "modifiedon",
+                "physicalType": "timestamp"
+              }
+            },
+            {
+              "source": {
+                "name": "modifiedonbehalfby",
+                "type": "Guid"
+              },
+              "destination": {
+                "name": "modifiedonbehalfby",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "modifiedonbehalfbyname",
+                "type": "String"
+              },
+              "destination": {
+                "name": "modifiedonbehalfbyname",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "modifiedonbehalfbyyominame",
+                "type": "String"
+              },
+              "destination": {
+                "name": "modifiedonbehalfbyyominame",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "msft_datastate",
+                "type": "Int32"
+              },
+              "destination": {
+                "name": "msft_datastate",
+                "physicalType": "integer"
+              }
+            },
+            {
+              "source": {
+                "name": "onholdtime",
+                "type": "Int32"
+              },
+              "destination": {
+                "name": "onholdtime",
+                "physicalType": "integer"
+              }
+            },
+            {
+              "source": {
+                "name": "ownerid",
+                "type": "Guid"
+              },
+              "destination": {
+                "name": "ownerid",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "owneridname",
+                "type": "String"
+              },
+              "destination": {
+                "name": "owneridname",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "owneridtype",
+                "type": "String"
+              },
+              "destination": {
+                "name": "owneridtype",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "owneridyominame",
+                "type": "String"
+              },
+              "destination": {
+                "name": "owneridyominame",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "owningbusinessunit",
+                "type": "Guid"
+              },
+              "destination": {
+                "name": "owningbusinessunit",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "owningbusinessunitname",
+                "type": "String"
+              },
+              "destination": {
+                "name": "owningbusinessunitname",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "owningteam",
+                "type": "Guid"
+              },
+              "destination": {
+                "name": "owningteam",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "owninguser",
+                "type": "Guid"
+              },
+              "destination": {
+                "name": "owninguser",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "postponeactivityprocessinguntil",
+                "type": "DateTime"
+              },
+              "destination": {
+                "name": "postponeactivityprocessinguntil",
+                "physicalType": "timestamp"
+              }
+            },
+            {
+              "source": {
+                "name": "prioritycode",
+                "type": "Int32"
+              },
+              "destination": {
+                "name": "prioritycode",
+                "physicalType": "integer"
+              }
+            },
+            {
+              "source": {
+                "name": "processid",
+                "type": "Guid"
+              },
+              "destination": {
+                "name": "processid",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "regardingobjectid",
+                "type": "Guid"
+              },
+              "destination": {
+                "name": "regardingobjectid",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "regardingobjectidname",
+                "type": "String"
+              },
+              "destination": {
+                "name": "regardingobjectidname",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "regardingobjectidyominame",
+                "type": "String"
+              },
+              "destination": {
+                "name": "regardingobjectidyominame",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "regardingobjecttypecode",
+                "type": "String"
+              },
+              "destination": {
+                "name": "regardingobjecttypecode",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "scheduleddurationminutes",
+                "type": "Int32"
+              },
+              "destination": {
+                "name": "scheduleddurationminutes",
+                "physicalType": "integer"
+              }
+            },
+            {
+              "source": {
+                "name": "scheduledend",
+                "type": "DateTime"
+              },
+              "destination": {
+                "name": "scheduledend",
+                "physicalType": "timestamp"
+              }
+            },
+            {
+              "source": {
+                "name": "scheduledstart",
+                "type": "DateTime"
+              },
+              "destination": {
+                "name": "scheduledstart",
+                "physicalType": "timestamp"
+              }
+            },
+            {
+              "source": {
+                "name": "sendermailboxid",
+                "type": "Guid"
+              },
+              "destination": {
+                "name": "sendermailboxid",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "sendermailboxidname",
+                "type": "String"
+              },
+              "destination": {
+                "name": "sendermailboxidname",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "senton",
+                "type": "DateTime"
+              },
+              "destination": {
+                "name": "senton",
+                "physicalType": "timestamp"
+              }
+            },
+            {
+              "source": {
+                "name": "seriesid",
+                "type": "Guid"
+              },
+              "destination": {
+                "name": "seriesid",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "serviceid",
+                "type": "Guid"
+              },
+              "destination": {
+                "name": "serviceid",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "serviceidname",
+                "type": "String"
+              },
+              "destination": {
+                "name": "serviceidname",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "slaid",
+                "type": "Guid"
+              },
+              "destination": {
+                "name": "slaid",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "slainvokedid",
+                "type": "Guid"
+              },
+              "destination": {
+                "name": "slainvokedid",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "slainvokedidname",
+                "type": "String"
+              },
+              "destination": {
+                "name": "slainvokedidname",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "slaname",
+                "type": "String"
+              },
+              "destination": {
+                "name": "slaname",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "sortdate",
+                "type": "DateTime"
+              },
+              "destination": {
+                "name": "sortdate",
+                "physicalType": "timestamp"
+              }
+            },
+            {
+              "source": {
+                "name": "stageid",
+                "type": "Guid"
+              },
+              "destination": {
+                "name": "stageid",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "statecode",
+                "type": "Int32"
+              },
+              "destination": {
+                "name": "statecode",
+                "physicalType": "integer"
+              }
+            },
+            {
+              "source": {
+                "name": "statuscode",
+                "type": "Int32"
+              },
+              "destination": {
+                "name": "statuscode",
+                "physicalType": "integer"
+              }
+            },
+            {
+              "source": {
+                "name": "subject",
+                "type": "String"
+              },
+              "destination": {
+                "name": "subject",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "timezoneruleversionnumber",
+                "type": "Int32"
+              },
+              "destination": {
+                "name": "timezoneruleversionnumber",
+                "physicalType": "integer"
+              }
+            },
+            {
+              "source": {
+                "name": "transactioncurrencyid",
+                "type": "Guid"
+              },
+              "destination": {
+                "name": "transactioncurrencyid",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "transactioncurrencyidname",
+                "type": "String"
+              },
+              "destination": {
+                "name": "transactioncurrencyidname",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "traversedpath",
+                "type": "String"
+              },
+              "destination": {
+                "name": "traversedpath",
+                "physicalType": "string"
+              }
+            },
+            {
+              "source": {
+                "name": "utcconversiontimezonecode",
+                "type": "Int32"
+              },
+              "destination": {
+                "name": "utcconversiontimezonecode",
+                "physicalType": "integer"
+              }
+            },
+            {
+              "source": {
+                "name": "versionnumber",
+                "type": "Int64"
+              },
+              "destination": {
+                "name": "versionnumber",
+                "physicalType": "long"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

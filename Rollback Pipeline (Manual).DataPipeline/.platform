@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "DataPipeline",
+    "displayName": "Rollback Pipeline (Manual)"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "039c8668-2001-b27a-4930-159b431a6fe8"
+  }
+}

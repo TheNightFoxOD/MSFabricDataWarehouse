@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "DataPipeline",
+    "displayName": "Purge Metadata Update (Manual)"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "a1789eaf-4150-834d-4444-a94e3018986c"
+  }
+}
