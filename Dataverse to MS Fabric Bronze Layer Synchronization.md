@@ -790,11 +790,11 @@ CREATE TABLE IF NOT EXISTS PipelineConfig (
 -- Insert initial pilot data (using GUID format)
 INSERT INTO PipelineConfig 
 (TableId, TableName, SchemaName, PrimaryKeyColumn, SyncEnabled, TrackDeletes, CreatedDate, ModifiedDate)
-SELECT 'a1b2c3d4-e5f6-7890-1234-567890abcdef', 'Account', 'dbo', 'AccountId', true, true, current_timestamp(), current_timestamp()
+SELECT 'a1b2c3d4-e5f6-7890-1234-567890abcdef', 'account', 'dbo', 'accountid', true, true, current_timestamp(), current_timestamp()
 UNION ALL
-SELECT 'b2c3d4e5-f6g7-8901-2345-6789012bcdef', 'Donation', 'dbo', 'DonationId', true, true, current_timestamp(), current_timestamp()
+SELECT 'b2c3d4e5-f6g7-8901-2345-6789012bcdef', 'donation', 'dbo', 'donationid', true, true, current_timestamp(), current_timestamp()
 UNION ALL
-SELECT 'c3d4e5f6-g7h8-9012-3456-78901234cdef', 'ActivityPointer', 'dbo', 'ActivityId', true, true, current_timestamp(), current_timestamp();
+SELECT 'c3d4e5f6-g7h8-9012-3456-78901234cdef', 'activitypointer', 'dbo', 'activityid', true, true, current_timestamp(), current_timestamp();
 ```
 
 ```sql
@@ -883,16 +883,16 @@ Each table in the Bronze layer should include these additional columns for track
 ```sql
 -- Example: Adding tracking columns to Bronze layer Account table
 -- This would be done via Notebook activity in the pipeline
--- Replace 'bronze_account' with parameterized table name: @{item().TableName}
+-- Replace 'account' with parameterized table name: @{item().TableName}
 
 -- Check if tracking columns already exist by describing the table
-DESCRIBE bronze_account;
+DESCRIBE account;
 ```
 
 ```sql
 -- Add tracking columns if they don't exist (conditional execution)
 -- Note: In actual pipeline, wrap this in conditional logic based on DESCRIBE results
-ALTER TABLE bronze_account ADD COLUMNS (
+ALTER TABLE account ADD COLUMNS (
     IsDeleted BOOLEAN DEFAULT false,
     IsPurged BOOLEAN DEFAULT false,
     DeletedDate TIMESTAMP,
@@ -904,13 +904,13 @@ ALTER TABLE bronze_account ADD COLUMNS (
 
 ```sql
 -- Optimize table after schema changes for performance
-OPTIMIZE bronze_account;
-OPTIMIZE bronze_account ZORDER BY (IsDeleted, IsPurged, LastSynced);
+OPTIMIZE account;
+OPTIMIZE account ZORDER BY (IsDeleted, IsPurged, LastSynced);
 ```
 
 ```sql
 -- Verify tracking columns were added successfully
-DESCRIBE bronze_account;
+DESCRIBE account;
 ```
 
 ```sql
@@ -920,7 +920,7 @@ SELECT
     SUM(CASE WHEN IsDeleted = true THEN 1 ELSE 0 END) as DeletedRecords,
     SUM(CASE WHEN IsPurged = true THEN 1 ELSE 0 END) as PurgedRecords,
     SUM(CASE WHEN IsDeleted = false AND IsPurged = false THEN 1 ELSE 0 END) as ActiveRecords
-FROM bronze_account;
+FROM account;
 ```
 
 ### Data Types Mapping: SQL Server → Spark SQL
