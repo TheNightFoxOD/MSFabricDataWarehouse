@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
   "metadata": {
     "type": "Notebook",
-    "displayName": "Manual Metadata Seed Notebook",
+    "displayName": "Truncate table",
     "description": "New notebook"
   },
   "config": {
     "version": "2.0",
-    "logicalId": "5de426f5-d4b9-89ef-4307-0b1feac8058a"
+    "logicalId": "4197dd20-7ce4-b3cc-428e-eb03288d7c4d"
   }
 }
