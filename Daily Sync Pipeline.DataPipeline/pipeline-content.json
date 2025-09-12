@@ -51,80 +51,6 @@
           },
           "activities": [
             {
-              "type": "Copy",
-              "typeProperties": {
-                "source": {
-                  "type": "CommonDataServiceForAppsSource",
-                  "query": {
-                    "value": "<fetch>\n  <entity name=\"@{item().TableName}\">\n    <all-attributes />\n    <filter type=\"and\">\n      <condition attribute=\"modifiedon\" operator=\"on-or-after\" value=\"@{formatDateTime(addDays(utcNow(), -30), 'yyyy-MM-ddTHH:mm:ssZ')}\" />\n    </filter>\n  </entity>\n</fetch>",
-                    "type": "Expression"
-                  },
-                  "datasetSettings": {
-                    "type": "CommonDataServiceForAppsEntity",
-                    "schema": [],
-                    "externalReferences": {
-                      "connection": "47553726-c8ed-444b-a11b-9915574eac39"
-                    },
-                    "annotations": []
-                  }
-                },
-                "sink": {
-                  "type": "LakehouseTableSink",
-                  "tableActionOption": "Upsert",
-                  "upsertSettings": {
-                    "keys": {
-                      "value": "@array(item().PrimaryKeyColumn)",
-                      "type": "Expression"
-                    }
-                  },
-                  "applyVOrder": true,
-                  "datasetSettings": {
-                    "type": "LakehouseTable",
-                    "typeProperties": {
-                      "schema": "dbo",
-                      "table": {
-                        "value": "@item().TableName",
-                        "type": "Expression"
-                      }
-                    },
-                    "schema": [],
-                    "linkedService": {
-                      "name": "Master_Bronze",
-                      "properties": {
-                        "type": "Lakehouse",
-                        "typeProperties": {
-                          "artifactId": "4aee8a32-be91-489f-89f3-1a819b188807",
-                          "workspaceId": "b0f83c07-a701-49bb-a165-e06ca0ee4000",
-                          "rootFolder": "Tables"
-                        },
-                        "annotations": []
-                      }
-                    },
-                    "annotations": []
-                  }
-                },
-                "enableStaging": false
-              },
-              "policy": {
-                "timeout": "0.12:00:00",
-                "retry": 0,
-                "retryIntervalInSeconds": 30,
-                "secureInput": false,
-                "secureOutput": false
-              },
-              "name": "Upsert Current Records",
-              "state": "Inactive",
-              "onInactiveMarkAs": "Succeeded",
-              "dependsOn": [
-                {
-                  "activity": "Schema is up to date",
-                  "dependencyConditions": [
-                    "Succeeded"
-                  ]
-                }
-              ]
-            },
-            {
               "type": "TridentNotebook",
               "typeProperties": {
                 "notebookId": "2aab78c7-2d38-9c42-4358-a121e194d39e",
@@ -160,11 +86,10 @@
               "type": "IfCondition",
               "typeProperties": {
                 "expression": {
-                  "value": "@or(\n  equals(json(activity('Check table definition').output.result.exitValue).action_required, 'CREATE_TABLE'),\n  contains(createArray('activitypointer'), item().TableName)\n)",
+                  "value": "@contains(json(activity('Check table definition').output.result.exitValue).required_actions, 'CREATE_TABLE')",
                   "type": "Expression"
                 },
-                "ifTrueActivities": [],
-                "ifFalseActivities": [
+                "ifTrueActivities": [
                   {
                     "type": "Copy",
                     "typeProperties": {
@@ -227,10 +152,50 @@
                     "name": "Create New Table",
                     "description": "Create New Table (Auto Import Schema)",
                     "dependsOn": []
+                  },
+                  {
+                    "type": "TridentNotebook",
+                    "typeProperties": {
+                      "notebookId": "4197dd20-7ce4-b3cc-428e-eb03288d7c4d",
+                      "workspaceId": "00000000-0000-0000-0000-000000000000",
+                      "parameters": {
+                        "table_name": {
+                          "value": {
+                            "value": "@{item().TableName}",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        },
+                        "schema_name": {
+                          "value": {
+                            "value": "@{item().SchemaName}",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "policy": {
+                      "timeout": "0.12:00:00",
+                      "retry": 0,
+                      "retryIntervalInSeconds": 30,
+                      "secureInput": false,
+                      "secureOutput": false
+                    },
+                    "name": "Truncate table",
+                    "dependsOn": [
+                      {
+                        "activity": "Create New Table",
+                        "dependencyConditions": [
+                          "Succeeded"
+                        ]
+                      }
+                    ]
                   }
-                ]
+                ],
+                "ifFalseActivities": []
               },
-              "name": "Table Exists",
+              "name": "Table needs to be created",
               "description": "",
               "dependsOn": [
                 {
@@ -245,7 +210,7 @@
               "type": "IfCondition",
               "typeProperties": {
                 "expression": {
-                  "value": "@equals(json(activity('Check table definition').output.result.exitValue).action_required, 'ADD_TRACKING_COLUMNS')",
+                  "value": "@contains(json(activity('Check table definition').output.result.exitValue).required_actions, 'ADD_TRACKING_COLUMNS')",
                   "type": "Expression"
                 },
                 "ifTrueActivities": [],
@@ -274,7 +239,7 @@
               "name": "Table Has Tracking Columns",
               "dependsOn": [
                 {
-                  "activity": "Table Exists",
+                  "activity": "Table needs to be created",
                   "dependencyConditions": [
                     "Succeeded"
                   ]
@@ -285,11 +250,10 @@
               "type": "IfCondition",
               "typeProperties": {
                 "expression": {
-                  "value": "@equals(json(activity('Check table definition').output.result.exitValue).action_required, 'UPDATE_SCHEMA')",
+                  "value": "@contains(json(activity('Check table definition').output.result.exitValue).required_actions, 'VALIDATE_SCHEMA')",
                   "type": "Expression"
                 },
-                "ifTrueActivities": [],
-                "ifFalseActivities": [
+                "ifTrueActivities": [
                   {
                     "type": "TridentNotebook",
                     "typeProperties": {
@@ -308,12 +272,101 @@
                     "onInactiveMarkAs": "Succeeded",
                     "dependsOn": []
                   }
-                ]
+                ],
+                "ifFalseActivities": []
               },
-              "name": "Schema is up to date",
+              "name": "Needs schema validation",
               "dependsOn": [
                 {
                   "activity": "Table Has Tracking Columns",
+                  "dependencyConditions": [
+                    "Succeeded"
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "IfCondition",
+              "typeProperties": {
+                "expression": {
+                  "value": "@equals(json(activity('Check table definition').output.result.exitValue).do_not_sync, false)",
+                  "type": "Expression"
+                },
+                "ifTrueActivities": [
+                  {
+                    "type": "Copy",
+                    "typeProperties": {
+                      "source": {
+                        "type": "CommonDataServiceForAppsSource",
+                        "query": {
+                          "value": "<fetch>\n  <entity name=\"@{item().TableName}\">\n    <all-attributes />\n    <filter type=\"and\">\n      <condition attribute=\"modifiedon\" operator=\"on-or-after\" value=\"@{formatDateTime(addDays(utcNow(), -30), 'yyyy-MM-ddTHH:mm:ssZ')}\" />\n    </filter>\n  </entity>\n</fetch>",
+                          "type": "Expression"
+                        },
+                        "datasetSettings": {
+                          "type": "CommonDataServiceForAppsEntity",
+                          "schema": [],
+                          "externalReferences": {
+                            "connection": "47553726-c8ed-444b-a11b-9915574eac39"
+                          },
+                          "annotations": []
+                        }
+                      },
+                      "sink": {
+                        "type": "LakehouseTableSink",
+                        "tableActionOption": "Upsert",
+                        "upsertSettings": {
+                          "keys": {
+                            "value": "@array(item().PrimaryKeyColumn)",
+                            "type": "Expression"
+                          }
+                        },
+                        "applyVOrder": true,
+                        "datasetSettings": {
+                          "type": "LakehouseTable",
+                          "typeProperties": {
+                            "schema": "dbo",
+                            "table": {
+                              "value": "@item().TableName",
+                              "type": "Expression"
+                            }
+                          },
+                          "schema": [],
+                          "linkedService": {
+                            "name": "Master_Bronze",
+                            "properties": {
+                              "type": "Lakehouse",
+                              "typeProperties": {
+                                "artifactId": "4aee8a32-be91-489f-89f3-1a819b188807",
+                                "workspaceId": "b0f83c07-a701-49bb-a165-e06ca0ee4000",
+                                "rootFolder": "Tables"
+                              },
+                              "annotations": []
+                            }
+                          },
+                          "annotations": []
+                        }
+                      },
+                      "enableStaging": false
+                    },
+                    "policy": {
+                      "timeout": "0.12:00:00",
+                      "retry": 0,
+                      "retryIntervalInSeconds": 30,
+                      "secureInput": false,
+                      "secureOutput": false
+                    },
+                    "name": "Upsert Current Records",
+                    "state": "Inactive",
+                    "onInactiveMarkAs": "Succeeded",
+                    "dependsOn": []
+                  }
+                ],
+                "ifFalseActivities": []
+              },
+              "name": "Can sync table",
+              "dependsOn": [
+                {
+                  "activity": "Needs schema validation",
                   "dependencyConditions": [
                     "Succeeded"
                   ]

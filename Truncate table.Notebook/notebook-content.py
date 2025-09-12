@@ -20,14 +20,25 @@
 # META   }
 # META }
 
-# CELL ********************
+# PARAMETERS CELL ********************
 
-# MAGIC %%sql
-# MAGIC drop table dataverse.activitypointer
+table_name = "default_table_name"
+schema_name = "default_schema_name"
 
 # METADATA ********************
 
 # META {
-# META   "language": "sparksql",
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+spark.sql(f"TRUNCATE TABLE {schema_name}.{table_name}")
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
 # META   "language_group": "synapse_pyspark"
 # META }
