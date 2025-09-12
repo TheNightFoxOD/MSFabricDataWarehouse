@@ -18,6 +18,8 @@ This architecture implements a robust data synchronization solution from Microso
 - **Point-in-Time Recovery**: Delta Lake checkpoints enabling rapid rollback to any previous state
 - **Automated Error Handling**: Multi-tier retry logic with exponential backoff and circuit breaker patterns
 - **Manual Fallback Controls**: Administrator-triggered rollback to validated checkpoints
+- **Dynamic Schema Management**: Automatic table creation with schema detection and drift handling
+- **Manual Table Exceptions**: Skip problematic tables that require manual setup
 
 ### Data Retention Strategy
 - **Dataverse**: 5 years + current year (system limitation with manual purges)
@@ -30,20 +32,27 @@ This architecture implements a robust data synchronization solution from Microso
 - **Source System**: Microsoft Dataverse
 - **Target Platform**: Microsoft Fabric Lakehouse (Bronze Layer)
 - **Storage Format**: Delta Lake tables with time travel capabilities
-- **Integration Tools**: MS Fabric Data Pipelines, Copy Activities, SQL Scripts/Dataflow Gen2
-- **Orchestration**: Metadata-driven ForEach loops with parameterized activities
+- **Integration Tools**: MS Fabric Data Pipelines, Copy Activities, Notebooks with PySpark
+- **Orchestration**: Metadata-driven ForEach loops with conditional processing
 
 ### Data Flow Architecture
 
 ```
 Dataverse → Daily Sync Pipeline → Bronze Layer (Current State)
                     ↓
-            Soft Delete Detection
+        1. Check Table Definition
                     ↓
-        Purge-Aware Classification
-        (IsDeleted vs IsPurged)
+        2. Create Table if Needed
                     ↓
-            Daily Checkpoint Creation
+        3. Add Tracking Columns
+                    ↓
+        4. Handle Schema Drift
+                    ↓
+        5. Sync Data Operations
+                    ↓
+        6. Purge-Aware Classification
+                    ↓
+        7. Log Execution
                     
 Manual Purge in Dataverse → Update Metadata → Next Sync Handles Automatically
 ```
@@ -55,7 +64,9 @@ Manual Purge in Dataverse → Update Metadata → Next Sync Handles Automaticall
 | CDC Method | Copy Activity with Purge-Aware Detection | Simpler than Synapse Link, handles both deletes and purges |
 | Storage Format | Delta Lake | ACID transactions, time travel, schema evolution |
 | Purge Handling | Metadata-driven classification | No separate pipeline needed, automatic handling |
-| Merge Strategy | SQL Scripts preferred, Dataflow Gen2 optional | SQL provides better control for complex logic |
+| Table Creation | Dynamic FetchXML with auto-schema import | Maintains full schema detection while handling exceptions |
+| Schema Management | Four-stage conditional processing | Clean separation of concerns with required_actions array |
+| Manual Exceptions | Skip problematic tables via do_not_sync flag | Allows manual setup of complex tables like activitypointer |
 | Orchestration | Metadata-driven pipelines | Eliminates per-table manual configuration |
 | Failure Strategy | Checkpoint-based rollback | Rapid recovery without data loss |
 
@@ -230,13 +241,13 @@ graph TB
     end
     
     subgraph "MS Fabric Data Pipelines"
-        subgraph "Daily Sync Pipeline"
-            DS1[Lookup Metadata]
-            DS2[ForEach Table Loop]
-            DS3[Copy Activity<br/>Upsert]
-            DS4[Copy Current IDs]
-            DS5[Purge-Aware<br/>Delete Detection]
-            DS6[Checkpoint<br/>Creation]
+        subgraph "Enhanced Daily Sync Pipeline"
+            DS0[Check Table Definition]
+            DS1[If: Table Needs Creation]
+            DS2[If: Table Has Tracking]
+            DS3[If: Needs Schema Validation]
+            DS4[If: Can Sync Table]
+            DS5[Log Execution]
         end
         
         subgraph "Manual Purge Update"
@@ -269,19 +280,19 @@ graph TB
         MC3[Purge Metadata<br/>Update]
     end
     
-    DV -->|Daily| DS1
+    DV -->|Daily| DS0
+    DS0 --> DS1
     DS1 --> DS2
     DS2 --> DS3
     DS3 --> DS4
     DS4 --> DS5
-    DS5 --> DS6
-    DS6 --> BL
+    DS5 --> BL
     
     PURGE -->|Manual| MC3
     MC3 --> PU1
     PU1 --> META
     
-    DS3 -->|On Error| EH1
+    DS1 -->|On Error| EH1
     EH1 -->|Max Retry| EH2
     EH2 -->|Critical| EH3
     EH3 --> EH4
@@ -293,58 +304,80 @@ graph TB
     RP3 --> BL
     
     BL --> CP
-    META -->|LastPurgeDate| DS5
+    META -->|LastPurgeDate| DS4
 ```
 
 ---
 
 # 4. Detailed Pipeline Setup
 
-## Pipeline 1: Daily Sync Pipeline
+## Pipeline 1: Enhanced Daily Sync Pipeline
+
+### Updated Pipeline Structure
+
+```
+Activity 1: Lookup - Get Enabled Tables
+Activity 2: ForEach - Process Tables
+├── Activity 2.0: Notebook - Check Table Definition
+├── Activity 2.1: If Condition - Table Needs to Be Created
+│   ├── True Branch: Copy Activity - Create New Table → Notebook - Truncate Table
+│   └── False Branch: Skip
+├── Activity 2.2: If Condition - Table Has Tracking Columns  
+│   ├── True Branch: Skip (already has tracking columns)
+│   └── False Branch: Notebook - Add Tracking Columns
+├── Activity 2.3: If Condition - Needs Schema Validation
+│   ├── True Branch: Notebook - Handle Schema Drift
+│   └── False Branch: Skip
+├── Activity 2.4: If Condition - Can Sync Table
+│   ├── True Branch: Sync Operations
+│   │   ├── Copy Activity - Upsert Current Records
+│   │   ├── Copy Activity - Extract Current IDs
+│   │   └── Notebook - Purge-Aware Delete Detection
+│   └── False Branch: Skip sync
+└── Activity 2.5: Notebook - Log Execution
+```
 
 ### Pipeline Summary
-**Six-activity approach for complete synchronization with purge awareness**:
+**Multi-stage conditional processing approach for complete synchronization with dynamic schema management**:
 
 ```
 Activity 1: Lookup - Get Enabled Tables
    - Source: PipelineConfig metadata table
    - Returns: Array of tables to process
-   - Includes: LastPurgeDate for each table
+   - Includes: LastPurgeDate and table configuration
 
 Activity 2: ForEach - Process Tables
-   Contains nested activities per table:
+   Contains sequential conditional activities per table:
    
-   Activity 2.1: Copy - Upsert Current Records
-      - Source: Dataverse (all active records)
-      - Destination: Bronze_Layer
-      - Action: Upsert
-      - Adds/Updates all current records
+   Activity 2.0: Notebook - Check Table Definition
+      - Determines table existence and required actions
+      - Handles manual creation exceptions
+      - Returns: required_actions array and do_not_sync flag
    
-   Activity 2.1.5: Script - Ensure Tracking Columns
-      - Conditional column addition
-      - Adds IsDeleted, IsPurged, DeletedDate, PurgedDate, LastSynced
-      - Creates indexes if columns don't exist
+   Activity 2.1: If Condition - Table Needs to Be Created
+      True Branch:
+         - Copy Activity: Create New Table with auto-schema import
+         - Notebook: Truncate table to remove schema detection data
+      False Branch: Skip
    
-   Activity 2.2: Copy - Extract Current IDs
-      - Source: Dataverse (just ID columns)
-      - Destination: Temp_CurrentIDs table
-      - Action: Overwrite
-      - Lightweight operation for comparison
+   Activity 2.2: If Condition - Table Has Tracking Columns
+      True Branch: Skip (already has tracking)
+      False Branch: Notebook - Add Tracking Columns
    
-   Activity 2.3: Script - Purge-Aware Delete Detection
-      - Compares current IDs with Bronze layer
-      - Sets IsPurged = 1 for old missing records
-      - Sets IsDeleted = 1 for recent missing records
-      - Uses LastPurgeDate as cutoff
-      - Updates LastSynced timestamp
+   Activity 2.3: If Condition - Needs Schema Validation  
+      True Branch: Notebook - Handle Schema Drift
+      False Branch: Skip
    
-   Activity 2.4: Script - Log Execution
-      - Updates SyncAuditLog
-      - Records metrics and status
-
-Activity 3: If Condition - Create Checkpoint
-   - Condition: All tables successful
-   - Creates daily checkpoint for rollback
+   Activity 2.4: If Condition - Can Sync Table
+      True Branch: Sync Operations
+         - Copy Activity: Upsert Current Records
+         - Copy Activity: Extract Current IDs
+         - Notebook: Purge-Aware Delete Detection
+      False Branch: Skip sync
+   
+   Activity 2.5: Notebook - Log Execution
+      - Updates SyncAuditLog with execution results
+      - Records metrics and status regardless of sync outcome
 ```
 
 ### Pipeline Parameters
@@ -382,151 +415,133 @@ ORDER BY TableName
 
 **Inside ForEach Container:**
 
-##### Activity 2.1: Copy - Upsert Records
+##### Activity 2.0: Notebook - Check Table Definition
+**Type**: Notebook Activity
+**Notebook**: CheckTableDefinition
+**Parameters**:
+```json
+{
+  "TableName": "@{item().TableName}"
+}
+```
+**Expression References for Pipeline**:
+- Table creation check: `@contains(json(activity('Check Table Definition').output.result.exitValue).required_actions, 'CREATE_TABLE')`
+- Tracking columns check: `@not(contains(json(activity('Check Table Definition').output.result.exitValue).required_actions, 'ADD_TRACKING_COLUMNS'))`
+- Schema validation check: `@contains(json(activity('Check Table Definition').output.result.exitValue).required_actions, 'VALIDATE_SCHEMA')`
+- Can sync check: `@not(json(activity('Check Table Definition').output.result.exitValue).do_not_sync)`
+
+##### Activity 2.1: If Condition - Table Needs to Be Created
+**Type**: If Condition
+**Expression**: `@contains(json(activity('Check Table Definition').output.result.exitValue).required_actions, 'CREATE_TABLE')`
+
+**True Branch:**
+
+###### Copy Activity - Create New Table
 **Type**: Copy Activity
 **Source**: 
 - Dataset: Dataverse
-- Query: `SELECT * FROM @{item().SchemaName}.@{item().TableName} WHERE ModifiedOn >= DATEADD(day, -7, GETDATE())`
+- Query Type: FetchXML
+- Query: 
+```xml
+<fetch top="1">
+  <entity name="@{item().TableName}">
+    <all-attributes />
+    <order attribute="modifiedon" descending="true" />
+  </entity>
+</fetch>
+```
+**Sink**:
+- Dataset: Lakehouse
+- Table: `@{item().TableName}`
+- Table Action: Create table
+- Write Method: Insert
+
+###### Notebook - Truncate Table
+**Type**: Notebook Activity
+**Notebook**: TruncateTable
+**Parameters**:
+```json
+{
+  "TableName": "@{item().TableName}"
+}
+```
+
+##### Activity 2.2: If Condition - Table Has Tracking Columns
+**Type**: If Condition  
+**Expression**: `@not(contains(json(activity('Check Table Definition').output.result.exitValue).required_actions, 'ADD_TRACKING_COLUMNS'))`
+
+**False Branch - Notebook: Add Tracking Columns**
+**Type**: Notebook Activity
+**Notebook**: AddTrackingColumns
+**Parameters**:
+```json
+{
+  "TableName": "@{item().TableName}"
+}
+```
+
+##### Activity 2.3: If Condition - Needs Schema Validation
+**Type**: If Condition
+**Expression**: `@contains(json(activity('Check Table Definition').output.result.exitValue).required_actions, 'VALIDATE_SCHEMA')`
+
+**True Branch - Notebook: Handle Schema Drift**
+**Type**: Notebook Activity
+**Notebook**: HandleSchemaDrift
+**Parameters**:
+```json
+{
+  "TableName": "@{item().TableName}"
+}
+```
+
+##### Activity 2.4: If Condition - Can Sync Table
+**Type**: If Condition
+**Expression**: `@not(json(activity('Check Table Definition').output.result.exitValue).do_not_sync)`
+
+**True Branch - Sync Operations:**
+
+###### Copy Activity - Upsert Current Records
+**Type**: Copy Activity
+**Source**: 
+- Dataset: Dataverse
+- Query: `<fetch><entity name="@{item().TableName}"><all-attributes /></entity></fetch>`
 **Sink**:
 - Dataset: Lakehouse
 - Table: `@{item().TableName}`
 - Write Method: Upsert
 - Key Columns: `@{item().PrimaryKeyColumn}`
-**Settings**:
-- Retry: 3
-- Retry Interval: 120 seconds
-- Timeout: 30 minutes
 
-##### Activity 2.1.5: Script - Ensure Tracking Columns
-**Type**: Script Activity
-**Script**:
-```sql
--- Conditional column addition - only runs if columns don't exist
-IF NOT EXISTS (
-    SELECT * FROM INFORMATION_SCHEMA.COLUMNS 
-    WHERE TABLE_NAME = '@{item().TableName}' 
-    AND COLUMN_NAME = 'IsDeleted'
-)
-BEGIN
-    ALTER TABLE @{item().TableName} ADD 
-        IsDeleted BIT DEFAULT 0,
-        IsPurged BIT DEFAULT 0,
-        DeletedDate DATETIME NULL,
-        PurgedDate DATETIME NULL,
-        LastSynced DATETIME DEFAULT CURRENT_TIMESTAMP();
-    
-    -- Add indexes for performance
-    CREATE INDEX IX_IsDeleted ON @{item().TableName} (IsDeleted);
-    CREATE INDEX IX_IsPurged ON @{item().TableName} (IsPurged);
-    CREATE INDEX IX_LastSynced ON @{item().TableName} (LastSynced DESC);
-END
-```
-
-##### Activity 2.2: Copy - Extract Current IDs
+###### Copy Activity - Extract Current IDs
 **Type**: Copy Activity
 **Source**:
 - Dataset: Dataverse  
-- Query: `SELECT @{item().PrimaryKeyColumn} FROM @{item().SchemaName}.@{item().TableName}`
+- Query: `<fetch><entity name="@{item().TableName}"><attribute name="@{item().PrimaryKeyColumn}" /></entity></fetch>`
 **Sink**:
 - Dataset: Lakehouse
 - Table: `Temp_CurrentIDs_@{item().TableName}`
 - Write Method: Overwrite
 
-##### Activity 2.3: Script - Purge-Aware Delete Detection
-**Type**: Script Activity
-**Script**:
-```sql
--- Get the LastPurgeDate for this table
-DECLARE @LastPurgeDate DATETIME = '@{item().LastPurgeDate}';
-
--- Update records based on their status
-UPDATE @{item().TableName}
-SET 
-    IsDeleted = CASE 
-        WHEN @{item().PrimaryKeyColumn} NOT IN (
-            SELECT @{item().PrimaryKeyColumn} 
-            FROM Temp_CurrentIDs_@{item().TableName}
-        )
-        AND (CreatedDate >= ISNULL(@LastPurgeDate, '1900-01-01') OR @LastPurgeDate IS NULL)
-        THEN 1  -- Recent record missing = deleted
-        ELSE IsDeleted  -- Keep existing value
-    END,
-    IsPurged = CASE
-        WHEN @{item().PrimaryKeyColumn} NOT IN (
-            SELECT @{item().PrimaryKeyColumn} 
-            FROM Temp_CurrentIDs_@{item().TableName}
-        )
-        AND @LastPurgeDate IS NOT NULL
-        AND CreatedDate < @LastPurgeDate
-        AND ISNULL(IsPurged, 0) = 0
-        THEN 1  -- Old record missing after purge = purged
-        ELSE IsPurged  -- Keep existing value
-    END,
-    LastSynced = CURRENT_TIMESTAMP()
-WHERE @{item().PrimaryKeyColumn} NOT IN (
-    SELECT @{item().PrimaryKeyColumn} 
-    FROM Temp_CurrentIDs_@{item().TableName}
-)
-AND (ISNULL(IsDeleted, 0) = 0 OR ISNULL(IsPurged, 0) = 0);
-
--- Clean up temp table
-DROP TABLE IF EXISTS Temp_CurrentIDs_@{item().TableName};
+###### Notebook - Purge-Aware Delete Detection
+**Type**: Notebook Activity
+**Notebook**: PurgeAwareDetection
+**Parameters**:
+```json
+{
+  "TableName": "@{item().TableName}",
+  "PrimaryKeyColumn": "@{item().PrimaryKeyColumn}",
+  "LastPurgeDate": "@{item().LastPurgeDate}"
+}
 ```
 
-##### Activity 2.4: Script - Log Execution
-**Type**: Script Activity
-**Script**:
-```sql
-INSERT INTO SyncAuditLog (
-    LogId, PipelineRunId, PipelineName, TableName, Operation,
-    StartTime, EndTime, RowsProcessed, Status
-)
-VALUES (
-    NEWID(),
-    '@{pipeline().RunId}',
-    'DailySync',
-    '@{item().TableName}',
-    'Upsert+PurgeAwareDelete',
-    '@{pipeline().TriggerTime}',
-    GETDATE(),
-    @@ROWCOUNT,
-    'Success'
-);
-
-UPDATE PipelineConfig
-SET LastDailySync = CURRENT_TIMESTAMP()
-WHERE TableName = '@{item().TableName}';
-```
-
-#### Activity 3: If Condition - Create Checkpoint
-**Type**: If Condition
-**Expression**: `@equals(pipeline().parameters.EnableCheckpoint, true)`
-
-**True Branch:**
-
-##### Activity 3.1: Script - Create Checkpoint
-**Type**: Script Activity
-**Script**:
-```sql
--- Create checkpoint for all Bronze tables
-DECLARE @CheckpointName NVARCHAR(100) = 'bronze_backup_' + CONVERT(VARCHAR(10), CURRENT_TIMESTAMP(), 120);
-
--- Use Delta Lake checkpoint command (pseudo-code, adjust for actual syntax)
-EXEC CreateDeltaCheckpoint @CheckpointName;
-
-INSERT INTO CheckpointHistory (
-    CheckpointId, CheckpointName, CheckpointType, TablesIncluded,
-    ValidationStatus, RetentionDate
-)
-SELECT 
-    NEWID(),
-    @CheckpointName,
-    'Daily',
-    COUNT(DISTINCT TableName),
-    'Validated',
-    DATEADD(day, 7, CURRENT_TIMESTAMP())
-FROM PipelineConfig
-WHERE SyncEnabled = 1;
+##### Activity 2.5: Notebook - Log Execution
+**Type**: Notebook Activity
+**Notebook**: LogExecution
+**Parameters**:
+```json
+{
+  "TableName": "@{item().TableName}",
+  "PipelineRunId": "@{pipeline().RunId}"
+}
 ```
 
 ### Error Handling Configuration
@@ -537,20 +552,8 @@ WHERE SyncEnabled = 1;
 
 **Inside Error Handler:**
 
-##### Activity E1: Script - Log Error
-**Type**: Script Activity
-```sql
-INSERT INTO SyncAuditLog (
-    LogId, PipelineRunId, PipelineName, Status, ErrorMessage
-)
-VALUES (
-    NEWID(),
-    '@{pipeline().RunId}',
-    'DailySync',
-    'Failed',
-    '@{activity('ForEach').error.message}'
-);
-```
+##### Activity E1: Notebook - Log Error
+**Type**: Notebook Activity
 
 ##### Activity E2: Web - Send Alert Email
 **Type**: Web Activity
@@ -572,7 +575,7 @@ VALUES (
 **Simple two-activity pipeline to update purge metadata after Dataverse purge**:
 
 ```
-Activity 1: Script - Update Purge Metadata
+Activity 1: Notebook - Update Purge Metadata
    - Updates LastPurgeDate for specified tables
    - Records purge event in audit log
    - Sets purge record count
@@ -593,39 +596,8 @@ Activity 2: Web - Send Confirmation
 
 ### Activity Configuration
 
-#### Activity 1: Script - Update Purge Metadata
-**Type**: Script Activity
-**Script**:
-```sql
--- Update purge metadata for specified tables
-UPDATE PipelineConfig
-SET 
-    LastPurgeDate = '@{pipeline().parameters.PurgeDate}',
-    PurgeRecordCount = @{pipeline().parameters.EstimatedPurgedRecords},
-    ModifiedDate = CURRENT_TIMESTAMP(),
-    ModifiedBy = '@{pipeline().RunId}'
-WHERE 
-    (@{pipeline().parameters.TableNames} = 'All' OR TableName IN (@{pipeline().parameters.TableNames}));
-
--- Log the purge event
-INSERT INTO SyncAuditLog (
-    LogId, PipelineRunId, PipelineName, TableName, Operation,
-    StartTime, EndTime, Status, Notes
-)
-SELECT 
-    NEWID(),
-    '@{pipeline().RunId}',
-    'PurgeMetadataUpdate',
-    TableName,
-    'PurgeRecorded',
-    CURRENT_TIMESTAMP(),
-    CURRENT_TIMESTAMP(),
-    'Success',
-    'Purge date recorded. Next sync will classify accordingly.'
-FROM PipelineConfig
-WHERE 
-    (@{pipeline().parameters.TableNames} = 'All' OR TableName IN (@{pipeline().parameters.TableNames}));
-```
+#### Activity 1: Notebook - Update Purge Metadata
+**Type**: Notebook Activity
 
 #### Activity 2: Web - Send Confirmation
 **Type**: Web Activity
@@ -660,7 +632,7 @@ Activity 2: If Condition - Checkpoint Exists
       - Restores each to checkpoint version
       - Logs restoration per table
    
-   Activity 2.2: Script - Post-Rollback Validation
+   Activity 2.2: Notebook - Post-Rollback Validation
       - Validates data integrity
       - Updates validation metrics
       - Confirms successful rollback
@@ -723,24 +695,8 @@ VALUES (
 );
 ```
 
-##### Activity 2.2: Script - Post-Rollback Validation
-**Type**: Script Activity
-```sql
--- Validate restoration
-INSERT INTO DataValidation (
-    ValidationId, ValidationDate, TableName, BronzeRowCount,
-    ValidationPassed, Notes
-)
-SELECT 
-    NEWID(),
-    CURRENT_TIMESTAMP(),
-    TableName,
-    COUNT(*),
-    1,
-    'Post-rollback validation'
-FROM @{item().TableName}
-GROUP BY TableName;
-```
+##### Activity 2.2: Notebook - Post-Rollback Validation
+**Type**: Notebook Activity
 
 **False Branch:**
 - Send error notification that checkpoint doesn't exist
@@ -878,20 +834,12 @@ ORDER BY TableName;
 
 Each table in the Bronze layer should include these additional columns for tracking:
 
-### Spark SQL Implementation for Bronze Tables
+### Tracking Columns Added by Pipeline
 
 ```sql
--- Example: Adding tracking columns to Bronze layer Account table
--- This would be done via Notebook activity in the pipeline
--- Replace 'account' with parameterized table name: @{item().TableName}
+-- Example: Tracking columns added to Bronze layer Account table
+-- These are added automatically by the "Add Tracking Columns" notebook
 
--- Check if tracking columns already exist by describing the table
-DESCRIBE account;
-```
-
-```sql
--- Add tracking columns if they don't exist (conditional execution)
--- Note: In actual pipeline, wrap this in conditional logic based on DESCRIBE results
 ALTER TABLE account ADD COLUMNS (
     IsDeleted BOOLEAN DEFAULT false,
     IsPurged BOOLEAN DEFAULT false,
@@ -909,11 +857,6 @@ OPTIMIZE account ZORDER BY (IsDeleted, IsPurged, LastSynced);
 ```
 
 ```sql
--- Verify tracking columns were added successfully
-DESCRIBE account;
-```
-
-```sql
 -- Example query to check tracking column functionality
 SELECT 
     COUNT(*) as TotalRecords,
@@ -923,49 +866,39 @@ SELECT
 FROM account;
 ```
 
-### Data Types Mapping: SQL Server → Spark SQL
+### Data Types Mapping: Dataverse → Spark SQL
 
-| SQL Server | Spark SQL | Notes |
-|------------|-----------|--------|
-| BIT | BOOLEAN | Default values: true/false instead of 1/0 |
-| DATETIME | TIMESTAMP | Built-in timezone awareness |
-| NVARCHAR(n) | STRING | No length limits in Delta Lake |
-| VARCHAR(36) | STRING | GUIDs stored as strings |
-| INT | INT | Same data type |
-| BIGINT | BIGINT | Same data type |
+| Dataverse Type | Spark SQL Type | Notes |
+|----------------|----------------|--------|
+| Two Options (Yes/No) | BOOLEAN | Default values: true/false |
+| Date and Time | TIMESTAMP | Built-in timezone awareness |
+| Single Line of Text | STRING | No length limits in Delta Lake |
+| Lookup | STRING | GUIDs stored as strings |
+| Whole Number | INT | Same data type |
+| Decimal Number | DECIMAL | Same data type |
+| Currency | DECIMAL(19,4) | Standard currency precision |
 
 ## Metadata Flow in Architecture
 
 ### Setup Phase (One-time)
 
 #### Step 1: Create Metadata Tables via Notebook
-Execute the SQL commands above in separate notebook cells using `%%sql` magic command:
-
-```sql
--- 1. Create all metadata tables
--- Run scripts above
-
--- 2. Populate PipelineConfig with pilot tables
--- See INSERT statement in PipelineConfig section
-```
+Execute the SQL commands above in a Spark SQL notebook
 
 ### Daily Operations Flow
 ```
-06:00 UTC - Daily Sync Pipeline
+06:00 UTC - Enhanced Daily Sync Pipeline
 ├── READ PipelineConfig WHERE SyncEnabled = 1
 │   └── Including LastPurgeDate for each table
 ├── ForEach Table:
-│   ├── Execute sync operations
-│   ├── Apply purge-aware logic using LastPurgeDate
-│   ├── WRITE to SyncAuditLog (per table)
-│   └── UPDATE PipelineConfig.LastDailySync
-├── WRITE to DataValidation (aggregate metrics)
-└── If successful: WRITE to CheckpointHistory
-
-07:00 UTC - Validation Check
-├── READ latest from DataValidation
-├── Compare thresholds (separate deleted vs purged)
-└── If issues: Send alert
+│   ├── Check Table Definition (determines required actions)
+│   ├── Create Table if needed (with auto schema import)
+│   ├── Add Tracking Columns if missing
+│   ├── Handle Schema Drift if required
+│   ├── Sync Data if allowed (not in manual creation list)
+│   └── Log Execution results
+├── WRITE to SyncAuditLog (per table and overall)
+└── WRITE to DataValidation (aggregate metrics)
 ```
 
 ### Annual Purge Flow
@@ -973,7 +906,7 @@ Execute the SQL commands above in separate notebook cells using `%%sql` magic co
 Manual Trigger - Dataverse Purge Process
 ├── Admin executes purge in Dataverse
 ├── Admin triggers Purge Metadata Update pipeline
-│   └── UPDATE PipelineConfig.LastPurgeDate = GETDATE()
+│   └── UPDATE PipelineConfig.LastPurgeDate = CURRENT_TIMESTAMP
 ├── Next Daily Sync automatically handles:
 │   ├── Missing old records → IsPurged = 1
 │   └── Missing recent records → IsDeleted = 1
@@ -984,9 +917,9 @@ Manual Trigger - Dataverse Purge Process
 ```
 On-Demand - System Health Check
 ├── READ recent from SyncAuditLog
-│   └── Calculate success rates
+│   └── Calculate success rates per table
 ├── READ latest from DataValidation
-│   └── Check discrepancy thresholds
+│   ├── Check discrepancy thresholds
 │   └── Monitor purged vs deleted ratios
 └── READ from CheckpointHistory
     └── Verify checkpoint availability
@@ -994,7 +927,7 @@ On-Demand - System Health Check
 Manual Trigger - Rollback
 ├── READ from CheckpointHistory WHERE CheckpointName = @param
 ├── Validate checkpoint exists and is active
-├── Execute Delta Lake time travel
+├── Execute Delta Lake time travel per table
 ├── WRITE to SyncAuditLog (rollback operation)
 └── UPDATE CheckpointHistory.RestoredCount
 ```
@@ -1013,6 +946,7 @@ Manual Trigger - Rollback
 | Dataverse API throttling | High - Sync delays | Medium | Implement adaptive throttling, batch size optimization, off-peak scheduling |
 | Schema changes without notification | High - Pipeline failures | Medium | Schema drift detection, flexible mapping, email alerts on schema mismatch |
 | Incorrect purge date update | High - Data misclassification | Low | Admin verification process, validation reports, ability to re-run classification |
+| Complex table creation failures | High - Manual intervention required | Medium | Exception handling for problematic tables, manual creation process |
 
 ### Medium Priority Risks
 
@@ -1021,6 +955,7 @@ Manual Trigger - Rollback
 | ForEach loop timeout on large datasets | Medium - Incomplete sync | Medium | Batch size tuning, parallel execution, timeout configuration |
 | Storage costs exceeding budget | Medium - Budget overrun | Medium | Retention policies, compression, tiered storage, regular capacity reviews |
 | Purge-delete logic errors | Medium - Incorrect flags | Low | Thorough testing, validation queries, manual override capability |
+| Notebook parameter issues | Medium - Pipeline failures | Medium | Parameter cell validation, error handling, fallback values |
 
 ### Low Priority Risks
 
@@ -1037,17 +972,18 @@ Manual Trigger - Rollback
 2. **Test Purge Scenarios**: Simulate purges in DEV environment thoroughly
 3. **Document Assumptions**: Record any Dataverse-specific behaviors discovered
 4. **Version Control**: Export pipeline JSON definitions to Git after major changes
+5. **Parameter Cell Management**: Always mark first cell as parameter cell in notebooks
+6. **JSON Output**: Use json.dumps() for all notebook outputs to pipeline
 
-### SQL Script vs Dataflow Gen2 Decision Matrix
+### Notebook vs Copy Activity Decision Matrix
 
 | Scenario | Recommended | Reason |
 |----------|-------------|--------|
 | Simple upsert operations | Copy Activity | Native support, best performance |
-| Purge-aware delete detection | SQL Script | Complex conditional logic easier to implement |
-| Business rule transformations | Dataflow Gen2 | Visual design, business user friendly |
-| High-volume batch processing | SQL Script | Better performance optimization |
-| Cross-table validations | SQL Script | Complex joins easier to write |
-| Data quality checks | Dataflow Gen2 | Built-in profiling capabilities |
+| Complex conditional logic | Notebook | Better control flow and error handling |
+| Schema management | Notebook | Dynamic SQL generation and validation |
+| Data transformations | Notebook | Flexible PySpark operations |
+| Manual exceptions | Notebook | Complex business logic implementation |
 
 ### Performance Optimization Tips
 
@@ -1057,8 +993,8 @@ Manual Trigger - Rollback
    - Adjust based on table sizes
 
 2. **Query Optimization**
-   - Use date filters for incremental loads
-   - Select only required columns
+   - Use FetchXML filters for incremental loads
+   - Select only required columns when possible
    - Index on IsDeleted, IsPurged, and LastSynced columns
 
 3. **Storage Optimization**
@@ -1072,7 +1008,7 @@ Manual Trigger - Rollback
 - [ ] All pipelines completed successfully
 - [ ] Data validation discrepancies < 1%
 - [ ] No unexpected deleted/purged records
-- [ ] Checkpoint created successfully
+- [ ] All tables synced or properly skipped
 
 **Weekly Checks**:
 - [ ] Storage growth within projections
@@ -1111,40 +1047,15 @@ Manual Trigger - Rollback
 3. [ ] Verify no unexpected data loss
 4. [ ] Send confirmation report to stakeholders
 
-### JSON Export Considerations
+### Manual Table Creation Process
 
-While manual configuration is recommended, JSON export/import can be useful for:
+For tables like 'activitypointer' that require manual setup:
 
-1. **Backup and Version Control**
-```powershell
-# Export pipeline definition
-Export-FabricPipeline -Name "DailySync" -Path "./pipelines/daily-sync.json"
-
-# Import to new environment
-Import-FabricPipeline -Path "./pipelines/daily-sync.json" -Workspace "Production"
-```
-
-2. **Environment Promotion**
-- Export from DEV after testing
-- Modify connection strings for ACC/PROD
-- Import with environment-specific parameters
-
-3. **Bulk Table Configuration** (Only if necessary)
-```python
-# Generate pipeline config for 100+ tables
-import json
-
-tables = ["Table1", "Table2", ...] # From Dataverse metadata
-pipeline_template = json.load("template.json")
-
-for table in tables:
-    activity = create_copy_activity(table)
-    pipeline_template['activities'].append(activity)
-
-json.dump(pipeline_template, "generated-pipeline.json")
-```
-
-**Note**: Avoid programmatic generation unless dealing with 50+ similar tables. Manual configuration is more maintainable for most scenarios.
+1. **Identify problematic columns**: Use Dataverse metadata to find EntityCollection types
+2. **Create table manually**: Use SQL CREATE TABLE with compatible schema
+3. **Add tracking columns**: Use standard tracking column script
+4. **Test data sync**: Verify Copy Activity works with manual table
+5. **Remove from exception list**: Update manual_creation_tables array
 
 ### Reporting Considerations
 
@@ -1153,32 +1064,25 @@ When building reports on Bronze layer data:
 1. **Current State Reports**:
 ```sql
 SELECT * FROM bronze_table
-WHERE IsDeleted = 0 AND IsPurged = 0
+WHERE IsDeleted = false AND IsPurged = false
 ```
 
 2. **Historical Reports** (including purged data):
 ```sql
 SELECT * FROM bronze_table
-WHERE IsDeleted = 0  -- Include purged but not deleted
+WHERE IsDeleted = false  -- Include purged but not deleted
 ```
 
 3. **Complete Audit Reports**:
 ```sql
 SELECT *,
     CASE 
-        WHEN IsDeleted = 1 THEN 'Deleted'
-        WHEN IsPurged = 1 THEN 'Purged'
+        WHEN IsDeleted = true THEN 'Deleted'
+        WHEN IsPurged = true THEN 'Purged'
         ELSE 'Active'
     END as RecordStatus
 FROM bronze_table
 ```
-
-### Support Contacts and Escalation
-
-1. **Level 1**: Pipeline failure alerts → Data Operations Team
-2. **Level 2**: Schema or permission issues → Dataverse Admin Team
-3. **Level 3**: Infrastructure or capacity → MS Fabric Platform Team
-4. **Emergency**: Data loss or corruption → Senior Management + Microsoft Support
 
 ### Success Criteria
 
@@ -1188,6 +1092,7 @@ FROM bronze_table
 - Zero data loss during purge process
 - Correct classification of purged vs deleted records
 - < 1% data discrepancy rate
+- Automatic table creation success rate > 95%
 
 **Business Success**:
 - Complete historical data retention achieved
@@ -1195,6 +1100,7 @@ FROM bronze_table
 - Successful completion of first annual purge cycle
 - Accurate historical reporting despite source purges
 - Stakeholder satisfaction > 90%
+- Manual intervention required < 5% of tables
 
 ---
 
@@ -1205,6 +1111,7 @@ FROM bronze_table
 | 1.0 | 2024-01-15 | Initial | Complete documentation package |
 | 2.0 | 2024-01-15 | Revised | Removed Historical Preservation Pipeline, added purge-aware detection |
 | 3.0 | 2024-01-16 | Updated | Trimmed metadata tables, refined implementation plan, added column tracking |
+| 4.0 | 2024-01-16 | Enhanced | Updated with four-stage conditional pipeline, notebook-based approach, manual table exceptions |
 
 ## Approval Sign-offs
 
