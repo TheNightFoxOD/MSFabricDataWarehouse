@@ -23,7 +23,7 @@
 # CELL ********************
 
 # MAGIC %%sql
-# MAGIC drop table dataverse.activitypointer
+# MAGIC truncate table dataverse.activitypointer
 
 # METADATA ********************
 

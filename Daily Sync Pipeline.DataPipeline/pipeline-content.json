@@ -289,7 +289,7 @@
               "type": "IfCondition",
               "typeProperties": {
                 "expression": {
-                  "value": "@equals(json(activity('Check table definition').output.result.exitValue).do_not_sync, false)",
+                  "value": "@and(equals(json(activity('Check table definition').output.result.exitValue).do_not_sync, false), not(empty(item().LastDailySync)))",
                   "type": "Expression"
                 },
                 "ifTrueActivities": [
@@ -299,7 +299,7 @@
                       "source": {
                         "type": "CommonDataServiceForAppsSource",
                         "query": {
-                          "value": "<fetch>\n  <entity name=\"@{item().TableName}\">\n    <all-attributes />\n    <filter type=\"and\">\n      <condition attribute=\"modifiedon\" operator=\"on-or-after\" value=\"@{formatDateTime(addDays(utcNow(), -30), 'yyyy-MM-ddTHH:mm:ssZ')}\" />\n    </filter>\n  </entity>\n</fetch>",
+                          "value": "@{json(activity('Build table fetch query').output.result.exitValue).fetchxml_query}",
                           "type": "Expression"
                         },
                         "datasetSettings": {
@@ -324,7 +324,10 @@
                         "datasetSettings": {
                           "type": "LakehouseTable",
                           "typeProperties": {
-                            "schema": "dbo",
+                            "schema": {
+                              "value": "@{item().SchemaName}",
+                              "type": "Expression"
+                            },
                             "table": {
                               "value": "@item().TableName",
                               "type": "Expression"
@@ -336,8 +339,8 @@
                             "properties": {
                               "type": "Lakehouse",
                               "typeProperties": {
-                                "artifactId": "4aee8a32-be91-489f-89f3-1a819b188807",
-                                "workspaceId": "b0f83c07-a701-49bb-a165-e06ca0ee4000",
+                                "artifactId": "9b188807-1a81-89f3-489f-be914aee8a32",
+                                "workspaceId": "00000000-0000-0000-0000-000000000000",
                                 "rootFolder": "Tables"
                               },
                               "annotations": []
@@ -356,17 +359,144 @@
                       "secureOutput": false
                     },
                     "name": "Upsert Current Records",
-                    "state": "Inactive",
-                    "onInactiveMarkAs": "Succeeded",
                     "dependsOn": []
                   }
                 ],
                 "ifFalseActivities": []
               },
-              "name": "Can sync table",
+              "name": "Table needs daily sync",
+              "dependsOn": [
+                {
+                  "activity": "Build table fetch query",
+                  "dependencyConditions": [
+                    "Succeeded"
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "TridentNotebook",
+              "typeProperties": {
+                "notebookId": "cfae5d46-c72d-aef1-4085-3692377a060c",
+                "workspaceId": "00000000-0000-0000-0000-000000000000",
+                "parameters": {
+                  "schema_name": {
+                    "value": {
+                      "value": "@{item().SchemaName}",
+                      "type": "Expression"
+                    },
+                    "type": "string"
+                  },
+                  "table_name": {
+                    "value": {
+                      "value": "@{item().TableName}",
+                      "type": "Expression"
+                    },
+                    "type": "string"
+                  },
+                  "last_daily_sync": {
+                    "value": {
+                      "value": "@{item().LastDailySync}",
+                      "type": "Expression"
+                    },
+                    "type": "string"
+                  }
+                }
+              },
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "Build table fetch query",
               "dependsOn": [
                 {
                   "activity": "Needs schema validation",
+                  "dependencyConditions": [
+                    "Succeeded"
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "IfCondition",
+              "typeProperties": {
+                "expression": {
+                  "value": "@and(equals(json(activity('Check table definition').output.result.exitValue).do_not_sync, false), empty(item().LastDailySync))",
+                  "type": "Expression"
+                },
+                "ifTrueActivities": [
+                  {
+                    "type": "Copy",
+                    "typeProperties": {
+                      "source": {
+                        "type": "CommonDataServiceForAppsSource",
+                        "query": {
+                          "value": "@{json(activity('Build table fetch query').output.result.exitValue).fetchxml_query}",
+                          "type": "Expression"
+                        },
+                        "datasetSettings": {
+                          "type": "CommonDataServiceForAppsEntity",
+                          "schema": [],
+                          "externalReferences": {
+                            "connection": "47553726-c8ed-444b-a11b-9915574eac39"
+                          },
+                          "annotations": []
+                        }
+                      },
+                      "sink": {
+                        "type": "LakehouseTableSink",
+                        "tableActionOption": "Append",
+                        "applyVOrder": true,
+                        "datasetSettings": {
+                          "type": "LakehouseTable",
+                          "typeProperties": {
+                            "schema": {
+                              "value": "@{item().SchemaName}",
+                              "type": "Expression"
+                            },
+                            "table": {
+                              "value": "@item().TableName",
+                              "type": "Expression"
+                            }
+                          },
+                          "schema": [],
+                          "linkedService": {
+                            "name": "Master_Bronze",
+                            "properties": {
+                              "type": "Lakehouse",
+                              "typeProperties": {
+                                "artifactId": "9b188807-1a81-89f3-489f-be914aee8a32",
+                                "workspaceId": "00000000-0000-0000-0000-000000000000",
+                                "rootFolder": "Tables"
+                              },
+                              "annotations": []
+                            }
+                          },
+                          "annotations": []
+                        }
+                      },
+                      "enableStaging": false
+                    },
+                    "policy": {
+                      "timeout": "0.12:00:00",
+                      "retry": 0,
+                      "retryIntervalInSeconds": 30,
+                      "secureInput": false,
+                      "secureOutput": false
+                    },
+                    "name": "Append Current Records",
+                    "dependsOn": []
+                  }
+                ],
+                "ifFalseActivities": []
+              },
+              "name": "Table needs initial sync",
+              "dependsOn": [
+                {
+                  "activity": "Build table fetch query",
                   "dependencyConditions": [
                     "Succeeded"
                   ]
