@@ -1,0 +1,337 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "Lookup",
+        "typeProperties": {
+          "source": {
+            "type": "LakehouseTableSource"
+          },
+          "datasetSettings": {
+            "type": "LakehouseTable",
+            "typeProperties": {
+              "schema": "metadata",
+              "table": "pipelineconfig"
+            },
+            "schema": [],
+            "linkedService": {
+              "name": "Master_Bronze",
+              "properties": {
+                "type": "Lakehouse",
+                "typeProperties": {
+                  "artifactId": "9b188807-1a81-89f3-489f-be914aee8a32",
+                  "workspaceId": "00000000-0000-0000-0000-000000000000",
+                  "rootFolder": "Tables"
+                },
+                "annotations": []
+              }
+            },
+            "annotations": []
+          },
+          "firstRowOnly": false
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Get Enabled Tables",
+        "description": "- Source: PipelineConfig metadata table\n- Returns: Array of tables to process\n- Includes: LastPurgeDate for each table",
+        "dependsOn": []
+      },
+      {
+        "type": "ForEach",
+        "typeProperties": {
+          "batchCount": 5,
+          "items": {
+            "value": "@activity('Get Enabled Tables').output.value",
+            "type": "Expression"
+          },
+          "activities": [
+            {
+              "type": "Copy",
+              "typeProperties": {
+                "source": {
+                  "type": "CommonDataServiceForAppsSource",
+                  "query": {
+                    "value": "<fetch>\n  <entity name=\"@{item().TableName}\">\n    <all-attributes />\n    <filter type=\"and\">\n      <condition attribute=\"modifiedon\" operator=\"on-or-after\" value=\"@{formatDateTime(addDays(utcNow(), -30), 'yyyy-MM-ddTHH:mm:ssZ')}\" />\n    </filter>\n  </entity>\n</fetch>",
+                    "type": "Expression"
+                  },
+                  "datasetSettings": {
+                    "type": "CommonDataServiceForAppsEntity",
+                    "schema": [],
+                    "externalReferences": {
+                      "connection": "47553726-c8ed-444b-a11b-9915574eac39"
+                    },
+                    "annotations": []
+                  }
+                },
+                "sink": {
+                  "type": "LakehouseTableSink",
+                  "tableActionOption": "Upsert",
+                  "upsertSettings": {
+                    "keys": {
+                      "value": "@array(item().PrimaryKeyColumn)",
+                      "type": "Expression"
+                    }
+                  },
+                  "applyVOrder": true,
+                  "datasetSettings": {
+                    "type": "LakehouseTable",
+                    "typeProperties": {
+                      "schema": "dbo",
+                      "table": {
+                        "value": "@item().TableName",
+                        "type": "Expression"
+                      }
+                    },
+                    "schema": [],
+                    "linkedService": {
+                      "name": "Master_Bronze",
+                      "properties": {
+                        "type": "Lakehouse",
+                        "typeProperties": {
+                          "artifactId": "4aee8a32-be91-489f-89f3-1a819b188807",
+                          "workspaceId": "b0f83c07-a701-49bb-a165-e06ca0ee4000",
+                          "rootFolder": "Tables"
+                        },
+                        "annotations": []
+                      }
+                    },
+                    "annotations": []
+                  }
+                },
+                "enableStaging": false
+              },
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "Upsert Current Records",
+              "state": "Inactive",
+              "onInactiveMarkAs": "Succeeded",
+              "dependsOn": [
+                {
+                  "activity": "Schema is up to date",
+                  "dependencyConditions": [
+                    "Succeeded"
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "TridentNotebook",
+              "typeProperties": {
+                "notebookId": "2aab78c7-2d38-9c42-4358-a121e194d39e",
+                "workspaceId": "00000000-0000-0000-0000-000000000000",
+                "parameters": {
+                  "table_name": {
+                    "value": {
+                      "value": "@{item().TableName}",
+                      "type": "Expression"
+                    },
+                    "type": "string"
+                  },
+                  "schema_name": {
+                    "value": {
+                      "value": "@{item().SchemaName}",
+                      "type": "Expression"
+                    },
+                    "type": "string"
+                  }
+                }
+              },
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "Check table definition",
+              "dependsOn": []
+            },
+            {
+              "type": "IfCondition",
+              "typeProperties": {
+                "expression": {
+                  "value": "@or(\n  equals(json(activity('Check table definition').output.result.exitValue).action_required, 'CREATE_TABLE'),\n  contains(createArray('activitypointer'), item().TableName)\n)",
+                  "type": "Expression"
+                },
+                "ifTrueActivities": [],
+                "ifFalseActivities": [
+                  {
+                    "type": "Copy",
+                    "typeProperties": {
+                      "source": {
+                        "type": "CommonDataServiceForAppsSource",
+                        "query": {
+                          "value": "<fetch top=\"1\">\n  <entity name=\"@{item().TableName}\">\n    <all-attributes />\n  </entity>\n</fetch>",
+                          "type": "Expression"
+                        },
+                        "datasetSettings": {
+                          "type": "CommonDataServiceForAppsEntity",
+                          "schema": [],
+                          "externalReferences": {
+                            "connection": "47553726-c8ed-444b-a11b-9915574eac39"
+                          },
+                          "annotations": []
+                        }
+                      },
+                      "sink": {
+                        "type": "LakehouseTableSink",
+                        "tableActionOption": "Append",
+                        "applyVOrder": true,
+                        "datasetSettings": {
+                          "type": "LakehouseTable",
+                          "typeProperties": {
+                            "schema": {
+                              "value": "@{item().SchemaName}",
+                              "type": "Expression"
+                            },
+                            "table": {
+                              "value": "@{item().TableName}",
+                              "type": "Expression"
+                            }
+                          },
+                          "schema": [],
+                          "linkedService": {
+                            "name": "Master_Bronze",
+                            "properties": {
+                              "type": "Lakehouse",
+                              "typeProperties": {
+                                "artifactId": "9b188807-1a81-89f3-489f-be914aee8a32",
+                                "workspaceId": "00000000-0000-0000-0000-000000000000",
+                                "rootFolder": "Tables"
+                              },
+                              "annotations": []
+                            }
+                          },
+                          "annotations": []
+                        }
+                      },
+                      "enableStaging": false
+                    },
+                    "policy": {
+                      "timeout": "0.12:00:00",
+                      "retry": 0,
+                      "retryIntervalInSeconds": 30,
+                      "secureInput": false,
+                      "secureOutput": false
+                    },
+                    "name": "Create New Table",
+                    "description": "Create New Table (Auto Import Schema)",
+                    "dependsOn": []
+                  }
+                ]
+              },
+              "name": "Table Exists",
+              "description": "",
+              "dependsOn": [
+                {
+                  "activity": "Check table definition",
+                  "dependencyConditions": [
+                    "Succeeded"
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "IfCondition",
+              "typeProperties": {
+                "expression": {
+                  "value": "@equals(json(activity('Check table definition').output.result.exitValue).action_required, 'ADD_TRACKING_COLUMNS')",
+                  "type": "Expression"
+                },
+                "ifTrueActivities": [],
+                "ifFalseActivities": [
+                  {
+                    "type": "TridentNotebook",
+                    "typeProperties": {
+                      "notebookId": "271e1514-ff52-43e9-a131-33362fefae3c",
+                      "workspaceId": "b0f83c07-a701-49bb-a165-e06ca0ee4000"
+                    },
+                    "policy": {
+                      "timeout": "0.12:00:00",
+                      "retry": 0,
+                      "retryIntervalInSeconds": 30,
+                      "secureInput": false,
+                      "secureOutput": false
+                    },
+                    "name": "Add Tracking Columns",
+                    "description": "Ensure Tracking Columns",
+                    "state": "Inactive",
+                    "onInactiveMarkAs": "Succeeded",
+                    "dependsOn": []
+                  }
+                ]
+              },
+              "name": "Table Has Tracking Columns",
+              "dependsOn": [
+                {
+                  "activity": "Table Exists",
+                  "dependencyConditions": [
+                    "Succeeded"
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "IfCondition",
+              "typeProperties": {
+                "expression": {
+                  "value": "@equals(json(activity('Check table definition').output.result.exitValue).action_required, 'UPDATE_SCHEMA')",
+                  "type": "Expression"
+                },
+                "ifTrueActivities": [],
+                "ifFalseActivities": [
+                  {
+                    "type": "TridentNotebook",
+                    "typeProperties": {
+                      "notebookId": "8765d33d-4dc2-4f88-8437-08a4c9f72bb5",
+                      "workspaceId": "b0f83c07-a701-49bb-a165-e06ca0ee4000"
+                    },
+                    "policy": {
+                      "timeout": "0.12:00:00",
+                      "retry": 0,
+                      "retryIntervalInSeconds": 30,
+                      "secureInput": false,
+                      "secureOutput": false
+                    },
+                    "name": "Handle Schema Drift",
+                    "state": "Inactive",
+                    "onInactiveMarkAs": "Succeeded",
+                    "dependsOn": []
+                  }
+                ]
+              },
+              "name": "Schema is up to date",
+              "dependsOn": [
+                {
+                  "activity": "Table Has Tracking Columns",
+                  "dependencyConditions": [
+                    "Succeeded"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "name": "Process Tables",
+        "dependsOn": [
+          {
+            "activity": "Get Enabled Tables",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

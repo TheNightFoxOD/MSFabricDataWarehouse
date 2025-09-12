@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "DataPipeline",
+    "displayName": "Daily Sync Pipeline"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "f72a7a21-2d62-a047-4f7a-02bccced4bcd"
+  }
+}
