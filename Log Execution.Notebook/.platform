@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
   "metadata": {
     "type": "Notebook",
-    "displayName": "Optimize on create",
+    "displayName": "Log Execution",
     "description": "New notebook"
   },
   "config": {
     "version": "2.0",
-    "logicalId": "699e697a-cccf-9321-4f45-09ac6b647c07"
+    "logicalId": "244278fb-87f9-a5b4-4594-1aafd743db04"
   }
 }

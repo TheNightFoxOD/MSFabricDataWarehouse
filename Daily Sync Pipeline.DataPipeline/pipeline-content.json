@@ -221,7 +221,7 @@
                       "secureInput": false,
                       "secureOutput": false
                     },
-                    "name": "Set primary key",
+                    "name": "Optimize on create",
                     "dependsOn": [
                       {
                         "activity": "Truncate table",
@@ -252,13 +252,28 @@
                   "value": "@contains(json(activity('Check table definition').output.result.exitValue).required_actions, 'ADD_TRACKING_COLUMNS')",
                   "type": "Expression"
                 },
-                "ifTrueActivities": [],
-                "ifFalseActivities": [
+                "ifTrueActivities": [
                   {
                     "type": "TridentNotebook",
                     "typeProperties": {
-                      "notebookId": "271e1514-ff52-43e9-a131-33362fefae3c",
-                      "workspaceId": "b0f83c07-a701-49bb-a165-e06ca0ee4000"
+                      "notebookId": "2fefae3c-3336-a131-43e9-ff52271e1514",
+                      "workspaceId": "00000000-0000-0000-0000-000000000000",
+                      "parameters": {
+                        "table_name": {
+                          "value": {
+                            "value": "@{item().TableName}",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        },
+                        "schema_name": {
+                          "value": {
+                            "value": "@{item().SchemaName}",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        }
+                      }
                     },
                     "policy": {
                       "timeout": "0.12:00:00",
@@ -269,13 +284,12 @@
                     },
                     "name": "Add Tracking Columns",
                     "description": "Ensure Tracking Columns",
-                    "state": "Inactive",
-                    "onInactiveMarkAs": "Succeeded",
                     "dependsOn": []
                   }
-                ]
+                ],
+                "ifFalseActivities": []
               },
-              "name": "Table Has Tracking Columns",
+              "name": "Needs Tracking Columns",
               "dependsOn": [
                 {
                   "activity": "Table needs to be created",
@@ -315,9 +329,11 @@
                 "ifFalseActivities": []
               },
               "name": "Needs schema validation",
+              "state": "Inactive",
+              "onInactiveMarkAs": "Succeeded",
               "dependsOn": [
                 {
-                  "activity": "Table Has Tracking Columns",
+                  "activity": "Needs Tracking Columns",
                   "dependencyConditions": [
                     "Succeeded"
                   ]
@@ -378,8 +394,8 @@
                             "properties": {
                               "type": "Lakehouse",
                               "typeProperties": {
-                                "artifactId": "9b188807-1a81-89f3-489f-be914aee8a32",
-                                "workspaceId": "00000000-0000-0000-0000-000000000000",
+                                "artifactId": "4aee8a32-be91-489f-89f3-1a819b188807",
+                                "workspaceId": "b0f83c07-a701-49bb-a165-e06ca0ee4000",
                                 "rootFolder": "Tables"
                               },
                               "annotations": []
@@ -404,6 +420,8 @@
                 "ifFalseActivities": []
               },
               "name": "Table needs daily sync",
+              "state": "Inactive",
+              "onInactiveMarkAs": "Succeeded",
               "dependsOn": [
                 {
                   "activity": "Build table fetch query",
@@ -416,8 +434,8 @@
             {
               "type": "TridentNotebook",
               "typeProperties": {
-                "notebookId": "cfae5d46-c72d-aef1-4085-3692377a060c",
-                "workspaceId": "00000000-0000-0000-0000-000000000000",
+                "notebookId": "377a060c-3692-4085-aef1-c72dcfae5d46",
+                "workspaceId": "b0f83c07-a701-49bb-a165-e06ca0ee4000",
                 "parameters": {
                   "schema_name": {
                     "value": {
@@ -450,6 +468,8 @@
                 "secureOutput": false
               },
               "name": "Build table fetch query",
+              "state": "Inactive",
+              "onInactiveMarkAs": "Succeeded",
               "dependsOn": [
                 {
                   "activity": "Needs schema validation",
@@ -507,8 +527,8 @@
                             "properties": {
                               "type": "Lakehouse",
                               "typeProperties": {
-                                "artifactId": "9b188807-1a81-89f3-489f-be914aee8a32",
-                                "workspaceId": "00000000-0000-0000-0000-000000000000",
+                                "artifactId": "4aee8a32-be91-489f-89f3-1a819b188807",
+                                "workspaceId": "b0f83c07-a701-49bb-a165-e06ca0ee4000",
                                 "rootFolder": "Tables"
                               },
                               "annotations": []
@@ -533,9 +553,41 @@
                 "ifFalseActivities": []
               },
               "name": "Table needs initial sync",
+              "state": "Inactive",
+              "onInactiveMarkAs": "Succeeded",
               "dependsOn": [
                 {
                   "activity": "Build table fetch query",
+                  "dependencyConditions": [
+                    "Succeeded"
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "TridentNotebook",
+              "typeProperties": {
+                "workspaceId": "b0f83c07-a701-49bb-a165-e06ca0ee4000"
+              },
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "Log Execution",
+              "state": "Inactive",
+              "onInactiveMarkAs": "Succeeded",
+              "dependsOn": [
+                {
+                  "activity": "Table needs daily sync",
+                  "dependencyConditions": [
+                    "Succeeded"
+                  ]
+                },
+                {
+                  "activity": "Table needs initial sync",
                   "dependencyConditions": [
                     "Succeeded"
                   ]
