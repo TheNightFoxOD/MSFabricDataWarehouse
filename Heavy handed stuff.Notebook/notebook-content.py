@@ -23,7 +23,19 @@
 # CELL ********************
 
 # MAGIC %%sql
-# MAGIC truncate table dataverse.activitypointer
+# MAGIC truncate table Master_Bronze.dataverse.activitypointer
+
+# METADATA ********************
+
+# META {
+# META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# MAGIC %%sql
+# MAGIC drop table dataverse.od_donation
 
 # METADATA ********************
 
