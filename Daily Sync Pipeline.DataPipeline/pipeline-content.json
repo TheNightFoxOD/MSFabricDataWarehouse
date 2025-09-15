@@ -394,8 +394,8 @@
                             "properties": {
                               "type": "Lakehouse",
                               "typeProperties": {
-                                "artifactId": "4aee8a32-be91-489f-89f3-1a819b188807",
-                                "workspaceId": "b0f83c07-a701-49bb-a165-e06ca0ee4000",
+                                "artifactId": "9b188807-1a81-89f3-489f-be914aee8a32",
+                                "workspaceId": "00000000-0000-0000-0000-000000000000",
                                 "rootFolder": "Tables"
                               },
                               "annotations": []
@@ -420,8 +420,6 @@
                 "ifFalseActivities": []
               },
               "name": "Table needs daily sync",
-              "state": "Inactive",
-              "onInactiveMarkAs": "Succeeded",
               "dependsOn": [
                 {
                   "activity": "Build table fetch query",
@@ -434,8 +432,8 @@
             {
               "type": "TridentNotebook",
               "typeProperties": {
-                "notebookId": "377a060c-3692-4085-aef1-c72dcfae5d46",
-                "workspaceId": "b0f83c07-a701-49bb-a165-e06ca0ee4000",
+                "notebookId": "cfae5d46-c72d-aef1-4085-3692377a060c",
+                "workspaceId": "00000000-0000-0000-0000-000000000000",
                 "parameters": {
                   "schema_name": {
                     "value": {
@@ -468,8 +466,6 @@
                 "secureOutput": false
               },
               "name": "Build table fetch query",
-              "state": "Inactive",
-              "onInactiveMarkAs": "Succeeded",
               "dependsOn": [
                 {
                   "activity": "Needs schema validation",
@@ -527,8 +523,8 @@
                             "properties": {
                               "type": "Lakehouse",
                               "typeProperties": {
-                                "artifactId": "4aee8a32-be91-489f-89f3-1a819b188807",
-                                "workspaceId": "b0f83c07-a701-49bb-a165-e06ca0ee4000",
+                                "artifactId": "9b188807-1a81-89f3-489f-be914aee8a32",
+                                "workspaceId": "00000000-0000-0000-0000-000000000000",
                                 "rootFolder": "Tables"
                               },
                               "annotations": []
@@ -547,14 +543,90 @@
                       "secureOutput": false
                     },
                     "name": "Append Current Records",
+                    "dependsOn": [
+                      {
+                        "activity": "Check whether table is empty",
+                        "dependencyConditions": [
+                          "Succeeded"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "TridentNotebook",
+                    "typeProperties": {
+                      "notebookId": "5be21d13-86a4-9593-47fd-94446cecbb5b",
+                      "workspaceId": "00000000-0000-0000-0000-000000000000",
+                      "parameters": {
+                        "schema_name": {
+                          "value": {
+                            "value": "@{item().SchemaName}",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        },
+                        "table_name": {
+                          "value": {
+                            "value": "@{item().TableName}",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "policy": {
+                      "timeout": "0.12:00:00",
+                      "retry": 0,
+                      "retryIntervalInSeconds": 30,
+                      "secureInput": false,
+                      "secureOutput": false
+                    },
+                    "name": "Update LastSynced",
+                    "dependsOn": [
+                      {
+                        "activity": "Append Current Records",
+                        "dependencyConditions": [
+                          "Succeeded"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "TridentNotebook",
+                    "typeProperties": {
+                      "notebookId": "d3f61db2-aeaa-b09a-4917-0e1df0f418a6",
+                      "workspaceId": "00000000-0000-0000-0000-000000000000",
+                      "parameters": {
+                        "table_name": {
+                          "value": {
+                            "value": "@{item().TableName}",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        },
+                        "schema_name": {
+                          "value": {
+                            "value": "@{item().SchemaName}",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "policy": {
+                      "timeout": "0.12:00:00",
+                      "retry": 0,
+                      "retryIntervalInSeconds": 30,
+                      "secureInput": false,
+                      "secureOutput": false
+                    },
+                    "name": "Check whether table is empty",
                     "dependsOn": []
                   }
                 ],
                 "ifFalseActivities": []
               },
               "name": "Table needs initial sync",
-              "state": "Inactive",
-              "onInactiveMarkAs": "Succeeded",
               "dependsOn": [
                 {
                   "activity": "Build table fetch query",
@@ -567,6 +639,7 @@
             {
               "type": "TridentNotebook",
               "typeProperties": {
+                "notebookId": "d743db04-1aaf-4594-a5b4-87f9244278fb",
                 "workspaceId": "b0f83c07-a701-49bb-a165-e06ca0ee4000"
               },
               "policy": {

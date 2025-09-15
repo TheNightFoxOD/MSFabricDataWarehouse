@@ -29,6 +29,32 @@
 
 # META {
 # META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark",
+# META   "frozen": false,
+# META   "editable": true
+# META }
+
+# CELL ********************
+
+# MAGIC %%sql
+# MAGIC truncate table Master_Bronze.dataverse.account
+
+# METADATA ********************
+
+# META {
+# META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# MAGIC %%sql
+# MAGIC truncate table Master_Bronze.dataverse.od_donation
+
+# METADATA ********************
+
+# META {
+# META   "language": "sparksql",
 # META   "language_group": "synapse_pyspark"
 # META }
 
@@ -41,5 +67,45 @@
 
 # META {
 # META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark",
+# META   "frozen": true,
+# META   "editable": false
+# META }
+
+# CELL ********************
+
+# MAGIC %%sql
+# MAGIC drop table dataverse.account
+
+# METADATA ********************
+
+# META {
+# META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark",
+# META   "frozen": true,
+# META   "editable": false
+# META }
+
+# CELL ********************
+
+# MAGIC %%sql
+# MAGIC drop table dataverse.activitypointer
+
+# METADATA ********************
+
+# META {
+# META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark",
+# META   "frozen": true,
+# META   "editable": false
+# META }
+
+# CELL ********************
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
 # META   "language_group": "synapse_pyspark"
 # META }
