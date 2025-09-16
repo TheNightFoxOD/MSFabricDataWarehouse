@@ -230,6 +230,26 @@
                         ]
                       }
                     ]
+                  },
+                  {
+                    "type": "SetVariable",
+                    "typeProperties": {
+                      "variableName": "table_creation_output",
+                      "value": "@{string(activity('Create New Table').output)}"
+                    },
+                    "policy": {
+                      "secureInput": false,
+                      "secureOutput": false
+                    },
+                    "name": "Set table_creation_output",
+                    "dependsOn": [
+                      {
+                        "activity": "Optimize on create",
+                        "dependencyConditions": [
+                          "Succeeded"
+                        ]
+                      }
+                    ]
                   }
                 ],
                 "ifFalseActivities": []
@@ -285,6 +305,26 @@
                     "name": "Add Tracking Columns",
                     "description": "Ensure Tracking Columns",
                     "dependsOn": []
+                  },
+                  {
+                    "type": "SetVariable",
+                    "typeProperties": {
+                      "variableName": "tracking_columns_output",
+                      "value": "@{string(activity('Add Tracking Columns').output)}"
+                    },
+                    "policy": {
+                      "secureInput": false,
+                      "secureOutput": false
+                    },
+                    "name": "Set tracking_columns_output",
+                    "dependsOn": [
+                      {
+                        "activity": "Add Tracking Columns",
+                        "dependencyConditions": [
+                          "Succeeded"
+                        ]
+                      }
+                    ]
                   }
                 ],
                 "ifFalseActivities": []
@@ -344,7 +384,7 @@
               "type": "IfCondition",
               "typeProperties": {
                 "expression": {
-                  "value": "@and(equals(json(activity('Check table definition').output.result.exitValue).do_not_sync, false), not(empty(item().LastDailySync)))",
+                  "value": "@not(empty(item().LastDailySync))",
                   "type": "Expression"
                 },
                 "ifTrueActivities": [
@@ -415,6 +455,29 @@
                     },
                     "name": "Upsert Current Records",
                     "dependsOn": []
+                  },
+                  {
+                    "type": "SetVariable",
+                    "typeProperties": {
+                      "variableName": "upsert_records_output",
+                      "value": {
+                        "value": "@{string(activity('Upsert Current Records').output)}",
+                        "type": "Expression"
+                      }
+                    },
+                    "policy": {
+                      "secureInput": false,
+                      "secureOutput": false
+                    },
+                    "name": "Set upsert_records_output",
+                    "dependsOn": [
+                      {
+                        "activity": "Upsert Current Records",
+                        "dependencyConditions": [
+                          "Succeeded"
+                        ]
+                      }
+                    ]
                   }
                 ],
                 "ifFalseActivities": []
@@ -479,7 +542,7 @@
               "type": "IfCondition",
               "typeProperties": {
                 "expression": {
-                  "value": "@and(equals(json(activity('Check table definition').output.result.exitValue).do_not_sync, false), empty(item().LastDailySync))",
+                  "value": "@empty(item().LastDailySync)",
                   "type": "Expression"
                 },
                 "ifTrueActivities": [
@@ -584,7 +647,7 @@
                     "name": "Update LastSynced",
                     "dependsOn": [
                       {
-                        "activity": "Append Current Records",
+                        "activity": "Set append_records_result",
                         "dependencyConditions": [
                           "Succeeded"
                         ]
@@ -622,6 +685,29 @@
                     },
                     "name": "Check whether table is empty",
                     "dependsOn": []
+                  },
+                  {
+                    "type": "SetVariable",
+                    "typeProperties": {
+                      "variableName": "append_records_output",
+                      "value": {
+                        "value": "@{string(activity('Append Current Records').output)}",
+                        "type": "Expression"
+                      }
+                    },
+                    "policy": {
+                      "secureInput": false,
+                      "secureOutput": false
+                    },
+                    "name": "Set append_records_result",
+                    "dependsOn": [
+                      {
+                        "activity": "Append Current Records",
+                        "dependencyConditions": [
+                          "Succeeded"
+                        ]
+                      }
+                    ]
                   }
                 ],
                 "ifFalseActivities": []
@@ -639,8 +725,75 @@
             {
               "type": "TridentNotebook",
               "typeProperties": {
-                "notebookId": "d743db04-1aaf-4594-a5b4-87f9244278fb",
-                "workspaceId": "b0f83c07-a701-49bb-a165-e06ca0ee4000"
+                "notebookId": "244278fb-87f9-a5b4-4594-1aafd743db04",
+                "workspaceId": "00000000-0000-0000-0000-000000000000",
+                "parameters": {
+                  "table_name": {
+                    "value": {
+                      "value": "@{item().TableName}",
+                      "type": "Expression"
+                    },
+                    "type": "string"
+                  },
+                  "pipeline_run_id": {
+                    "value": "@{pipeline().RunId}",
+                    "type": "string"
+                  },
+                  "pipeline_trigger_time": {
+                    "value": "@{pipeline().TriggerTime}",
+                    "type": "string"
+                  },
+                  "schema_check_result": {
+                    "value": "@{activity('Check Table Definition').output.result.exitValue}",
+                    "type": "string"
+                  },
+                  "table_creation_result": {
+                    "value": {
+                      "value": "@{variables('table_creation_output')}",
+                      "type": "Expression"
+                    },
+                    "type": "string"
+                  },
+                  "tracking_columns_result": {
+                    "value": {
+                      "value": "@{variables('tracking_columns_output')}",
+                      "type": "Expression"
+                    },
+                    "type": "string"
+                  },
+                  "upsert_records_result": {
+                    "value": {
+                      "value": "@{variables('upsert_records_output')}",
+                      "type": "Expression"
+                    },
+                    "type": "string"
+                  },
+                  "append_records_result": {
+                    "value": {
+                      "value": "@{variables('append_records_output')}",
+                      "type": "Expression"
+                    },
+                    "type": "string"
+                  },
+                  "delete_detection_result": {
+                    "value": {
+                      "value": "@{variables('delete_detection_output')}",
+                      "type": "Expression"
+                    },
+                    "type": "string"
+                  },
+                  "purge_detection_result": {
+                    "value": {
+                      "value": "@{variables('purge_detection_output')}",
+                      "type": "Expression"
+                    },
+                    "type": "string"
+                  },
+                  "schema_name": {
+                    "value": "@{item().SchemaName}",
+                    "type": "string"
+                  }
+                }
               },
               "policy": {
                 "timeout": "0.12:00:00",
@@ -650,8 +803,6 @@
                 "secureOutput": false
               },
               "name": "Log Execution",
-              "state": "Inactive",
-              "onInactiveMarkAs": "Succeeded",
               "dependsOn": [
                 {
                   "activity": "Table needs daily sync",
@@ -679,6 +830,32 @@
           }
         ]
       }
-    ]
+    ],
+    "variables": {
+      "table_creation_output": {
+        "type": "String",
+        "defaultValue": "\"\""
+      },
+      "tracking_columns_output": {
+        "type": "String",
+        "defaultValue": "\"\""
+      },
+      "upsert_records_output": {
+        "type": "String",
+        "defaultValue": "\"\""
+      },
+      "append_records_output": {
+        "type": "String",
+        "defaultValue": "\"\""
+      },
+      "delete_detection_output": {
+        "type": "String",
+        "defaultValue": "\"\""
+      },
+      "purge_detection_output": {
+        "type": "String",
+        "defaultValue": "\"\""
+      }
+    }
   }
 }

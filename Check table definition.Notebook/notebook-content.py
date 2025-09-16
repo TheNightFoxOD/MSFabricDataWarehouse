@@ -43,11 +43,10 @@ manual_creation_tables = ['activitypointer']
 results = {
     "table_exists": False,
     "schema_changed": False,
-    "required_actions": [],
+    "required_actions": [],  # Array to handle multiple simultaneous actions
     "current_columns": [],
     "error_message": "",
-    "full_table_name": f"{schema_name}.{table_name}",
-    "do_not_sync": False
+    "full_table_name": f"{schema_name}.{table_name}"
 }
 
 try:
@@ -61,9 +60,10 @@ try:
     if not table_exists:
         # Check if this table requires manual creation
         if table_name in manual_creation_tables:
-            # Table needs manual creation - don't add CREATE_TABLE action, set do_not_sync flag
-            results["do_not_sync"] = True
-            print(f"Table {table_name} requires manual creation - skipping automatic creation")
+            # ERROR OUT: Table needs manual creation - stop pipeline execution
+            error_msg = f"Table '{table_name}' does not exist and requires manual creation. Please create the table manually before running the pipeline."
+            print(f"ERROR: {error_msg}")
+            raise Exception(error_msg)
         else:
             # Table doesn't exist, need to create it AND add tracking columns
             results["required_actions"].append("CREATE_TABLE")
@@ -87,11 +87,17 @@ try:
     print(f"Schema check results: {results}")
    
 except Exception as e:
-    results["error_message"] = str(e)
-    print(f"Error in schema check: {e}")
+    # If it's our manual creation error, re-raise it to fail the activity
+    if "requires manual creation" in str(e):
+        raise e
+    else:
+        # For other errors, log and re-raise
+        results["error_message"] = str(e)
+        print(f"Error in schema check: {e}")
+        raise Exception(f"Schema check failed for table {table_name}: {str(e)}")
 
-# Output for pipeline consumption
-# CRITICAL: Use json.dumps() to convert Python dict to valid JSON string
+# Only reach here if no errors occurred
+# Output for pipeline consumption with proper JSON formatting
 mssparkutils.notebook.exit(json.dumps(results))
 
 # METADATA ********************

@@ -30,8 +30,8 @@
 # META {
 # META   "language": "sparksql",
 # META   "language_group": "synapse_pyspark",
-# META   "frozen": false,
-# META   "editable": true
+# META   "frozen": true,
+# META   "editable": false
 # META }
 
 # CELL ********************
@@ -43,13 +43,67 @@
 
 # META {
 # META   "language": "sparksql",
-# META   "language_group": "synapse_pyspark"
+# META   "language_group": "synapse_pyspark",
+# META   "frozen": true,
+# META   "editable": false
 # META }
 
 # CELL ********************
 
 # MAGIC %%sql
 # MAGIC truncate table Master_Bronze.dataverse.od_donation
+
+# METADATA ********************
+
+# META {
+# META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark",
+# META   "frozen": true,
+# META   "editable": false
+# META }
+
+# CELL ********************
+
+# MAGIC %%sql
+# MAGIC truncate table Master_Bronze.metadata.checkpointhistory
+
+# METADATA ********************
+
+# META {
+# META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# MAGIC %%sql
+# MAGIC truncate table Master_Bronze.metadata.datavalidation
+
+# METADATA ********************
+
+# META {
+# META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# MAGIC %%sql
+# MAGIC truncate table Master_Bronze.metadata.pipelineconfig
+
+# METADATA ********************
+
+# META {
+# META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark",
+# META   "frozen": true,
+# META   "editable": false
+# META }
+
+# CELL ********************
+
+# MAGIC %%sql
+# MAGIC truncate table Master_Bronze.metadata.syncauditlog
 
 # METADATA ********************
 
@@ -68,8 +122,8 @@
 # META {
 # META   "language": "sparksql",
 # META   "language_group": "synapse_pyspark",
-# META   "frozen": true,
-# META   "editable": false
+# META   "frozen": false,
+# META   "editable": true
 # META }
 
 # CELL ********************
@@ -102,10 +156,18 @@
 
 # CELL ********************
 
+# MAGIC %%sql
+# MAGIC select * from metadata.pipelineconfig
+# MAGIC 
+# MAGIC -- DELETE from metadata.pipelineconfig
+# MAGIC -- where TableName = 'activitypointer'
+# MAGIC --     or TableName = 'account'
 
 # METADATA ********************
 
 # META {
-# META   "language": "python",
-# META   "language_group": "synapse_pyspark"
+# META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark",
+# META   "frozen": true,
+# META   "editable": false
 # META }

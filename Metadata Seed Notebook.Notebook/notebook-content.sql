@@ -390,7 +390,9 @@ truncate table metadata.PipelineConfig
 
 -- META {
 -- META   "language": "sparksql",
--- META   "language_group": "synapse_pyspark"
+-- META   "language_group": "synapse_pyspark",
+-- META   "frozen": true,
+-- META   "editable": false
 -- META }
 
 -- CELL ********************
