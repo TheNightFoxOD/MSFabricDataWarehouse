@@ -235,7 +235,10 @@
                     "type": "SetVariable",
                     "typeProperties": {
                       "variableName": "table_creation_output",
-                      "value": "@{string(activity('Create New Table').output)}"
+                      "value": {
+                        "value": "@{string(activity('Create New Table').output)}",
+                        "type": "Expression"
+                      }
                     },
                     "policy": {
                       "secureInput": false,
@@ -310,7 +313,10 @@
                     "type": "SetVariable",
                     "typeProperties": {
                       "variableName": "tracking_columns_output",
-                      "value": "@{string(activity('Add Tracking Columns').output)}"
+                      "value": {
+                        "value": "@{string(activity('Add Tracking Columns').output)}",
+                        "type": "Expression"
+                      }
                     },
                     "policy": {
                       "secureInput": false,
@@ -434,6 +440,95 @@
                             "properties": {
                               "type": "Lakehouse",
                               "typeProperties": {
+                                "artifactId": "4aee8a32-be91-489f-89f3-1a819b188807",
+                                "workspaceId": "b0f83c07-a701-49bb-a165-e06ca0ee4000",
+                                "rootFolder": "Tables"
+                              },
+                              "annotations": []
+                            }
+                          },
+                          "annotations": []
+                        }
+                      },
+                      "enableStaging": false
+                    },
+                    "policy": {
+                      "timeout": "0.12:00:00",
+                      "retry": 0,
+                      "retryIntervalInSeconds": 30,
+                      "secureInput": false,
+                      "secureOutput": false
+                    },
+                    "name": "Upsert Current Records",
+                    "state": "Inactive",
+                    "onInactiveMarkAs": "Succeeded",
+                    "dependsOn": []
+                  },
+                  {
+                    "type": "SetVariable",
+                    "typeProperties": {
+                      "variableName": "upsert_records_output",
+                      "value": {
+                        "value": "@{string(activity('Upsert Current Records').output)}",
+                        "type": "Expression"
+                      }
+                    },
+                    "policy": {
+                      "secureInput": false,
+                      "secureOutput": false
+                    },
+                    "name": "Set upsert_records_output",
+                    "state": "Inactive",
+                    "onInactiveMarkAs": "Succeeded",
+                    "dependsOn": [
+                      {
+                        "activity": "Upsert Current Records",
+                        "dependencyConditions": [
+                          "Succeeded"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "Copy",
+                    "typeProperties": {
+                      "source": {
+                        "type": "CommonDataServiceForAppsSource",
+                        "query": {
+                          "value": "@{json(activity('Build table fetch query').output.result.exitValue).fetchxml_query}",
+                          "type": "Expression"
+                        },
+                        "datasetSettings": {
+                          "type": "CommonDataServiceForAppsEntity",
+                          "typeProperties": {
+                            "entityName": "@{json(activity('Build table fetch query').output.result.exitValue).fetchxml_query}"
+                          },
+                          "schema": [],
+                          "externalReferences": {
+                            "connection": "47553726-c8ed-444b-a11b-9915574eac39"
+                          },
+                          "annotations": []
+                        }
+                      },
+                      "sink": {
+                        "type": "LakehouseTableSink",
+                        "tableActionOption": "Append",
+                        "applyVOrder": true,
+                        "datasetSettings": {
+                          "type": "LakehouseTable",
+                          "typeProperties": {
+                            "schema": "temp",
+                            "table": {
+                              "value": "@concat(item().TableName, '_staging')",
+                              "type": "Expression"
+                            }
+                          },
+                          "schema": [],
+                          "linkedService": {
+                            "name": "Master_Bronze",
+                            "properties": {
+                              "type": "Lakehouse",
+                              "typeProperties": {
                                 "artifactId": "9b188807-1a81-89f3-489f-be914aee8a32",
                                 "workspaceId": "00000000-0000-0000-0000-000000000000",
                                 "rootFolder": "Tables"
@@ -453,15 +548,61 @@
                       "secureInput": false,
                       "secureOutput": false
                     },
-                    "name": "Upsert Current Records",
+                    "name": "Copy to staging",
                     "dependsOn": []
+                  },
+                  {
+                    "type": "TridentNotebook",
+                    "typeProperties": {
+                      "notebookId": "7f7e3a0a-cfbe-81f5-4905-dc1c9de56f73",
+                      "workspaceId": "00000000-0000-0000-0000-000000000000",
+                      "parameters": {
+                        "schema_name": {
+                          "value": {
+                            "value": "@item().SchemaName",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        },
+                        "table_name": {
+                          "value": {
+                            "value": "@item().TableName",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        },
+                        "primary_key_column": {
+                          "value": {
+                            "value": "@item().PrimaryKeyColumn",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "policy": {
+                      "timeout": "0.12:00:00",
+                      "retry": 0,
+                      "retryIntervalInSeconds": 30,
+                      "secureInput": false,
+                      "secureOutput": false
+                    },
+                    "name": "Merge staged",
+                    "dependsOn": [
+                      {
+                        "activity": "Copy to staging",
+                        "dependencyConditions": [
+                          "Succeeded"
+                        ]
+                      }
+                    ]
                   },
                   {
                     "type": "SetVariable",
                     "typeProperties": {
                       "variableName": "upsert_records_output",
                       "value": {
-                        "value": "@{string(activity('Upsert Current Records').output)}",
+                        "value": "@{string(activity('Merge staged').output)}",
                         "type": "Expression"
                       }
                     },
@@ -469,10 +610,48 @@
                       "secureInput": false,
                       "secureOutput": false
                     },
-                    "name": "Set upsert_records_output",
+                    "name": "Set sync records output",
                     "dependsOn": [
                       {
-                        "activity": "Upsert Current Records",
+                        "activity": "Merge staged",
+                        "dependencyConditions": [
+                          "Succeeded"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "TridentNotebook",
+                    "typeProperties": {
+                      "notebookId": "d44e6df4-4fed-445f-b7e9-d90e425dfe78",
+                      "workspaceId": "b0f83c07-a701-49bb-a165-e06ca0ee4000",
+                      "parameters": {
+                        "schema_name": {
+                          "value": "temp",
+                          "type": "string"
+                        },
+                        "table_name": {
+                          "value": {
+                            "value": "@concat(item().TableName, '_staging')",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "policy": {
+                      "timeout": "0.12:00:00",
+                      "retry": 0,
+                      "retryIntervalInSeconds": 30,
+                      "secureInput": false,
+                      "secureOutput": false
+                    },
+                    "name": "Drop staging table",
+                    "state": "Inactive",
+                    "onInactiveMarkAs": "Succeeded",
+                    "dependsOn": [
+                      {
+                        "activity": "Set sync records output",
                         "dependencyConditions": [
                           "Succeeded"
                         ]
@@ -736,15 +915,24 @@
                     "type": "string"
                   },
                   "pipeline_run_id": {
-                    "value": "@{pipeline().RunId}",
+                    "value": {
+                      "value": "@{pipeline().RunId}",
+                      "type": "Expression"
+                    },
                     "type": "string"
                   },
                   "pipeline_trigger_time": {
-                    "value": "@{pipeline().TriggerTime}",
+                    "value": {
+                      "value": "@{pipeline().TriggerTime}",
+                      "type": "Expression"
+                    },
                     "type": "string"
                   },
                   "schema_check_result": {
-                    "value": "@{activity('Check Table Definition').output.result.exitValue}",
+                    "value": {
+                      "value": "@{activity('Check Table Definition').output.result.exitValue}",
+                      "type": "Expression"
+                    },
                     "type": "string"
                   },
                   "table_creation_result": {
@@ -790,7 +978,10 @@
                     "type": "string"
                   },
                   "schema_name": {
-                    "value": "@{item().SchemaName}",
+                    "value": {
+                      "value": "@{item().SchemaName}",
+                      "type": "Expression"
+                    },
                     "type": "string"
                   }
                 }

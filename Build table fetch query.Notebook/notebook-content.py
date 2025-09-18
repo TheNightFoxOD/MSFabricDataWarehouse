@@ -38,6 +38,12 @@ last_daily_sync = ""
 import json
 from datetime import datetime, timedelta
 
+################################################
+# schema_name = "dataverse"
+# table_name = "od_donation"
+# last_daily_sync = "2025-09-16T14:45:39Z"
+################################################
+
 # Build FetchXML query - fail fast, no fallback
 full_table_name = f"{schema_name}.{table_name}"
 
@@ -47,7 +53,7 @@ print(f"Reading schema for: {full_table_name}")
 current_schema = spark.sql(f"DESCRIBE {full_table_name}").collect()
 
 # Extract column names, excluding our tracking columns
-tracking_columns = ['isdeleted', 'ispurged', 'deleteddate', 'purgeddate', 'lastsynced', 'syncdate']
+tracking_columns = ['isdeleted', 'ispurged', 'deleteddate', 'purgeddate', 'lastsynced']
 
 source_columns = [
     row['col_name'] for row in current_schema 
@@ -88,7 +94,7 @@ if last_daily_sync and last_daily_sync.strip() and last_daily_sync != "null":
     
     filter_xml = f'''
     <filter type="and">
-      <condition attribute="modifiedon" operator="on-or-after" value="{filter_date_str}" />
+      <condition attribute="modifiedon" operator="ge" value="{filter_date_str}" />
     </filter>'''
     
     has_incremental_filter = True
@@ -99,7 +105,8 @@ else:
 # Build the complete FetchXML query
 fetchxml_query = f'''<fetch>
   <entity name="{table_name}">
-{attributes_xml}{filter_xml}
+    {attributes_xml}
+    {filter_xml}
   </entity>
 </fetch>'''
 
