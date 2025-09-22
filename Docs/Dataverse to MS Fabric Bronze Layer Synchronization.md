@@ -1121,3 +1121,16 @@ FROM bronze_table
 | Technical Architect | | | |
 | Data Governance Lead | | | |
 | DevOps Manager | | | |
+
+should fetch all records when table hasn't been synced before
+
+    <filter type="and">
+      <condition attribute="modifiedon" operator="on-or-after" value="@{formatDateTime(addDays(utcNow(), -30), 'yyyy-MM-ddTHH:mm:ssZ')}" />
+    </filter>
+
+sync fails for activitypointer due to unsupported columns
+sync fails for od_donation and account due to unidentified invalid cast
+
+
+
+double check manually created tables path
