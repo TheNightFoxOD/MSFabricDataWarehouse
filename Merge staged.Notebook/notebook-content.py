@@ -25,6 +25,7 @@
 table_name = "PARAM_NOT_SET_table_name"
 schema_name = "PARAM_NOT_SET_schema_name"
 primary_key_column = "PARAM_NOT_SET_primary_key_column"
+lookback_range = 3
 
 # METADATA ********************
 
@@ -37,6 +38,13 @@ primary_key_column = "PARAM_NOT_SET_primary_key_column"
 
 import json
 from datetime import datetime
+
+###############################################
+# table_name = "od_donation"
+# schema_name = "dataverse"
+# primary_key_column = "od_donationid"
+# lookback_range = 7
+###############################################
 
 try:
     # Build table names
@@ -104,25 +112,33 @@ try:
         MERGE INTO {target_table} as target
         USING {staging_table} as staging
         ON CAST(target.{primary_key_column} AS STRING) = CAST(staging.{primary_key_column} AS STRING)
-        WHEN MATCHED THEN UPDATE SET 
-            {update_set_clause}
+        WHEN MATCHED AND staging.modifiedon > date_sub(current_date(), {lookback_range}) THEN 
+            UPDATE SET {update_set_clause}
         WHEN NOT MATCHED THEN INSERT 
             ({insert_columns_str})
             VALUES ({insert_values_str})
         """
 
         print("Executing MERGE SQL:")
+        print("-" * 60)
         print(merge_sql)
+        print("-" * 60)
 
         # Execute the merge
         spark.sql(merge_sql)
 
         # Get record counts after MERGE for metrics
+        # Count how many records in staging are actually "modified" within lookback range
+        modified_count = spark.sql(f"""
+            SELECT COUNT(*) as count 
+            FROM {staging_table} 
+            WHERE modifiedon > date_sub(current_date(), {lookback_range})
+        """).collect()[0]['count']
         target_count_after = spark.sql(f"SELECT COUNT(*) as cnt FROM {target_table}").collect()[0]['cnt']
 
         # Calculate metrics
         insert_count = target_count_after - target_count_before
-        update_count = staging_count - insert_count
+        update_count = min(target_count_before, modified_count) - insert_count  # Can't update more than exist
         total_upsert_count = insert_count + update_count
 
         print(f"MERGE completed successfully:")
@@ -130,9 +146,9 @@ try:
         print(f"- Updated: {update_count} records")
         print(f"- Total processed: {total_upsert_count} records")
 
-        # Clean up staging table
-        spark.sql(f"TRUNCATE TABLE {staging_table}")
-        print(f"Staging table {staging_table} truncated")
+        # # Clean up staging table
+        # spark.sql(f"TRUNCATE TABLE {staging_table}")
+        # print(f"Staging table {staging_table} truncated")
 
         # Prepare success result
         result = {

@@ -111,6 +111,11 @@ SELECT 'c3d4e5f6-g7h8-9012-3456-78901234cdef', 'activitypointer', 'dataverse', '
 -- MAGIC             "PrimaryIdAttribute": "accountid"
 -- MAGIC         },
 -- MAGIC         {
+-- MAGIC             "MetadataId": "608861bc-50a4-4c5f-a02c-21fe1943e2cf",
+-- MAGIC             "LogicalName": "contact",
+-- MAGIC             "PrimaryIdAttribute": "contactid"
+-- MAGIC         },
+-- MAGIC         {
 -- MAGIC             "MetadataId": "c821cd41-f315-43d1-8fa6-82787b6f06e7",
 -- MAGIC             "LogicalName": "activitypointer",
 -- MAGIC             "PrimaryIdAttribute": "activityid"
@@ -119,6 +124,21 @@ SELECT 'c3d4e5f6-g7h8-9012-3456-78901234cdef', 'activitypointer', 'dataverse', '
 -- MAGIC             "MetadataId": "0b83f874-8c24-4c7f-b6c3-67256859ca0d",
 -- MAGIC             "LogicalName": "od_donation",
 -- MAGIC             "PrimaryIdAttribute": "od_donationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "39d4e1f4-1bf5-4a72-9e45-aeb04865e806",
+-- MAGIC             "LogicalName": "od_transaction",
+-- MAGIC             "PrimaryIdAttribute": "od_transactionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "59c9b48d-5578-41f2-9ca2-689e1dac0905",
+-- MAGIC             "LogicalName": "campaign",
+-- MAGIC             "PrimaryIdAttribute": "campaignid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "87e909a7-e378-407e-92f2-2dab2a6b7ca6",
+-- MAGIC             "LogicalName": "campaignactivity",
+-- MAGIC             "PrimaryIdAttribute": "activityid"
 -- MAGIC         }
 -- MAGIC     ]
 -- MAGIC }

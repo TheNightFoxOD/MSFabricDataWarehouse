@@ -26,15 +26,16 @@
             "datasetSettings": {
               "type": "LakehouseTable",
               "typeProperties": {
-                "table": "temp_donations_3"
+                "schema": "",
+                "table": "temp_donations_1"
               },
               "schema": [],
               "linkedService": {
-                "name": "Master__bronze_dp",
+                "name": "Master_Bronze",
                 "properties": {
                   "type": "Lakehouse",
                   "typeProperties": {
-                    "artifactId": "2a19da98-8286-8cf5-42b3-00666e943b92",
+                    "artifactId": "9b188807-1a81-89f3-489f-be914aee8a32",
                     "workspaceId": "00000000-0000-0000-0000-000000000000",
                     "rootFolder": "Tables"
                   },

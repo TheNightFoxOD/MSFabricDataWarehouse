@@ -1,12 +1,11 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
   "metadata": {
-    "type": "Notebook",
-    "displayName": "Various scripts",
-    "description": "New notebook"
+    "type": "Dataflow",
+    "displayName": "Daily sync Dataflow"
   },
   "config": {
     "version": "2.0",
-    "logicalId": "fe228376-4cea-b33e-46cc-7a4b40d5d556"
+    "logicalId": "9388799a-26ed-ab4e-477b-e1131602347f"
   }
 }

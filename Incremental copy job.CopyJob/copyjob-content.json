@@ -1,0 +1,7 @@
+{
+  "properties": {
+    "jobMode": "Batch",
+    "fullLoadBehavior": "None"
+  },
+  "activities": []
+}

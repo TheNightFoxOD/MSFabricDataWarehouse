@@ -1,18 +1,18 @@
 {
   "formatVersion": "202502",
   "computeEngineSettings": {},
-  "name": "Dataflow Master Bronze DL",
+  "name": "Daily sync Dataflow",
   "queryGroups": [],
   "documentLocale": "en-US",
   "queriesMetadata": {
-    "account": {
-      "queryId": "4b3fc83b-24c9-447d-8aca-fbaebb781425",
-      "queryName": "account",
+    "od_donation": {
+      "queryId": "0d417fcf-d9b6-40ec-b363-de13fb28c507",
+      "queryName": "od_donation",
       "loadEnabled": false
     },
-    "account_DataDestination": {
-      "queryId": "ab3fff43-42bf-41c7-97bd-76591fcb7676",
-      "queryName": "account_DataDestination",
+    "od_donation_DataDestination": {
+      "queryId": "c9da5a5b-8de5-4133-b831-ad31d7e5e5bd",
+      "queryName": "od_donation_DataDestination",
       "isHidden": true,
       "loadEnabled": false
     }

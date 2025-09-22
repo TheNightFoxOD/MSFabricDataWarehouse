@@ -224,8 +224,10 @@
 # CELL ********************
 
 # MAGIC %%sql
-# MAGIC update temp.od_donation_staging
-# MAGIC set od_amount = 101
+# MAGIC select count(*) from temp.od_donation_staging
+# MAGIC -- select * from temp.od_donation_staging
+# MAGIC -- where od_donationid = '0f6219ea-1ee8-4329-a8c4-63ba5ae335d7'
+# MAGIC -- or od_donationid = '3b5f38d9-1c5c-48b1-af7d-2d63a4e2fe4f'
 
 # METADATA ********************
 
@@ -241,10 +243,38 @@
 # MAGIC -- from dataverse.od_donation
 # MAGIC -- where od_donationid = '0f6219ea-1ee8-4329-a8c4-63ba5ae335d7'
 # MAGIC 
-# MAGIC -- select count(*)
-# MAGIC -- from dataverse.od_donation
-# MAGIC 
 # MAGIC DESCRIBE dataverse.od_donation
+
+# METADATA ********************
+
+# META {
+# META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# MAGIC %%sql
+# MAGIC select count(*)
+# MAGIC from dataverse.od_donation
+
+# METADATA ********************
+
+# META {
+# META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# MAGIC %%sql
+# MAGIC select od_donationid, od_amount, LastSynced, IsDeleted, IsPurged
+# MAGIC from dataverse.od_donation
+# MAGIC where od_donationid = '0f6219ea-1ee8-4329-a8c4-63ba5ae335d7' -- updated
+# MAGIC or od_donationid = '5048c7f2-eb30-4af4-bd1d-7ee19ff36dad' -- deleted
+# MAGIC or od_donationid = '43cd37ec-1216-4ed5-bbc7-3022c75db947' -- deleted
+# MAGIC or od_donationid = '3077df32-16c5-4b39-9f5e-14650df74626' -- added
+# MAGIC order by LastSynced desc
 
 # METADATA ********************
 
@@ -260,7 +290,11 @@
 # MAGIC -- from temp.od_donation_staging
 # MAGIC -- where od_donationid = '0f6219ea-1ee8-4329-a8c4-63ba5ae335d7'
 # MAGIC 
-# MAGIC DESCRIBE temp.od_donation_staging
+# MAGIC -- DESCRIBE temp.od_donation_staging
+# MAGIC 
+# MAGIC DESCRIBE temp.od_donation_CurrentIDs
+# MAGIC 
+
 
 # METADATA ********************
 
