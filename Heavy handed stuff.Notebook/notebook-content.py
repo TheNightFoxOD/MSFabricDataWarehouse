@@ -96,8 +96,8 @@
 # META {
 # META   "language": "sparksql",
 # META   "language_group": "synapse_pyspark",
-# META   "frozen": true,
-# META   "editable": false
+# META   "frozen": false,
+# META   "editable": true
 # META }
 
 # CELL ********************
@@ -137,7 +137,7 @@
 # CELL ********************
 
 # MAGIC %%sql
-# MAGIC drop table dataverse.od_donation
+# MAGIC drop table dataverse.account
 
 # METADATA ********************
 

@@ -119,18 +119,18 @@ except:
 operations_logged = {row['Operation']: row for row in log_results}
 
 sync_type = None
-total_records = 0
+upserted_records = 0
 deleted_records = 0
 purged_records = 0
 overall_status = "error"
 
 # Determine sync type and record counts from logged operations
-if 'InitialSync' in operations_logged:
+if 'CreateTable' in operations_logged:
     sync_type = 'initial'
-    total_records = operations_logged['InitialSync']['RowsProcessed'] or 0
+    upserted_records = operations_logged['CreateTable']['RowsProcessed'] or 0
 elif 'DataSync' in operations_logged:
     sync_type = 'daily' 
-    total_records = operations_logged['DataSync']['RowsProcessed'] or 0
+    upserted_records = operations_logged['DataSync']['RowsProcessed'] or 0
 
 if 'DeleteDetection' in operations_logged:
     deleted_records = operations_logged['DeleteDetection']['RowsDeleted'] or 0
@@ -157,7 +157,7 @@ else:
 sync_operations = {
     "status": overall_status,
     "sync_type": sync_type or "unknown",
-    "total_records": total_records,
+    "upserted_records": upserted_records,
     "deleted_records": deleted_records,
     "purged_records": purged_records,
     "operations_logged": list(operations_logged.keys())
@@ -166,7 +166,7 @@ sync_operations = {
 print(f"Reconstructed execution state:")
 print(f"- Overall Status: {overall_status}")
 print(f"- Sync Type: {sync_type}")
-print(f"- Total Records: {total_records}")
+print(f"- Upserted Records: {upserted_records}")
 print(f"- Deleted Records: {deleted_records}")
 print(f"- Operations: {list(operations_logged.keys())}")
 
@@ -180,7 +180,7 @@ print(f"- Operations: {list(operations_logged.keys())}")
 # CELL ********************
 
 # DataValidation entry - only if we had successful sync operations
-if sync_operations["status"] in ["success", "partial_success"] and sync_operations["total_records"] > 0:
+if sync_operations["status"] in ["success", "partial_success"] and sync_operations["upserted_records"] > 0:
     validation_schema = StructType([
         StructField("ValidationId", StringType(), False),
         StructField("ValidationDate", TimestampType(), False),
@@ -197,7 +197,7 @@ if sync_operations["status"] in ["success", "partial_success"] and sync_operatio
         # Query Bronze layer for actual current state
         bronze_counts_query = f"""
         SELECT 
-            COUNT(*) as total_records,
+            COUNT(*) as upserted_records,
             SUM(CASE WHEN COALESCE(IsDeleted, false) = false AND COALESCE(IsPurged, false) = false THEN 1 ELSE 0 END) as active_records,
             SUM(CASE WHEN COALESCE(IsDeleted, false) = true THEN 1 ELSE 0 END) as deleted_records,
             SUM(CASE WHEN COALESCE(IsPurged, false) = true THEN 1 ELSE 0 END) as purged_records
@@ -206,14 +206,14 @@ if sync_operations["status"] in ["success", "partial_success"] and sync_operatio
         
         bronze_counts = spark.sql(bronze_counts_query).collect()[0]
         
-        total_records_bronze = bronze_counts['total_records']
+        upserted_records_bronze = bronze_counts['upserted_records']
         active_records = bronze_counts['active_records'] 
         deleted_records_bronze = bronze_counts['deleted_records']
         purged_records_bronze = bronze_counts['purged_records']
         
         # Determine expected source count
         if sync_operations["sync_type"] == "initial":
-            expected_source_count = sync_operations["total_records"]
+            expected_source_count = sync_operations["upserted_records"]
         else:
             expected_source_count = active_records
         
@@ -222,13 +222,13 @@ if sync_operations["status"] in ["success", "partial_success"] and sync_operatio
         
         # Internal consistency check
         calculated_total = active_records + deleted_records_bronze + purged_records_bronze
-        if total_records_bronze != calculated_total:
-            validation_errors.append(f"Total mismatch: {total_records_bronze} != {calculated_total}")
+        if upserted_records_bronze != calculated_total:
+            validation_errors.append(f"Total mismatch: {upserted_records_bronze} != {calculated_total}")
         
         # For initial sync: validate we got expected records
         if sync_operations["sync_type"] == "initial":
-            if active_records != sync_operations["total_records"]:
-                validation_errors.append(f"Initial sync mismatch: active={active_records}, copied={sync_operations['total_records']}")
+            if active_records != sync_operations["upserted_records"]:
+                validation_errors.append(f"Initial sync mismatch: active={active_records}, copied={sync_operations['upserted_records']}")
         
         validation_passed = len(validation_errors) == 0
         
@@ -241,7 +241,7 @@ if sync_operations["status"] in ["success", "partial_success"] and sync_operatio
             end_time, 
             full_table_name, 
             expected_source_count,
-            total_records_bronze,
+            upserted_records_bronze,
             active_records,
             deleted_records_bronze,
             purged_records_bronze,
@@ -252,7 +252,7 @@ if sync_operations["status"] in ["success", "partial_success"] and sync_operatio
         validation_df.write.format("delta").mode("append").saveAsTable("metadata.DataValidation")
         execution_results["logs_written"]["data_validation"] = 1
         
-        print(f"DataValidation: source={expected_source_count}, total={total_records_bronze}, active={active_records}, passed={validation_passed}")
+        print(f"DataValidation: source={expected_source_count}, total={upserted_records_bronze}, active={active_records}, passed={validation_passed}")
         
     except Exception as e:
         execution_results["errors"].append(f"DataValidation query failed: {str(e)}")
@@ -288,10 +288,17 @@ if sync_operations["status"] in ["success", "partial_success"]:
         print(f"Error updating PipelineConfig: {e}")
 else:
     print("Skipping PipelineConfig update (no successful sync)")
+        
+# Calculate total processed records (upserts + deletes + purges)
+total_processed_records = (
+    sync_operations["upserted_records"] + 
+    sync_operations["deleted_records"] + 
+    sync_operations["purged_records"]
+)
 
 # Create Checkpoint Entry
 checkpoint_created = False
-if sync_operations["status"] == "success" and sync_operations["total_records"] > 0:
+if sync_operations["status"] == "success" and total_processed_records > 0:
     checkpoint_schema = StructType([
         StructField("CheckpointId", StringType(), False),
         StructField("CheckpointName", StringType(), False),
@@ -313,7 +320,7 @@ if sync_operations["status"] == "success" and sync_operations["total_records"] >
             'Daily',
             end_time,
             1,
-            sync_operations["total_records"],
+            total_processed_records,  # Now includes all processing activity
             'Validated',
             retention_date,
             True
@@ -323,7 +330,7 @@ if sync_operations["status"] == "success" and sync_operations["total_records"] >
         checkpoint_df.write.format("delta").mode("append").saveAsTable("metadata.CheckpointHistory")
         execution_results["logs_written"]["checkpoint_history"] = 1
         checkpoint_created = True
-        print(f"Created checkpoint entry")
+        print(f"Created checkpoint entry with {total_processed_records} total processed records")
         
     except Exception as e:
         execution_results["errors"].append(f"Error creating checkpoint: {str(e)}")
@@ -350,7 +357,7 @@ print(f"Table: {full_table_name}")
 print(f"Pipeline Run: {pipeline_run_id}")
 print(f"Operations Logged: {sync_operations['operations_logged']}")
 print(f"Sync Type: {sync_operations['sync_type']}")
-print(f"Records Processed: {sync_operations['total_records']}")
+print(f"Records Processed: {sync_operations['upserted_records']}")
 print(f"Records Deleted: {sync_operations['deleted_records']}")
 print(f"Records Purged: {sync_operations['purged_records']}")
 print(f"Overall Status: {sync_operations['status']}")
