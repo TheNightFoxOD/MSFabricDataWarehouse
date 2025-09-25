@@ -109,6 +109,28 @@
 
 # META {
 # META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark",
+# META   "frozen": true,
+# META   "editable": false
+# META }
+
+# CELL ********************
+
+# MAGIC %%sql
+# MAGIC -- select * from Master_Bronze.metadata.syncauditlog
+# MAGIC -- order by CreatedDate DESC
+# MAGIC 
+# MAGIC 
+# MAGIC SELECT Operation, Status, RowsProcessed, RowsDeleted, RowsPurged, StartTime, EndTime
+# MAGIC FROM metadata.syncauditlog 
+# MAGIC WHERE PipelineRunId = 'e13e5a80-cba7-4305-8002-c923f1ca61ef' 
+# MAGIC   AND TableName = 'dataverse.account'
+# MAGIC ORDER BY CreatedDate
+
+# METADATA ********************
+
+# META {
+# META   "language": "sparksql",
 # META   "language_group": "synapse_pyspark"
 # META }
 
@@ -129,15 +151,15 @@
 # CELL ********************
 
 # MAGIC %%sql
-# MAGIC drop table dataverse.account
+# MAGIC drop table dataverse.od_transaction
 
 # METADATA ********************
 
 # META {
 # META   "language": "sparksql",
 # META   "language_group": "synapse_pyspark",
-# META   "frozen": true,
-# META   "editable": false
+# META   "frozen": false,
+# META   "editable": true
 # META }
 
 # CELL ********************
@@ -150,8 +172,21 @@
 # META {
 # META   "language": "sparksql",
 # META   "language_group": "synapse_pyspark",
-# META   "frozen": true,
-# META   "editable": false
+# META   "frozen": false,
+# META   "editable": true
+# META }
+
+# CELL ********************
+
+# MAGIC %%sql
+# MAGIC -- describe table dataverse.activitypointer
+# MAGIC select * from dataverse.activitypointer
+
+# METADATA ********************
+
+# META {
+# META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark"
 # META }
 
 # CELL ********************
@@ -168,14 +203,27 @@
 # META {
 # META   "language": "sparksql",
 # META   "language_group": "synapse_pyspark",
-# META   "frozen": true,
-# META   "editable": false
+# META   "frozen": false,
+# META   "editable": true
 # META }
 
 # CELL ********************
 
 # MAGIC %%sql
-# MAGIC drop table temp.od_donation_staging
+# MAGIC select count(*) from dbo.od_transaction
+# MAGIC -- describe table dbo.od_transaction
+
+# METADATA ********************
+
+# META {
+# META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# MAGIC %%sql
+# MAGIC drop table dataverse.contact
 
 # METADATA ********************
 

@@ -80,9 +80,8 @@ SELECT 'c3d4e5f6-g7h8-9012-3456-78901234cdef', 'activitypointer', 'dataverse', '
 
 -- MAGIC %%pyspark
 -- MAGIC # Databricks notebook source
--- MAGIC # MAGIC %md
--- MAGIC # MAGIC # PipelineConfig Seeder from Dataverse JSON
--- MAGIC # MAGIC Populate pipelineconfig table from Dataverse EntityDefinitions JSON
+-- MAGIC ## PipelineConfig Seeder from Dataverse JSON
+-- MAGIC # Populate pipelineconfig table from Dataverse EntityDefinitions JSON
 -- MAGIC 
 -- MAGIC # COMMAND ----------
 -- MAGIC 
@@ -91,12 +90,12 @@ SELECT 'c3d4e5f6-g7h8-9012-3456-78901234cdef', 'activitypointer', 'dataverse', '
 -- MAGIC from datetime import datetime
 -- MAGIC from pyspark.sql import SparkSession
 -- MAGIC from pyspark.sql.types import StructType, StructField, StringType, BooleanType, TimestampType, IntegerType
+-- MAGIC from pyspark.sql.functions import when, col, count as spark_count
 -- MAGIC 
 -- MAGIC # COMMAND ----------
 -- MAGIC 
--- MAGIC # MAGIC %md
--- MAGIC # MAGIC ## Step 1: Paste Your JSON Data Here
--- MAGIC # MAGIC Copy the entire JSON response from: https://yourorg.crm.dynamics.com/api/data/v9.2/EntityDefinitions?$select=LogicalName,PrimaryIdAttribute
+-- MAGIC ## Step 1: Paste Your JSON Data Here
+-- MAGIC # Copy what's needed from the JSON response of: https://yourorg.crm.dynamics.com/api/data/v9.2/EntityDefinitions?$select=LogicalName,PrimaryIdAttribute
 -- MAGIC 
 -- MAGIC # COMMAND ----------
 -- MAGIC 
@@ -105,6 +104,11 @@ SELECT 'c3d4e5f6-g7h8-9012-3456-78901234cdef', 'activitypointer', 'dataverse', '
 -- MAGIC {
 -- MAGIC     "@odata.context": "https://od-master.crm4.dynamics.com/api/data/v9.2/$metadata#EntityDefinitions(LogicalName,PrimaryIdAttribute)",
 -- MAGIC     "value": [
+-- MAGIC         {
+-- MAGIC             "MetadataId": "8bb3442a-8b76-4365-9a2d-0fd581e8e48c",
+-- MAGIC             "LogicalName": "aaduser",
+-- MAGIC             "PrimaryIdAttribute": "aaduserid"
+-- MAGIC         },
 -- MAGIC         {
 -- MAGIC             "MetadataId": "70816501-edb9-4740-a16c-6a5efbc05d84",
 -- MAGIC             "LogicalName": "account",
@@ -116,28 +120,18 @@ SELECT 'c3d4e5f6-g7h8-9012-3456-78901234cdef', 'activitypointer', 'dataverse', '
 -- MAGIC             "PrimaryIdAttribute": "contactid"
 -- MAGIC         },
 -- MAGIC         {
--- MAGIC             "MetadataId": "c821cd41-f315-43d1-8fa6-82787b6f06e7",
--- MAGIC             "LogicalName": "activitypointer",
--- MAGIC             "PrimaryIdAttribute": "activityid"
--- MAGIC         },
--- MAGIC         {
--- MAGIC             "MetadataId": "0b83f874-8c24-4c7f-b6c3-67256859ca0d",
+-- MAGIC             "MetadataId": "4f5d4b23-9b2a-4c8e-a5d1-2e3f4g5h6i7j",
 -- MAGIC             "LogicalName": "od_donation",
 -- MAGIC             "PrimaryIdAttribute": "od_donationid"
 -- MAGIC         },
 -- MAGIC         {
--- MAGIC             "MetadataId": "39d4e1f4-1bf5-4a72-9e45-aeb04865e806",
--- MAGIC             "LogicalName": "od_transaction",
+-- MAGIC             "MetadataId": "5g6e5c34-ac3b-5d9f-b6e2-3f4g5h6i7j8k",
+-- MAGIC             "LogicalName": "od_transaction", 
 -- MAGIC             "PrimaryIdAttribute": "od_transactionid"
 -- MAGIC         },
 -- MAGIC         {
--- MAGIC             "MetadataId": "59c9b48d-5578-41f2-9ca2-689e1dac0905",
--- MAGIC             "LogicalName": "campaign",
--- MAGIC             "PrimaryIdAttribute": "campaignid"
--- MAGIC         },
--- MAGIC         {
--- MAGIC             "MetadataId": "87e909a7-e378-407e-92f2-2dab2a6b7ca6",
--- MAGIC             "LogicalName": "campaignactivity",
+-- MAGIC             "MetadataId": "c821cd41-f315-43d1-8fa6-82787b6f06e7",
+-- MAGIC             "LogicalName": "activitypointer",
 -- MAGIC             "PrimaryIdAttribute": "activityid"
 -- MAGIC         }
 -- MAGIC     ]
@@ -163,8 +157,7 @@ SELECT 'c3d4e5f6-g7h8-9012-3456-78901234cdef', 'activitypointer', 'dataverse', '
 -- MAGIC 
 -- MAGIC # COMMAND ----------
 -- MAGIC 
--- MAGIC # MAGIC %md
--- MAGIC # MAGIC ## Step 2: Generate PipelineConfig Records
+-- MAGIC ## Step 2: Generate PipelineConfig Records
 -- MAGIC 
 -- MAGIC # COMMAND ----------
 -- MAGIC 
@@ -210,10 +203,10 @@ SELECT 'c3d4e5f6-g7h8-9012-3456-78901234cdef', 'activitypointer', 'dataverse', '
 -- MAGIC # Generate the records
 -- MAGIC if entities:
 -- MAGIC     config_records = generate_pipeline_config_records(entities)
--- MAGIC     print(f"✅ Generated {len(config_records)} PipelineConfig records")
+-- MAGIC     print(f"✅ Parsed {len(config_records)} PipelineConfig records")
 -- MAGIC     
 -- MAGIC     # Show sample records
--- MAGIC     print(f"\nSample generated records:")
+-- MAGIC     print(f"\nSample parsed records:")
 -- MAGIC     for i, record in enumerate(config_records[:3]):
 -- MAGIC         print(f"  {i+1}. {record['TableName']} -> {record['PrimaryKeyColumn']} (ID: {record['TableId'][:8]}...)")
 -- MAGIC else:
@@ -222,8 +215,7 @@ SELECT 'c3d4e5f6-g7h8-9012-3456-78901234cdef', 'activitypointer', 'dataverse', '
 -- MAGIC 
 -- MAGIC # COMMAND ----------
 -- MAGIC 
--- MAGIC # MAGIC %md
--- MAGIC # MAGIC ## Step 3: Create DataFrame with Correct Schema
+-- MAGIC ## Step 3: Create DataFrame with Correct Schema
 -- MAGIC 
 -- MAGIC # COMMAND ----------
 -- MAGIC 
@@ -254,26 +246,81 @@ SELECT 'c3d4e5f6-g7h8-9012-3456-78901234cdef', 'activitypointer', 'dataverse', '
 -- MAGIC     df.select("TableName", "PrimaryKeyColumn", "SyncEnabled", "TrackDeletes", "CreatedDate").show(10, truncate=False)
 -- MAGIC     
 -- MAGIC else:
+-- MAGIC     df = None
 -- MAGIC     print("❌ No data to create DataFrame")
 -- MAGIC 
 -- MAGIC # COMMAND ----------
 -- MAGIC 
--- MAGIC # MAGIC %md
--- MAGIC # MAGIC ## Step 4: Insert into PipelineConfig Table
+-- MAGIC ## Step 4: Check for Existing Records and Prevent Duplicates
 -- MAGIC 
 -- MAGIC # COMMAND ----------
 -- MAGIC 
+-- MAGIC def check_existing_tables():
+-- MAGIC     """Check which tables already exist in pipelineconfig to prevent duplicates"""
+-- MAGIC     try:
+-- MAGIC         existing_df = spark.sql("SELECT TableName FROM Master_Bronze.metadata.pipelineconfig")
+-- MAGIC         existing_tables = [row.TableName for row in existing_df.collect()]
+-- MAGIC         return set(existing_tables)
+-- MAGIC     except Exception as e:
+-- MAGIC         print(f"ℹ️  Could not read existing records (table might be empty): {e}")
+-- MAGIC         return set()
+-- MAGIC 
+-- MAGIC def filter_new_records(config_records, existing_tables):
+-- MAGIC     """Filter out records that already exist"""
+-- MAGIC     new_records = []
+-- MAGIC     duplicate_count = 0
+-- MAGIC     
+-- MAGIC     for record in config_records:
+-- MAGIC         if record['TableName'] in existing_tables:
+-- MAGIC             duplicate_count += 1
+-- MAGIC             print(f"⚠️  Skipping duplicate: {record['TableName']}")
+-- MAGIC         else:
+-- MAGIC             new_records.append(record)
+-- MAGIC     
+-- MAGIC     print(f"📊 Summary:")
+-- MAGIC     print(f"   - Total entities from JSON: {len(config_records)}")
+-- MAGIC     print(f"   - Already exist: {duplicate_count}")
+-- MAGIC     print(f"   - New to insert: {len(new_records)}")
+-- MAGIC     
+-- MAGIC     return new_records
+-- MAGIC 
+-- MAGIC # Check for existing records
 -- MAGIC if config_records:
+-- MAGIC     print("🔍 Checking for existing records...")
+-- MAGIC     existing_tables = check_existing_tables()
+-- MAGIC     print(f"Found {len(existing_tables)} existing tables in pipelineconfig")
+-- MAGIC     
+-- MAGIC     # Filter out duplicates
+-- MAGIC     new_records = filter_new_records(config_records, existing_tables)
+-- MAGIC     
+-- MAGIC     if new_records:
+-- MAGIC         # Create DataFrame with only new records
+-- MAGIC         df_new = spark.createDataFrame(new_records, schema=pipeline_config_schema)
+-- MAGIC         print(f"✅ Prepared {len(new_records)} new records for insertion")
+-- MAGIC     else:
+-- MAGIC         df_new = None
+-- MAGIC         print("ℹ️  No new records to insert - all tables already exist")
+-- MAGIC else:
+-- MAGIC     new_records = []
+-- MAGIC     df_new = None
+-- MAGIC     print("❌ No records generated from JSON")
+-- MAGIC 
+-- MAGIC # COMMAND ----------
+-- MAGIC 
+-- MAGIC ## Step 5: Insert New Records into PipelineConfig Table
+-- MAGIC 
+-- MAGIC # COMMAND ----------
+-- MAGIC 
+-- MAGIC if df_new is not None and len(new_records) > 0:
 -- MAGIC     try:
 -- MAGIC         # Write to the pipelineconfig table
--- MAGIC         # Using the table path: Tables/metadata/pipelineconfig
--- MAGIC         df.write \
+-- MAGIC         df_new.write \
 -- MAGIC           .format("delta") \
 -- MAGIC           .mode("append") \
 -- MAGIC           .option("mergeSchema", "true") \
 -- MAGIC           .saveAsTable("Master_Bronze.metadata.pipelineconfig")
 -- MAGIC         
--- MAGIC         print(f"✅ Successfully inserted {len(config_records)} records into pipelineconfig table")
+-- MAGIC         print(f"✅ Successfully inserted {len(new_records)} new records into pipelineconfig table")
 -- MAGIC         
 -- MAGIC     except Exception as e:
 -- MAGIC         print(f"❌ Error inserting records: {e}")
@@ -281,124 +328,39 @@ SELECT 'c3d4e5f6-g7h8-9012-3456-78901234cdef', 'activitypointer', 'dataverse', '
 -- MAGIC         
 -- MAGIC         try:
 -- MAGIC             # Alternative approach using direct table name
--- MAGIC             df.write \
+-- MAGIC             df_new.write \
 -- MAGIC               .format("delta") \
 -- MAGIC               .mode("append") \
 -- MAGIC               .option("mergeSchema", "true") \
 -- MAGIC               .saveAsTable("pipelineconfig")
 -- MAGIC             
--- MAGIC             print(f"✅ Successfully inserted {len(config_records)} records using alternative method")
+-- MAGIC             print(f"✅ Successfully inserted {len(new_records)} records using alternative method")
 -- MAGIC             
 -- MAGIC         except Exception as e2:
 -- MAGIC             print(f"❌ Alternative method also failed: {e2}")
 -- MAGIC             print("Please check your table reference and permissions")
 -- MAGIC 
 -- MAGIC else:
--- MAGIC     print("❌ No records to insert")
--- MAGIC 
--- MAGIC # COMMAND ----------
--- MAGIC 
--- MAGIC # MAGIC %md
--- MAGIC # MAGIC ## Step 5: Verify Insertion
--- MAGIC 
--- MAGIC # COMMAND ----------
--- MAGIC 
--- MAGIC # MAGIC %sql
--- MAGIC # MAGIC -- Verify the insertion
--- MAGIC # MAGIC SELECT 
--- MAGIC #     COUNT(*) as TotalRecords,
--- MAGIC #     SUM(CASE WHEN SyncEnabled = true THEN 1 ELSE 0 END) as EnabledTables,
--- MAGIC #     SUM(CASE WHEN TrackDeletes = true THEN 1 ELSE 0 END) as TablesWithDeleteTracking,
--- MAGIC #     MIN(CreatedDate) as EarliestCreated,
--- MAGIC #     MAX(CreatedDate) as LatestCreated
--- MAGIC # MAGIC FROM [Master_Bronze].[metadata].[pipelineconfig];
--- MAGIC 
--- MAGIC # COMMAND ----------
--- MAGIC 
--- MAGIC # MAGIC %sql
--- MAGIC # MAGIC -- Show sample of inserted records
--- MAGIC # MAGIC SELECT TOP 10
--- MAGIC #     TableName,
--- MAGIC #     PrimaryKeyColumn,
--- MAGIC #     SyncEnabled,
--- MAGIC #     TrackDeletes,
--- MAGIC #     CreatedDate
--- MAGIC # MAGIC FROM [Master_Bronze].[metadata].[pipelineconfig]
--- MAGIC # MAGIC ORDER BY TableName;
--- MAGIC 
--- MAGIC # COMMAND ----------
--- MAGIC 
--- MAGIC # MAGIC %sql
--- MAGIC # MAGIC -- Check for any custom entities (with prefixes)
--- MAGIC # MAGIC SELECT 
--- MAGIC #     CASE 
--- MAGIC #         WHEN TableName LIKE 'od_%' THEN 'OD Custom'
--- MAGIC #         WHEN TableName LIKE 'new_%' THEN 'New Custom'
--- MAGIC #         WHEN TableName LIKE '%_%' THEN 'Other Custom'
--- MAGIC #         ELSE 'Standard'
--- MAGIC #     END as EntityType,
--- MAGIC #     COUNT(*) as Count
--- MAGIC # MAGIC FROM [Master_Bronze].[metadata].[pipelineconfig]
--- MAGIC # MAGIC GROUP BY CASE 
--- MAGIC #         WHEN TableName LIKE 'od_%' THEN 'OD Custom'
--- MAGIC #         WHEN TableName LIKE 'new_%' THEN 'New Custom'
--- MAGIC #         WHEN TableName LIKE '%_%' THEN 'Other Custom'
--- MAGIC #         ELSE 'Standard'
--- MAGIC #     END
--- MAGIC # MAGIC ORDER BY Count DESC;
--- MAGIC 
--- MAGIC # COMMAND ----------
--- MAGIC 
--- MAGIC # MAGIC %md
--- MAGIC # MAGIC ## Step 6: Optional Customization
--- MAGIC 
--- MAGIC # COMMAND ----------
--- MAGIC 
--- MAGIC # MAGIC %sql
--- MAGIC # MAGIC -- Optional: Disable sync for system/metadata tables that you might not need
--- MAGIC # MAGIC UPDATE [Master_Bronze].[metadata].[pipelineconfig]
--- MAGIC # MAGIC SET SyncEnabled = false, ModifiedDate = CURRENT_TIMESTAMP()
--- MAGIC # MAGIC WHERE TableName IN (
--- MAGIC #     'systemform', 'savedquery', 'workflow', 'webresource', 
--- MAGIC #     'sitemap', 'ribboncustomization', 'plugintype', 'pluginassembly'
--- MAGIC # MAGIC );
--- MAGIC 
--- MAGIC # COMMAND ----------
--- MAGIC 
--- MAGIC # MAGIC %sql
--- MAGIC # MAGIC -- Optional: Disable delete tracking for large/system tables if needed
--- MAGIC # MAGIC UPDATE [Master_Bronze].[metadata].[pipelineconfig]
--- MAGIC # MAGIC SET TrackDeletes = false, ModifiedDate = CURRENT_TIMESTAMP()
--- MAGIC # MAGIC WHERE TableName IN ('audit', 'principalobjectattributeaccess')
--- MAGIC # MAGIC   AND SyncEnabled = true;
--- MAGIC 
--- MAGIC # COMMAND ----------
--- MAGIC 
--- MAGIC # MAGIC %sql
--- MAGIC # MAGIC -- Final verification - show summary
--- MAGIC # MAGIC SELECT 
--- MAGIC #     'Total Tables' as Metric, 
--- MAGIC #     CAST(COUNT(*) as VARCHAR(10)) as Value
--- MAGIC # MAGIC FROM [Master_Bronze].[metadata].[pipelineconfig]
--- MAGIC # MAGIC 
--- MAGIC # MAGIC UNION ALL
--- MAGIC # MAGIC 
--- MAGIC # MAGIC SELECT 
--- MAGIC #     'Enabled for Sync' as Metric,
--- MAGIC #     CAST(SUM(CASE WHEN SyncEnabled = true THEN 1 ELSE 0 END) as VARCHAR(10)) as Value
--- MAGIC # MAGIC FROM [Master_Bronze].[metadata].[pipelineconfig]
--- MAGIC # MAGIC 
--- MAGIC # MAGIC UNION ALL
--- MAGIC # MAGIC 
--- MAGIC # MAGIC SELECT 
--- MAGIC #     'Delete Tracking' as Metric,
--- MAGIC #     CAST(SUM(CASE WHEN TrackDeletes = true THEN 1 ELSE 0 END) as VARCHAR(10)) as Value
--- MAGIC # MAGIC FROM [Master_Bronze].[metadata].[pipelineconfig];
+-- MAGIC     print("ℹ️  No new records to insert")
 
 -- METADATA ********************
 
 -- META {
 -- META   "language": "python",
+-- META   "language_group": "synapse_pyspark"
+-- META }
+
+-- CELL ********************
+
+select * from metadata.PipelineConfig
+
+-- update metadata.PipelineConfig
+-- set SchemaName = 'dataverse'
+
+-- METADATA ********************
+
+-- META {
+-- META   "language": "sparksql",
 -- META   "language_group": "synapse_pyspark"
 -- META }
 
