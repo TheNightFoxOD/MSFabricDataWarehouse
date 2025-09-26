@@ -195,19 +195,63 @@
                     ]
                   },
                   {
-                    "type": "SetVariable",
+                    "type": "TridentNotebook",
                     "typeProperties": {
-                      "variableName": "table_creation_output",
-                      "value": {
-                        "value": "@{string(activity('Create New Table').output)}",
-                        "type": "Expression"
+                      "notebookId": "b1f00094-24e9-a43c-44e5-f6ee22bf399c",
+                      "workspaceId": "00000000-0000-0000-0000-000000000000",
+                      "parameters": {
+                        "table_name": {
+                          "value": {
+                            "value": "@item().TableName",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        },
+                        "schema_name": {
+                          "value": {
+                            "value": "@item().SchemaName",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        },
+                        "pipeline_run_id": {
+                          "value": {
+                            "value": "@{pipeline().RunId}",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        },
+                        "pipeline_trigger_time": {
+                          "value": {
+                            "value": "@{pipeline().TriggerTime}",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        },
+                        "table_creation_result": {
+                          "value": {
+                            "value": "@{string(activity('Create New Table').output)}",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        },
+                        "schema_check_result": {
+                          "value": {
+                            "value": "@{activity('Check Table Definition').output.result.exitValue}",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        }
                       }
                     },
                     "policy": {
+                      "timeout": "0.12:00:00",
+                      "retry": 0,
+                      "retryIntervalInSeconds": 30,
                       "secureInput": false,
                       "secureOutput": false
                     },
-                    "name": "Set table_creation_output",
+                    "name": "Log table created",
                     "dependsOn": [
                       {
                         "activity": "Optimize on create",
@@ -273,19 +317,56 @@
                     "dependsOn": []
                   },
                   {
-                    "type": "SetVariable",
+                    "type": "TridentNotebook",
                     "typeProperties": {
-                      "variableName": "tracking_columns_output",
-                      "value": {
-                        "value": "@{string(activity('Add Tracking Columns').output)}",
-                        "type": "Expression"
+                      "notebookId": "1f7fa146-452c-ac79-426f-4255aed66501",
+                      "workspaceId": "00000000-0000-0000-0000-000000000000",
+                      "parameters": {
+                        "schema_name": {
+                          "value": {
+                            "value": "@item().SchemaName",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        },
+                        "table_name": {
+                          "value": {
+                            "value": "@item().TableName",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        },
+                        "pipeline_run_id": {
+                          "value": {
+                            "value": "@{pipeline().RunId}",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        },
+                        "pipeline_trigger_time": {
+                          "value": {
+                            "value": "@{pipeline().TriggerTime}",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        },
+                        "tracking_columns_result": {
+                          "value": {
+                            "value": "@{activity('Add Tracking Columns').output.result.exitValue}",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        }
                       }
                     },
                     "policy": {
+                      "timeout": "0.12:00:00",
+                      "retry": 0,
+                      "retryIntervalInSeconds": 30,
                       "secureInput": false,
                       "secureOutput": false
                     },
-                    "name": "Set tracking_columns_output",
+                    "name": "Log tracking columns added",
                     "dependsOn": [
                       {
                         "activity": "Add Tracking Columns",
@@ -411,29 +492,6 @@
                     ]
                   },
                   {
-                    "type": "SetVariable",
-                    "typeProperties": {
-                      "variableName": "upsert_records_output",
-                      "value": {
-                        "value": "@{string(activity('Merge staged').output)}",
-                        "type": "Expression"
-                      }
-                    },
-                    "policy": {
-                      "secureInput": false,
-                      "secureOutput": false
-                    },
-                    "name": "Set sync records output",
-                    "dependsOn": [
-                      {
-                        "activity": "Merge staged",
-                        "dependencyConditions": [
-                          "Succeeded"
-                        ]
-                      }
-                    ]
-                  },
-                  {
                     "type": "TridentNotebook",
                     "typeProperties": {
                       "notebookId": "425dfe78-d90e-b7e9-445f-4fedd44e6df4",
@@ -462,7 +520,7 @@
                     "name": "Drop staging table",
                     "dependsOn": [
                       {
-                        "activity": "Set sync records output",
+                        "activity": "Merge staged",
                         "dependencyConditions": [
                           "Succeeded"
                         ]
@@ -652,7 +710,10 @@
                       "workspaceId": "00000000-0000-0000-0000-000000000000",
                       "parameters": {
                         "table_name": {
-                          "value": "@item().TableName",
+                          "value": {
+                            "value": "@item().TableName",
+                            "type": "Expression"
+                          },
                           "type": "string"
                         },
                         "schema_name": {
@@ -689,19 +750,63 @@
                     ]
                   },
                   {
-                    "type": "SetVariable",
+                    "type": "TridentNotebook",
                     "typeProperties": {
-                      "variableName": "delete_detection_output",
-                      "value": {
-                        "value": "@{string(activity('Delete detection').output)}",
-                        "type": "Expression"
+                      "notebookId": "8e366a3a-4f5f-b055-4ecb-509f5f19aa53",
+                      "workspaceId": "00000000-0000-0000-0000-000000000000",
+                      "parameters": {
+                        "schema_name ": {
+                          "value": {
+                            "value": "@item().SchemaName",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        },
+                        "table_name": {
+                          "value": {
+                            "value": "@item().TableName",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        },
+                        "pipeline_run_id": {
+                          "value": {
+                            "value": "@{pipeline().RunId}",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        },
+                        "pipeline_trigger_time": {
+                          "value": {
+                            "value": "@{pipeline().TriggerTime}",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        },
+                        "upsert_records_result": {
+                          "value": {
+                            "value": "@{activity('Merge staged').output.result.exitValue}",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        },
+                        "delete_detection_result": {
+                          "value": {
+                            "value": "@{activity('Delete Detection').output.result.exitValue}",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        }
                       }
                     },
                     "policy": {
+                      "timeout": "0.12:00:00",
+                      "retry": 0,
+                      "retryIntervalInSeconds": 30,
                       "secureInput": false,
                       "secureOutput": false
                     },
-                    "name": "Set delete detection output",
+                    "name": "Log daily sync",
                     "dependsOn": [
                       {
                         "activity": "Delete Detection",
@@ -747,55 +852,6 @@
                   "pipeline_trigger_time": {
                     "value": {
                       "value": "@{pipeline().TriggerTime}",
-                      "type": "Expression"
-                    },
-                    "type": "string"
-                  },
-                  "schema_check_result": {
-                    "value": {
-                      "value": "@{activity('Check Table Definition').output.result.exitValue}",
-                      "type": "Expression"
-                    },
-                    "type": "string"
-                  },
-                  "table_creation_result": {
-                    "value": {
-                      "value": "@{variables('table_creation_output')}",
-                      "type": "Expression"
-                    },
-                    "type": "string"
-                  },
-                  "tracking_columns_result": {
-                    "value": {
-                      "value": "@{variables('tracking_columns_output')}",
-                      "type": "Expression"
-                    },
-                    "type": "string"
-                  },
-                  "upsert_records_result": {
-                    "value": {
-                      "value": "@{variables('upsert_records_output')}",
-                      "type": "Expression"
-                    },
-                    "type": "string"
-                  },
-                  "append_records_result": {
-                    "value": {
-                      "value": "@{variables('append_records_output')}",
-                      "type": "Expression"
-                    },
-                    "type": "string"
-                  },
-                  "delete_detection_result": {
-                    "value": {
-                      "value": "@{variables('delete_detection_output')}",
-                      "type": "Expression"
-                    },
-                    "type": "string"
-                  },
-                  "purge_detection_result": {
-                    "value": {
-                      "value": "@{variables('purge_detection_output')}",
                       "type": "Expression"
                     },
                     "type": "string"

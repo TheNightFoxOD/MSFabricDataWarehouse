@@ -37,7 +37,7 @@ schema_name = "default_schema_name"
 import json
 
 # Define tables that require manual creation
-manual_creation_tables = ['activitypointer']
+manual_creation_tables = [] #'activitypointer'
 
 # Initialize results dictionary for pipeline output
 results = {

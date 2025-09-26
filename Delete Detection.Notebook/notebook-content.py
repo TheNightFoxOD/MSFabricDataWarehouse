@@ -228,29 +228,29 @@ def purge_aware_delete_detection():
         
         # Get comprehensive metrics
         total_records = updated_df.count()
-        deleted_count = updated_df.filter(col("IsDeleted") == True).count()
-        purged_count = updated_df.filter(col("IsPurged") == True).count()
+        all_deleted_count = updated_df.filter(col("IsDeleted") == True).count()
+        all_purged_count = updated_df.filter(col("IsPurged") == True).count()
         active_count = updated_df.filter(
             (col("IsDeleted") == False) & (col("IsPurged") == False)
         ).count()
         
-        # Calculate newly affected records (records updated in this run)
+        # Calculate records affected in this execution (for logging)
         if has_purge_date:
-            newly_deleted = updated_df.filter(
+            deleted_records = updated_df.filter(
                 (col("IsDeleted") == True) & 
                 (col("DeletedDate") == current_ts)
             ).count()
             
-            newly_purged = updated_df.filter(
+            purged_records = updated_df.filter(
                 (col("IsPurged") == True) & 
                 (col("PurgedDate") == current_ts)
             ).count()
         else:
-            newly_deleted = updated_df.filter(
+            deleted_records = updated_df.filter(
                 (col("IsDeleted") == True) & 
                 (col("DeletedDate") == current_ts)
             ).count()
-            newly_purged = 0
+            purged_records = 0
         
         # ==========================================
         # STEP 8: Clean up temporary table
@@ -270,11 +270,11 @@ def purge_aware_delete_detection():
             "table_name": table_name,
             "total_records": total_records,
             "active_records": active_count,
-            "deleted_records": deleted_count,
-            "purged_records": purged_count,
+            "deleted_records": deleted_records,           # Records deleted in THIS execution
+            "purged_records": purged_records,             # Records purged in THIS execution  
+            "all_deleted_records": all_deleted_count,     # Total deleted records (historical)
+            "all_purged_records": all_purged_count,       # Total purged records (historical)
             "missing_from_source": missing_count,
-            "newly_deleted": newly_deleted,
-            "newly_purged": newly_purged,
             "has_purge_date": has_purge_date,
             "last_purge_date": last_purge_date if has_purge_date else None,
             "sync_timestamp": current_ts_str,
@@ -284,8 +284,8 @@ def purge_aware_delete_detection():
         print(f"✓ Purge-aware detection completed successfully")
         print(f"  - Total records: {total_records}")
         print(f"  - Active records: {active_count}")
-        print(f"  - Deleted records: {deleted_count} (newly deleted: {newly_deleted})")
-        print(f"  - Purged records: {purged_count} (newly purged: {newly_purged})")
+        print(f"  - All deleted records: {all_deleted_count} (deleted in this run: {deleted_records})")
+        print(f"  - All purged records: {all_purged_count} (purged in this run: {purged_records})")
         
         return result
         
