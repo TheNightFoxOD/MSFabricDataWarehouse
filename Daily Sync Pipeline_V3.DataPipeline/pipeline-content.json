@@ -69,6 +69,13 @@
                       "type": "Expression"
                     },
                     "type": "string"
+                  },
+                  "sync_enabled": {
+                    "value": {
+                      "value": "@{item().SyncEnabled}",
+                      "type": "Expression"
+                    },
+                    "type": "bool"
                   }
                 }
               },
@@ -434,7 +441,7 @@
               "type": "IfCondition",
               "typeProperties": {
                 "expression": {
-                  "value": "@not(contains(json(activity('Check table definition').output.result.exitValue).required_actions, 'CREATE_TABLE'))",
+                  "value": "@contains(json(activity('Check table definition').output.result.exitValue).required_actions, 'SYNC_DATA')",
                   "type": "Expression"
                 },
                 "ifTrueActivities": [
@@ -726,6 +733,13 @@
                         "primary_key": {
                           "value": {
                             "value": "@item().PrimaryKeyColumn",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        },
+                        "last_purge_date": {
+                          "value": {
+                            "value": "@item().LastPurgeDate",
                             "type": "Expression"
                           },
                           "type": "string"

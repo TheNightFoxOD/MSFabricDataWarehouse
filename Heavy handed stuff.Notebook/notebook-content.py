@@ -151,7 +151,7 @@
 # CELL ********************
 
 # MAGIC %%sql
-# MAGIC drop table dataverse.od_transaction
+# MAGIC drop table dataverse.od_donation
 
 # METADATA ********************
 
@@ -165,7 +165,7 @@
 # CELL ********************
 
 # MAGIC %%sql
-# MAGIC drop table dataverse.activitypointer
+# MAGIC drop table dataverse.contact
 
 # METADATA ********************
 

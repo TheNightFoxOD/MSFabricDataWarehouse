@@ -24,10 +24,27 @@
 
 # MAGIC %%sql
 # MAGIC -- describe table dataverse.account
-# MAGIC select od_groupname, accountid, address1_city, od_startdate, IsDeleted, LastSynced from dataverse.account
+# MAGIC select od_groupname, accountid, address1_city, od_startdate, IsDeleted, LastSynced, IsDeleted, IsPurged
+# MAGIC  from dataverse.account
 # MAGIC where 1=1
 # MAGIC -- and IsDeleted = true
-# MAGIC order by modifiedon desc 
+# MAGIC and accountid = '08e2aec7-85ac-ea11-a812-000d3aad0b76'
+# MAGIC -- order by modifiedon desc 
+
+# METADATA ********************
+
+# META {
+# META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# MAGIC %%sql
+# MAGIC SELECT count(*)
+# MAGIC from dataverse.account
+# MAGIC where IsDeleted = true
+# MAGIC and IsPurged = true
 
 # METADATA ********************
 
@@ -65,9 +82,9 @@
 # CELL ********************
 
 # MAGIC %%sql
-# MAGIC -- select * from metadata.pipelineconfig
-# MAGIC update metadata.pipelineconfig
-# MAGIC set SyncEnable = false
+# MAGIC select * from metadata.pipelineconfig
+# MAGIC -- update metadata.pipelineconfig
+# MAGIC -- set LastPurgeDate = '2023-01-01'
 
 # METADATA ********************
 
