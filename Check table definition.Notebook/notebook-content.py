@@ -34,6 +34,18 @@ schema_name = "default_schema_name"
 
 # CELL ********************
 
+# table_name = "account"
+# schema_name = "dataverse"
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
 import json
 
 # Define tables that require manual creation
@@ -70,20 +82,21 @@ try:
             results["required_actions"].append("ADD_TRACKING_COLUMNS")
     else:
         # Table exists, validate schema
-        results["required_actions"].append("VALIDATE_SCHEMA")
+        results["required_actions"].append("VALIDATE_SCHEMA")        
+        results["required_actions"].append("SYNC_DATA")
         
         # Get current schema
         current_schema = spark.sql(f"DESCRIBE {full_table_name}").collect()
         results["current_columns"] = [row['col_name'] for row in current_schema if row['col_name'] not in ['', '# Partitioning']]
-       
+    
         # Check if tracking columns exist
         tracking_columns = ['IsDeleted', 'IsPurged', 'DeletedDate', 'PurgedDate', 'LastSynced']
         existing_columns = [col.lower() for col in results["current_columns"]]
         missing_tracking = [col for col in tracking_columns if col.lower() not in existing_columns]
-       
+    
         if missing_tracking:
             results["required_actions"].append("ADD_TRACKING_COLUMNS")
-   
+
     print(f"Schema check results: {results}")
    
 except Exception as e:

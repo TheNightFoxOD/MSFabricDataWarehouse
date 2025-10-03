@@ -160,26 +160,57 @@ safe_full_table_name = full_table_name if not "PARAM_NOT_SET" in full_table_name
 
 log_entries = []
 
-# 1. Data Sync entry (from Merge staged)
-if upsert_success:
-    log_entries.append((
-        str(uuid.uuid4()), safe_pipeline_run_id, 'DailySync', safe_full_table_name, 'DataSync',
-        start_time, end_time, upsert_count, 0, 0, 'Success', None, 0, end_time
-    ))
+# 1. Data Sync entry (from Merge staged) - Log both success and failure
+if upsert_activity:  # Check if activity was attempted (has data)
+    if upsert_success:
+        log_entries.append((
+            str(uuid.uuid4()), safe_pipeline_run_id, 'DailySync', safe_full_table_name, 'DataSync',
+            start_time, end_time, upsert_count, 0, 0, 'Success', None, 0, end_time
+        ))
+        print(f"Logged successful DataSync: {upsert_count} records")
+    else:
+        # Activity attempted but failed - extract error message
+        error_msg = upsert_activity.get('error_message', 'DataSync operation failed')
+        log_entries.append((
+            str(uuid.uuid4()), safe_pipeline_run_id, 'DailySync', safe_full_table_name, 'DataSync',
+            start_time, end_time, 0, 0, 0, 'Error', error_msg, 0, end_time
+        ))
+        print(f"Logged failed DataSync: {error_msg}")
 
-# 2. Delete Detection entry
-if delete_success:
-    log_entries.append((
-        str(uuid.uuid4()), safe_pipeline_run_id, 'DailySync', safe_full_table_name, 'DeleteDetection',
-        start_time, end_time, 0, delete_count, 0, 'Success', None, 0, end_time
-    ))
+# 2. Delete Detection entry - Log both success and failure  
+if delete_detection:  # Check if activity was attempted (has data)
+    if delete_success:
+        log_entries.append((
+            str(uuid.uuid4()), safe_pipeline_run_id, 'DailySync', safe_full_table_name, 'DeleteDetection',
+            start_time, end_time, 0, delete_count, 0, 'Success', None, 0, end_time
+        ))
+        print(f"Logged successful DeleteDetection: {delete_count} records")
+    else:
+        # Activity attempted but failed - extract error message
+        error_msg = delete_detection.get('error_message', 'Delete detection operation failed')
+        log_entries.append((
+            str(uuid.uuid4()), safe_pipeline_run_id, 'DailySync', safe_full_table_name, 'DeleteDetection',
+            start_time, end_time, 0, 0, 0, 'Error', error_msg, 0, end_time
+        ))
+        print(f"Logged failed DeleteDetection: {error_msg}")
 
-# Insert log entries
+# 3. Handle case where no activities were attempted due to parameter issues
+if not upsert_activity and not delete_activity:
+    log_entries.append((
+        str(uuid.uuid4()), safe_pipeline_run_id, 'DailySync', safe_full_table_name, 'DailySyncAttempt',
+        start_time, end_time, 0, 0, 0, 'Error', 
+        'No daily sync activities could be parsed from input parameters', 0, end_time
+    ))
+    print("Logged daily sync failure due to parameter parsing issues")
+
+# Insert log entries - now always logs something
 if log_entries:
     sync_audit_df = spark.createDataFrame(log_entries, sync_audit_schema)
     sync_audit_df.write.format("delta").mode("append").saveAsTable("metadata.SyncAuditLog")
     execution_results["logs_written"]["sync_audit_log"] = len(log_entries)
     print(f"Inserted {len(log_entries)} entries into metadata.SyncAuditLog")
+else:
+    print("WARNING: No log entries created - this should not happen")
 
 # Return results
 execution_results["total_logs_written"] = sum(execution_results["logs_written"].values())

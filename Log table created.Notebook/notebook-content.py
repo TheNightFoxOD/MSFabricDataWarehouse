@@ -162,27 +162,74 @@ safe_full_table_name = full_table_name if not "PARAM_NOT_SET" in full_table_name
 
 log_entries = []
 
-# 1. Schema Check entry
-schema_error_msg = schema_check.get('error_message') if schema_check.get('error_message') else None
-schema_status = 'Error' if schema_error_msg else 'Success'
-log_entries.append((
-    str(uuid.uuid4()), safe_pipeline_run_id, 'DailySync', safe_full_table_name, 'SchemaCheck',
-    start_time, end_time, 0, 0, 0, schema_status, schema_error_msg, 0, end_time
-))
+# 1. Schema Check entry - Log both success and failure
+if schema_check:  # Check if activity was attempted (has data)
+    schema_error_msg = schema_check.get('error_message')
+    if schema_error_msg:
+        log_entries.append((
+            str(uuid.uuid4()), safe_pipeline_run_id, 'DailySync', safe_full_table_name, 'SchemaCheck',
+            start_time, end_time, 0, 0, 0, 'Error', schema_error_msg, 0, end_time
+        ))
+        print(f"Logged failed SchemaCheck: {schema_error_msg}")
+    else:
+        log_entries.append((
+            str(uuid.uuid4()), safe_pipeline_run_id, 'DailySync', safe_full_table_name, 'SchemaCheck',
+            start_time, end_time, 0, 0, 0, 'Success', None, 0, end_time
+        ))
+        print(f"Logged successful SchemaCheck")
+else:
+    # Schema check not attempted due to parameter issues
+    log_entries.append((
+        str(uuid.uuid4()), safe_pipeline_run_id, 'DailySync', safe_full_table_name, 'SchemaCheck',
+        start_time, end_time, 0, 0, 0, 'Error', 
+        'Schema check could not be parsed from input parameters', 0, end_time
+    ))
+    print("Logged schema check failure due to parameter parsing issues")
 
-# 2. Create Table + Initial Sync entry (combined operation)
-if table_creation_success:
+# 2. Create Table + Initial Sync entry - Log both success and failure
+if table_creation:  # Check if activity was attempted (has data)
+    if table_creation_success and table_creation_count > 0:
+        # Log successful table creation
+        log_entries.append((
+            str(uuid.uuid4()), safe_pipeline_run_id, 'DailySync', safe_full_table_name, 'CreateTable',
+            start_time, end_time, table_creation_count, 0, 0, 'Success', None, 0, end_time
+        ))
+        print(f"Logged successful CreateTable: {table_creation_count} records")
+        
+        # Log successful initial sync (same operation, different log entry)
+        log_entries.append((
+            str(uuid.uuid4()), safe_pipeline_run_id, 'DailySync', safe_full_table_name, 'InitialSync',
+            start_time, end_time, table_creation_count, 0, 0, 'Success', None, 0, end_time
+        ))
+        print(f"Logged successful InitialSync: {table_creation_count} records")
+    else:
+        # Activity attempted but failed - extract error message
+        error_msg = table_creation.get('errors', ['Table creation failed'])[0] if table_creation.get('errors') else 'Table creation operation failed'
+        if isinstance(error_msg, dict):
+            error_msg = error_msg.get('errorMessage', 'Table creation operation failed')
+        
+        log_entries.append((
+            str(uuid.uuid4()), safe_pipeline_run_id, 'DailySync', safe_full_table_name, 'CreateTable',
+            start_time, end_time, 0, 0, 0, 'Error', str(error_msg), 0, end_time
+        ))
+        print(f"Logged failed CreateTable: {error_msg}")
+else:
+    # Table creation not attempted due to parameter issues
     log_entries.append((
         str(uuid.uuid4()), safe_pipeline_run_id, 'DailySync', safe_full_table_name, 'CreateTable',
-        start_time, end_time, table_creation_count, 0, 0, 'Success', None, 0, end_time
+        start_time, end_time, 0, 0, 0, 'Error', 
+        'Table creation activity could not be parsed from input parameters', 0, end_time
     ))
+    print("Logged table creation failure due to parameter parsing issues")
 
-# Insert log entries
+# Insert log entries - now always logs something
 if log_entries:
     sync_audit_df = spark.createDataFrame(log_entries, sync_audit_schema)
     sync_audit_df.write.format("delta").mode("append").saveAsTable("metadata.SyncAuditLog")
     execution_results["logs_written"]["sync_audit_log"] = len(log_entries)
     print(f"Inserted {len(log_entries)} entries into metadata.SyncAuditLog")
+else:
+    print("WARNING: No log entries created - this should not happen")
 
 # Return results
 execution_results["total_logs_written"] = sum(execution_results["logs_written"].values())

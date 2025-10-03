@@ -108,6 +108,3556 @@ SELECT 'c3d4e5f6-g7h8-9012-3456-78901234cdef', 'activitypointer', 'dataverse', '
 -- MAGIC             "MetadataId": "70816501-edb9-4740-a16c-6a5efbc05d84",
 -- MAGIC             "LogicalName": "account",
 -- MAGIC             "PrimaryIdAttribute": "accountid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "f7fb806f-c31c-4028-a264-26167c938517",
+-- MAGIC             "LogicalName": "accountleads",
+-- MAGIC             "PrimaryIdAttribute": "accountleadid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "7634d589-4baa-471b-add7-892f27108731",
+-- MAGIC             "LogicalName": "aciviewmapper",
+-- MAGIC             "PrimaryIdAttribute": "aciviewmapperid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "03d2c2d7-f19e-4e42-a207-861d601763c1",
+-- MAGIC             "LogicalName": "actioncard",
+-- MAGIC             "PrimaryIdAttribute": "actioncardid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "08e364fb-c780-45c5-8db8-df0271d12f5b",
+-- MAGIC             "LogicalName": "actioncardusersettings",
+-- MAGIC             "PrimaryIdAttribute": "actioncardusersettingsid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "ca9fe43d-fc3e-4685-8303-1a9d66b68336",
+-- MAGIC             "LogicalName": "actioncarduserstate",
+-- MAGIC             "PrimaryIdAttribute": "actioncarduserstateid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "54bb1ceb-6ea4-471e-ac1c-51e08b68f59d",
+-- MAGIC             "LogicalName": "activityfileattachment",
+-- MAGIC             "PrimaryIdAttribute": "activityfileattachmentid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "d8e5d57b-ff7a-46b4-b4c0-78662b068e57",
+-- MAGIC             "LogicalName": "activitymimeattachment",
+-- MAGIC             "PrimaryIdAttribute": "activitymimeattachmentid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "16cc9e9c-271d-4971-8d48-b6ddc661fdad",
+-- MAGIC             "LogicalName": "activitymonitor",
+-- MAGIC             "PrimaryIdAttribute": "activitymonitorid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "fee29d46-b7ce-4dc0-97a0-e382afbca7c6",
+-- MAGIC             "LogicalName": "activityparty",
+-- MAGIC             "PrimaryIdAttribute": "activitypartyid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "c821cd41-f315-43d1-8fa6-82787b6f06e7",
+-- MAGIC             "LogicalName": "activitypointer",
+-- MAGIC             "PrimaryIdAttribute": "activityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "de79dad5-a90c-4d2f-9011-2e7345311686",
+-- MAGIC             "LogicalName": "adminsettingsentity",
+-- MAGIC             "PrimaryIdAttribute": "adminsettingsentityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "42e58b37-184a-48c3-a639-e51a8915a6b2",
+-- MAGIC             "LogicalName": "advancedsimilarityrule",
+-- MAGIC             "PrimaryIdAttribute": "advancedsimilarityruleid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "2e235a86-402b-40b4-b591-894ab1377be0",
+-- MAGIC             "LogicalName": "adx_externalidentity",
+-- MAGIC             "PrimaryIdAttribute": "adx_externalidentityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "b01400a5-049a-4c53-8232-6adf69c10412",
+-- MAGIC             "LogicalName": "adx_invitation",
+-- MAGIC             "PrimaryIdAttribute": "adx_invitationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "8f9d3dfe-6f56-ee11-be6f-000d3aaab2a8",
+-- MAGIC             "LogicalName": "adx_invitation_invitecontacts",
+-- MAGIC             "PrimaryIdAttribute": "adx_invitation_invitecontactsid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "2913db5d-7256-ee11-be6f-000d3aaab2a8",
+-- MAGIC             "LogicalName": "adx_invitation_mspp_webrole_powerpagecomponent",
+-- MAGIC             "PrimaryIdAttribute": "adx_invitation_mspp_webrole_powerpagecomponentid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "b49d3dfe-6f56-ee11-be6f-000d3aaab2a8",
+-- MAGIC             "LogicalName": "adx_invitation_redeemedcontacts",
+-- MAGIC             "PrimaryIdAttribute": "adx_invitation_redeemedcontactsid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "3a35aed1-178f-4e5a-8cc4-e44a909e9129",
+-- MAGIC             "LogicalName": "adx_inviteredemption",
+-- MAGIC             "PrimaryIdAttribute": "activityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "e99d3dfe-6f56-ee11-be6f-000d3aaab2a8",
+-- MAGIC             "LogicalName": "adx_kbarticle_kbarticle",
+-- MAGIC             "PrimaryIdAttribute": "adx_kbarticle_kbarticleid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "d0288ab4-3dd4-4c35-9529-2d3ede71b1c9",
+-- MAGIC             "LogicalName": "adx_portalcomment",
+-- MAGIC             "PrimaryIdAttribute": "activityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "ba85318f-aaf4-4223-bcf0-c426ef8bc9a5",
+-- MAGIC             "LogicalName": "adx_setting",
+-- MAGIC             "PrimaryIdAttribute": "adx_settingid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "c9439bac-d780-460f-a487-cde265a1b2ba",
+-- MAGIC             "LogicalName": "adx_webformsession",
+-- MAGIC             "PrimaryIdAttribute": "adx_webformsessionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "c1961a14-d4e6-470c-8d1e-23ae6b1bbb8d",
+-- MAGIC             "LogicalName": "annotation",
+-- MAGIC             "PrimaryIdAttribute": "annotationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "0e8878a1-a4a1-492b-8545-f9aa981c5874",
+-- MAGIC             "LogicalName": "annualfiscalcalendar",
+-- MAGIC             "PrimaryIdAttribute": "userfiscalcalendarid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "25bc7877-2996-4ff1-8879-a8aac703c71c",
+-- MAGIC             "LogicalName": "archivecleanupoperation",
+-- MAGIC             "PrimaryIdAttribute": "archivecleanupoperationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "13394a90-c97d-4a73-8f7e-cbce80f8102f",
+-- MAGIC             "LogicalName": "asyncoperation",
+-- MAGIC             "PrimaryIdAttribute": "asyncoperationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "47209b73-775e-4cb1-9364-3ae615288fe6",
+-- MAGIC             "LogicalName": "attachment",
+-- MAGIC             "PrimaryIdAttribute": "attachmentid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "fbf2b5e1-1523-41db-9d3e-b81af45bc293",
+-- MAGIC             "LogicalName": "attribute",
+-- MAGIC             "PrimaryIdAttribute": "attributeid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "5d894b3f-4f8e-4640-a2a4-c708c5486db1",
+-- MAGIC             "LogicalName": "attributeimageconfig",
+-- MAGIC             "PrimaryIdAttribute": "attributeimageconfigid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "56662660-0e05-42b6-8445-3b9422ce4975",
+-- MAGIC             "LogicalName": "attributemap",
+-- MAGIC             "PrimaryIdAttribute": "attributemapid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "72f69f0f-10d0-ed11-b59d-002248a7fd02",
+-- MAGIC             "LogicalName": "attributemaskingrule",
+-- MAGIC             "PrimaryIdAttribute": "attributemaskingruleid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "f7969ad7-67aa-44af-8f20-b9c590cb1939",
+-- MAGIC             "LogicalName": "audit",
+-- MAGIC             "PrimaryIdAttribute": "auditid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "13b7d3d6-62be-448c-9e64-a9abb503911b",
+-- MAGIC             "LogicalName": "availabletimes",
+-- MAGIC             "PrimaryIdAttribute": "availabletimesid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "eda97bea-4332-47e4-99ed-48930e66e7f8",
+-- MAGIC             "LogicalName": "availabletimesdatasource",
+-- MAGIC             "PrimaryIdAttribute": "availabletimesdatasourceid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "9b7832ef-8664-4087-8a45-7c20521ff0af",
+-- MAGIC             "LogicalName": "azureserviceconnection",
+-- MAGIC             "PrimaryIdAttribute": "azureserviceconnectionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "7abab2e5-df14-4026-9650-f017487e784c",
+-- MAGIC             "LogicalName": "backgroundoperation",
+-- MAGIC             "PrimaryIdAttribute": "backgroundoperationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "e9669024-7945-4a2e-a81d-3cc7bef71d7e",
+-- MAGIC             "LogicalName": "bookableresource",
+-- MAGIC             "PrimaryIdAttribute": "bookableresourceid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "ea019b20-031d-4f47-b409-8702b30cc43c",
+-- MAGIC             "LogicalName": "bookableresourcebooking",
+-- MAGIC             "PrimaryIdAttribute": "bookableresourcebookingid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "668408e3-ae97-4a55-8888-66f69e4f21c0",
+-- MAGIC             "LogicalName": "bookableresourcebookingexchangesyncidmapping",
+-- MAGIC             "PrimaryIdAttribute": "bookableresourcebookingexchangesyncidmappingid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "263e488e-e7b2-4514-bbd3-a5271dcb3acb",
+-- MAGIC             "LogicalName": "bookableresourcebookingheader",
+-- MAGIC             "PrimaryIdAttribute": "bookableresourcebookingheaderid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "e17ad177-6d40-46a5-91e5-f048dd24a595",
+-- MAGIC             "LogicalName": "bookableresourcecategory",
+-- MAGIC             "PrimaryIdAttribute": "bookableresourcecategoryid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "7ed43ef9-3654-41ad-944c-82da896f4da0",
+-- MAGIC             "LogicalName": "bookableresourcecategoryassn",
+-- MAGIC             "PrimaryIdAttribute": "bookableresourcecategoryassnid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "327f5aeb-1ef8-46e2-81df-cd2f43e3c051",
+-- MAGIC             "LogicalName": "bookableresourcecharacteristic",
+-- MAGIC             "PrimaryIdAttribute": "bookableresourcecharacteristicid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "ccd32c68-526c-441a-8456-e617ce0327f7",
+-- MAGIC             "LogicalName": "bookableresourcegroup",
+-- MAGIC             "PrimaryIdAttribute": "bookableresourcegroupid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "84f92bb8-9783-4329-9720-68acb2f4d59e",
+-- MAGIC             "LogicalName": "bookingstatus",
+-- MAGIC             "PrimaryIdAttribute": "bookingstatusid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "5838038e-9eec-455b-928d-5d70e91b2cec",
+-- MAGIC             "LogicalName": "bot",
+-- MAGIC             "PrimaryIdAttribute": "botid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "a55b423e-bbfa-ea11-a812-000d3a4aa70c",
+-- MAGIC             "LogicalName": "bot_botcomponent",
+-- MAGIC             "PrimaryIdAttribute": "bot_botcomponentid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "ab74a335-5107-ef11-9f8a-000d3aaab884",
+-- MAGIC             "LogicalName": "bot_botcomponentcollection",
+-- MAGIC             "PrimaryIdAttribute": "bot_botcomponentcollectionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "f765d157-3aed-ee11-a203-000d3aaabaf4",
+-- MAGIC             "LogicalName": "bot_botcontentpack",
+-- MAGIC             "PrimaryIdAttribute": "bot_botcontentpackid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "f5d76a59-fc8f-eb11-b1ac-000d3abb5458",
+-- MAGIC             "LogicalName": "bot_environmentvariabledefinition",
+-- MAGIC             "PrimaryIdAttribute": "bot_environmentvariabledefinitionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "db7afdd4-71f6-42c5-896f-903369207caf",
+-- MAGIC             "LogicalName": "botcomponent",
+-- MAGIC             "PrimaryIdAttribute": "botcomponentid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "9b82f849-117c-ee11-8179-000d3aaabaf4",
+-- MAGIC             "LogicalName": "botcomponent_aipluginoperation",
+-- MAGIC             "PrimaryIdAttribute": "botcomponent_aipluginoperationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "22fc3c44-bbfa-ea11-a812-000d3a4aa70c",
+-- MAGIC             "LogicalName": "botcomponent_botcomponent",
+-- MAGIC             "PrimaryIdAttribute": "botcomponent_botcomponentid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "a88d5b3c-fce2-ed11-a7c7-000d3aaab7fb",
+-- MAGIC             "LogicalName": "botcomponent_connectionreference",
+-- MAGIC             "PrimaryIdAttribute": "botcomponent_connectionreferenceid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "8374a335-5107-ef11-9f8a-000d3aaab884",
+-- MAGIC             "LogicalName": "botcomponent_dvtablesearch",
+-- MAGIC             "PrimaryIdAttribute": "botcomponent_dvtablesearchid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "e6981261-fc8f-eb11-b1ac-000d3abb5458",
+-- MAGIC             "LogicalName": "botcomponent_environmentvariabledefinition",
+-- MAGIC             "PrimaryIdAttribute": "botcomponent_environmentvariabledefinitionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "b777d2be-031a-ef11-9f89-000d3a39ffaf",
+-- MAGIC             "LogicalName": "botcomponent_msdyn_aimodel",
+-- MAGIC             "PrimaryIdAttribute": "botcomponent_msdyn_aimodelid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "96fc3c44-bbfa-ea11-a812-000d3a4aa70c",
+-- MAGIC             "LogicalName": "botcomponent_workflow",
+-- MAGIC             "PrimaryIdAttribute": "botcomponent_workflowid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "88fdb3f9-32ba-4d04-bcea-8259789a73c0",
+-- MAGIC             "LogicalName": "botcomponentcollection",
+-- MAGIC             "PrimaryIdAttribute": "botcomponentcollectionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "62189aa7-6db9-4d93-a936-b7a8ebefe8f8",
+-- MAGIC             "LogicalName": "botcontentpack",
+-- MAGIC             "PrimaryIdAttribute": "botcontentpackid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "a8434027-b384-4aa1-95a6-15bd50995de1",
+-- MAGIC             "LogicalName": "bulkarchiveconfig",
+-- MAGIC             "PrimaryIdAttribute": "bulkarchiveconfigid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "7cd0e871-b924-4fba-8d96-c3d69b5e07d0",
+-- MAGIC             "LogicalName": "bulkarchivefailuredetail",
+-- MAGIC             "PrimaryIdAttribute": "bulkarchivefailuredetailid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "e79e85c9-9970-4470-8756-984a9b783894",
+-- MAGIC             "LogicalName": "bulkarchiveoperation",
+-- MAGIC             "PrimaryIdAttribute": "bulkarchiveoperationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "2fbc9027-ede6-4c5d-9cc9-7909badc23d5",
+-- MAGIC             "LogicalName": "bulkarchiveoperationdetail",
+-- MAGIC             "PrimaryIdAttribute": "bulkarchiveoperationdetailid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "44d10acd-4e6f-432b-a839-6c79b58ce9cf",
+-- MAGIC             "LogicalName": "bulkdeletefailure",
+-- MAGIC             "PrimaryIdAttribute": "bulkdeletefailureid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "900569d7-bbc7-4835-b55c-6118f03c4623",
+-- MAGIC             "LogicalName": "bulkdeleteoperation",
+-- MAGIC             "PrimaryIdAttribute": "bulkdeleteoperationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "b237ecf9-e361-41cd-bce7-52bbd74eba0c",
+-- MAGIC             "LogicalName": "bulkoperation",
+-- MAGIC             "PrimaryIdAttribute": "activityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "7eb3842c-a164-48e3-b35c-7f53cc4e174c",
+-- MAGIC             "LogicalName": "bulkoperationlog",
+-- MAGIC             "PrimaryIdAttribute": "bulkoperationlogid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "33ddf274-4f15-43a5-9838-3a8dd5b558bb",
+-- MAGIC             "LogicalName": "businessprocess",
+-- MAGIC             "PrimaryIdAttribute": "businessprocessid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "0e253140-308f-4fd0-9342-f367899f8481",
+-- MAGIC             "LogicalName": "businessprocessflowinstance",
+-- MAGIC             "PrimaryIdAttribute": "businessprocessflowinstanceid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "f01e8baa-c7f5-4ec3-b538-5a3eed8527f6",
+-- MAGIC             "LogicalName": "businessunit",
+-- MAGIC             "PrimaryIdAttribute": "businessunitid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "f8f9c1bc-bad3-44d5-bdad-9fc8be60f8a8",
+-- MAGIC             "LogicalName": "businessunitmap",
+-- MAGIC             "PrimaryIdAttribute": "businessunitmapid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "fc90e923-d3c2-4e27-be83-0b020aeee1cb",
+-- MAGIC             "LogicalName": "businessunitnewsarticle",
+-- MAGIC             "PrimaryIdAttribute": "businessunitnewsarticleid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "b16eb406-4dd9-49ee-8efe-9b351bd31f28",
+-- MAGIC             "LogicalName": "calendar",
+-- MAGIC             "PrimaryIdAttribute": "calendarid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "2f4998f1-583e-4206-b49e-a3ac04e2bb6d",
+-- MAGIC             "LogicalName": "calendarrule",
+-- MAGIC             "PrimaryIdAttribute": "calendarruleid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "367b1896-6465-4657-a7e7-468dc248f733",
+-- MAGIC             "LogicalName": "callbackregistration",
+-- MAGIC             "PrimaryIdAttribute": "callbackregistrationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "59c9b48d-5578-41f2-9ca2-689e1dac0905",
+-- MAGIC             "LogicalName": "campaign",
+-- MAGIC             "PrimaryIdAttribute": "campaignid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "87e909a7-e378-407e-92f2-2dab2a6b7ca6",
+-- MAGIC             "LogicalName": "campaignactivity",
+-- MAGIC             "PrimaryIdAttribute": "activityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "9f1765b6-ec8e-4f87-89b6-871f5a99b6e1",
+-- MAGIC             "LogicalName": "campaignactivityitem",
+-- MAGIC             "PrimaryIdAttribute": "campaignactivityitemid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "5f8784c4-b1ba-4099-9fd1-3c876bc05fa2",
+-- MAGIC             "LogicalName": "campaignitem",
+-- MAGIC             "PrimaryIdAttribute": "campaignitemid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "a8c1e72a-90ac-46fa-9bf5-465097edd021",
+-- MAGIC             "LogicalName": "campaignresponse",
+-- MAGIC             "PrimaryIdAttribute": "activityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "b22e0d48-7e91-46f2-b103-49de5e5869b5",
+-- MAGIC             "LogicalName": "canvasapp",
+-- MAGIC             "PrimaryIdAttribute": "canvasappid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "11db9bbe-5651-4311-b847-67faf79139d9",
+-- MAGIC             "LogicalName": "canvasappextendedmetadata",
+-- MAGIC             "PrimaryIdAttribute": "canvasappextendedmetadataid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "68b9813f-3db6-4631-8d53-f60ca3b13749",
+-- MAGIC             "LogicalName": "card",
+-- MAGIC             "PrimaryIdAttribute": "cardid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "f5dbc8e0-e65b-ee11-be6e-000d3aaab7fb",
+-- MAGIC             "LogicalName": "cardentityconnections",
+-- MAGIC             "PrimaryIdAttribute": "cardentityconnectionsid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "11aa8c60-605a-4415-b352-7d4ed8ac818e",
+-- MAGIC             "LogicalName": "cardstateitem",
+-- MAGIC             "PrimaryIdAttribute": "cardstateitemid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "bb1faa2e-0332-e611-80d5-00155dcf0c03",
+-- MAGIC             "LogicalName": "cardtype",
+-- MAGIC             "PrimaryIdAttribute": "cardtypeid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "ec1a8609-7eef-4727-9ac3-002c93859203",
+-- MAGIC             "LogicalName": "catalog",
+-- MAGIC             "PrimaryIdAttribute": "catalogid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "b0a060f9-9d85-45bc-b6fe-7b8b28bb5b24",
+-- MAGIC             "LogicalName": "catalogassignment",
+-- MAGIC             "PrimaryIdAttribute": "catalogassignmentid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "98b63422-89aa-452a-8a78-3706a9e4690b",
+-- MAGIC             "LogicalName": "category",
+-- MAGIC             "PrimaryIdAttribute": "categoryid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "2486d31f-f169-488a-bb4c-7abeba7cd8f2",
+-- MAGIC             "LogicalName": "cdi_anonymousvisitor",
+-- MAGIC             "PrimaryIdAttribute": "cdi_anonymousvisitorid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "0765573c-f665-4979-99d2-be0690d868b0",
+-- MAGIC             "LogicalName": "cdi_automation",
+-- MAGIC             "PrimaryIdAttribute": "cdi_automationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "c1955963-9bf4-4957-bfa9-f7ef85156f07",
+-- MAGIC             "LogicalName": "cdi_bulktxtmessage",
+-- MAGIC             "PrimaryIdAttribute": "cdi_bulktxtmessageid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "5e2975f0-ac9c-e911-a81f-000d3a43d098",
+-- MAGIC             "LogicalName": "cdi_bulktxtmessage_list",
+-- MAGIC             "PrimaryIdAttribute": "cdi_bulktxtmessage_listid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "f9c36451-feaf-430d-b7f5-567f92f6ad66",
+-- MAGIC             "LogicalName": "cdi_category",
+-- MAGIC             "PrimaryIdAttribute": "cdi_categoryid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "3a2a75f0-ac9c-e911-a81f-000d3a43d098",
+-- MAGIC             "LogicalName": "cdi_cdi_datasync_list",
+-- MAGIC             "PrimaryIdAttribute": "cdi_cdi_datasync_listid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "33c52b22-1d54-4abd-ac32-e511a38c88b9",
+-- MAGIC             "LogicalName": "cdi_datasync",
+-- MAGIC             "PrimaryIdAttribute": "cdi_datasyncid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "9b2cd745-f536-4e24-8f14-59995fd8b4e2",
+-- MAGIC             "LogicalName": "cdi_domain",
+-- MAGIC             "PrimaryIdAttribute": "cdi_domainid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "9f0b253f-f091-456c-b0c4-a4287a4dc3ad",
+-- MAGIC             "LogicalName": "cdi_emailcname",
+-- MAGIC             "PrimaryIdAttribute": "cdi_emailcnameid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "5513022a-145d-4eaf-81d1-bd2e476b34e8",
+-- MAGIC             "LogicalName": "cdi_emailevent",
+-- MAGIC             "PrimaryIdAttribute": "cdi_emaileventid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "18a849fe-811c-413f-b5f0-998b66572345",
+-- MAGIC             "LogicalName": "cdi_emailsend",
+-- MAGIC             "PrimaryIdAttribute": "cdi_emailsendid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "30af72f6-ac9c-e911-a81f-000d3a43d098",
+-- MAGIC             "LogicalName": "cdi_emailsend_account",
+-- MAGIC             "PrimaryIdAttribute": "cdi_emailsend_accountid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "47a07ecf-250d-eb11-a813-000d3a4aadc8",
+-- MAGIC             "LogicalName": "cdi_emailsend_cdi_webcontent",
+-- MAGIC             "PrimaryIdAttribute": "cdi_emailsend_cdi_webcontentid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "77af72f6-ac9c-e911-a81f-000d3a43d098",
+-- MAGIC             "LogicalName": "cdi_emailsend_contact",
+-- MAGIC             "PrimaryIdAttribute": "cdi_emailsend_contactid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "034369fc-ac9c-e911-a81f-000d3a43d098",
+-- MAGIC             "LogicalName": "cdi_emailsend_lead",
+-- MAGIC             "PrimaryIdAttribute": "cdi_emailsend_leadid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "134369fc-ac9c-e911-a81f-000d3a43d098",
+-- MAGIC             "LogicalName": "cdi_emailsend_list",
+-- MAGIC             "PrimaryIdAttribute": "cdi_emailsend_listid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "264369fc-ac9c-e911-a81f-000d3a43d098",
+-- MAGIC             "LogicalName": "cdi_emailsend_suppressed_list",
+-- MAGIC             "PrimaryIdAttribute": "cdi_emailsend_suppressed_listid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "1c44746f-697c-419e-9a83-43a06e037c0f",
+-- MAGIC             "LogicalName": "cdi_emailstatistics",
+-- MAGIC             "PrimaryIdAttribute": "cdi_emailstatisticsid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "b40484c5-1667-4791-bb59-8b7ce787f52d",
+-- MAGIC             "LogicalName": "cdi_emailtemplate",
+-- MAGIC             "PrimaryIdAttribute": "cdi_emailtemplateid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "c01ce279-8e4f-4334-bb05-7c48bef96257",
+-- MAGIC             "LogicalName": "cdi_event",
+-- MAGIC             "PrimaryIdAttribute": "cdi_eventid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "5c4369fc-ac9c-e911-a81f-000d3a43d098",
+-- MAGIC             "LogicalName": "cdi_event_cdi_automation",
+-- MAGIC             "PrimaryIdAttribute": "cdi_event_cdi_automationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "9d3600ba-4957-4bda-9bed-a822e661379f",
+-- MAGIC             "LogicalName": "cdi_eventparticipation",
+-- MAGIC             "PrimaryIdAttribute": "cdi_eventparticipationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "f930f88a-e0e8-468f-97dc-0bffe72bb588",
+-- MAGIC             "LogicalName": "cdi_excludedemail",
+-- MAGIC             "PrimaryIdAttribute": "cdi_excludedemailid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "2583931a-993c-414f-a9a4-237ed9791a30",
+-- MAGIC             "LogicalName": "cdi_executesend",
+-- MAGIC             "PrimaryIdAttribute": "cdi_executesendid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "1417a777-13b1-4360-9f34-fc279e43134b",
+-- MAGIC             "LogicalName": "cdi_executesocialpost",
+-- MAGIC             "PrimaryIdAttribute": "cdi_executesocialpostid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "a7d9066c-c65c-47c2-8714-b38db440cb3d",
+-- MAGIC             "LogicalName": "cdi_filter",
+-- MAGIC             "PrimaryIdAttribute": "cdi_filterid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "99513058-359e-4617-b2df-069a6d363483",
+-- MAGIC             "LogicalName": "cdi_formcapture",
+-- MAGIC             "PrimaryIdAttribute": "cdi_formcaptureid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "7aa551c9-2f07-4565-af2f-e047cbc8b17c",
+-- MAGIC             "LogicalName": "cdi_formcapturefield",
+-- MAGIC             "PrimaryIdAttribute": "cdi_formcapturefieldid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "1296122b-89b4-41d1-a9e1-07ed886b818e",
+-- MAGIC             "LogicalName": "cdi_formfield",
+-- MAGIC             "PrimaryIdAttribute": "cdi_formfieldid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "2813ed45-d8c1-4640-a455-ce3ecc04ff18",
+-- MAGIC             "LogicalName": "cdi_import",
+-- MAGIC             "PrimaryIdAttribute": "cdi_importid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "4d2d05f5-8567-48bf-8d10-9023e298136e",
+-- MAGIC             "LogicalName": "cdi_importlog",
+-- MAGIC             "PrimaryIdAttribute": "cdi_importlogid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "e8737e12-a1b6-4792-974a-c95938fa285d",
+-- MAGIC             "LogicalName": "cdi_iporganization",
+-- MAGIC             "PrimaryIdAttribute": "cdi_iporganizationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "974ede33-a74c-ea11-a812-000d3a4aadc8",
+-- MAGIC             "LogicalName": "cdi_lead_product",
+-- MAGIC             "PrimaryIdAttribute": "cdi_lead_productid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "42dbfc9f-0ce6-43fe-9787-b33b235fe848",
+-- MAGIC             "LogicalName": "cdi_pageview",
+-- MAGIC             "PrimaryIdAttribute": "cdi_pageviewid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "d3af71e3-87cc-4d81-9f95-2d023594f55d",
+-- MAGIC             "LogicalName": "cdi_postedfield",
+-- MAGIC             "PrimaryIdAttribute": "cdi_postedfieldid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "efd4c72d-1a70-4617-88d1-ac68a7f87497",
+-- MAGIC             "LogicalName": "cdi_postedform",
+-- MAGIC             "PrimaryIdAttribute": "cdi_postedformid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "f3754845-35c5-443d-afe5-9d929d9a0da7",
+-- MAGIC             "LogicalName": "cdi_postedsubscription",
+-- MAGIC             "PrimaryIdAttribute": "cdi_postedsubscriptionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "29472871-7798-4019-b217-03dde3125035",
+-- MAGIC             "LogicalName": "cdi_postedsurvey",
+-- MAGIC             "PrimaryIdAttribute": "cdi_postedsurveyid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "a799d92e-ba89-4d96-9c86-09160c334632",
+-- MAGIC             "LogicalName": "cdi_profile",
+-- MAGIC             "PrimaryIdAttribute": "cdi_profileid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "1bb576e0-4379-4a0e-a173-76ff34052834",
+-- MAGIC             "LogicalName": "cdi_quicksendprivilege",
+-- MAGIC             "PrimaryIdAttribute": "cdi_quicksendprivilegeid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "5241d4bc-be7c-46e8-9d8e-ea34202d5b4c",
+-- MAGIC             "LogicalName": "cdi_securitysession",
+-- MAGIC             "PrimaryIdAttribute": "cdi_securitysessionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "be671b49-a0bc-4933-ad04-d6e3c559f6f9",
+-- MAGIC             "LogicalName": "cdi_sendemail",
+-- MAGIC             "PrimaryIdAttribute": "cdi_sendemailid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "27a51796-20a0-43ef-9f10-7d289266d592",
+-- MAGIC             "LogicalName": "cdi_sentemail",
+-- MAGIC             "PrimaryIdAttribute": "cdi_sentemailid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "8e333b53-b56c-4fab-9632-cd14f9383032",
+-- MAGIC             "LogicalName": "cdi_setting",
+-- MAGIC             "PrimaryIdAttribute": "cdi_settingid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "285025e1-ac6c-4845-9917-289a49211c39",
+-- MAGIC             "LogicalName": "cdi_socialclick",
+-- MAGIC             "PrimaryIdAttribute": "cdi_socialclickid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "f9579320-f6c5-434b-a577-a4baf1d8ac46",
+-- MAGIC             "LogicalName": "cdi_socialpost",
+-- MAGIC             "PrimaryIdAttribute": "cdi_socialpostid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "a50c9002-3d63-4703-9f76-ce6417bde6b3",
+-- MAGIC             "LogicalName": "cdi_subscriptionlist",
+-- MAGIC             "PrimaryIdAttribute": "cdi_subscriptionlistid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "c130818f-4e83-4559-b268-1645b996ca6a",
+-- MAGIC             "LogicalName": "cdi_subscriptionpreference",
+-- MAGIC             "PrimaryIdAttribute": "cdi_subscriptionpreferenceid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "e440da17-75f5-4d85-ad2e-b5a4b0827eda",
+-- MAGIC             "LogicalName": "cdi_surveyanswer",
+-- MAGIC             "PrimaryIdAttribute": "cdi_surveyanswerid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "5dd76542-aaec-4e28-ae42-914448871e17",
+-- MAGIC             "LogicalName": "cdi_surveyquestion",
+-- MAGIC             "PrimaryIdAttribute": "cdi_surveyquestionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "98157a59-97d2-4ffd-b1c9-f59f9e332591",
+-- MAGIC             "LogicalName": "cdi_txtmessage",
+-- MAGIC             "PrimaryIdAttribute": "activityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "9898ee90-07b7-46fa-8c24-c46746f0a634",
+-- MAGIC             "LogicalName": "cdi_unsubscribe",
+-- MAGIC             "PrimaryIdAttribute": "cdi_unsubscribeid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "096d6102-ad9c-e911-a81f-000d3a43d098",
+-- MAGIC             "LogicalName": "cdi_unsubscribe_cdi_subscriptionlist",
+-- MAGIC             "PrimaryIdAttribute": "cdi_unsubscribe_cdi_subscriptionlistid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "789ecc56-f96d-4c7a-8356-ed34e1c0ec50",
+-- MAGIC             "LogicalName": "cdi_usersession",
+-- MAGIC             "PrimaryIdAttribute": "cdi_usersessionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "a1380b9a-2743-42c0-9b1b-cd52ae449e55",
+-- MAGIC             "LogicalName": "cdi_visit",
+-- MAGIC             "PrimaryIdAttribute": "cdi_visitid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "d0bccfda-2797-46a1-bc8f-297c4477e404",
+-- MAGIC             "LogicalName": "cdi_webcontent",
+-- MAGIC             "PrimaryIdAttribute": "cdi_webcontentid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "15edf69f-dfcb-4c1f-8f6d-23e5c2358464",
+-- MAGIC             "LogicalName": "certificatecredential",
+-- MAGIC             "PrimaryIdAttribute": "certificatecredentialid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "d7bc29c5-2cee-e411-80d9-00155dcf6500",
+-- MAGIC             "LogicalName": "channelaccessprofile",
+-- MAGIC             "PrimaryIdAttribute": "channelaccessprofileid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "b227fe8f-a978-4ca6-bc14-6be823cccaf6",
+-- MAGIC             "LogicalName": "channelaccessprofileentityaccesslevel",
+-- MAGIC             "PrimaryIdAttribute": "channelaccessprofileentityaccesslevelid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "7ff738ed-cbf7-e411-93a4-00219b3e9ee9",
+-- MAGIC             "LogicalName": "channelaccessprofilerule",
+-- MAGIC             "PrimaryIdAttribute": "channelaccessprofileruleid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "855a4feb-77f8-e411-93a4-00219b3e9ee9",
+-- MAGIC             "LogicalName": "channelaccessprofileruleitem",
+-- MAGIC             "PrimaryIdAttribute": "channelaccessprofileruleitemid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "91054a4a-e9cc-42f6-a192-976f004255ad",
+-- MAGIC             "LogicalName": "channelproperty",
+-- MAGIC             "PrimaryIdAttribute": "channelpropertyid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "3fb9eeb0-d854-41c9-8582-51372207aa41",
+-- MAGIC             "LogicalName": "channelpropertygroup",
+-- MAGIC             "PrimaryIdAttribute": "channelpropertygroupid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "143a656a-0295-4bd1-a122-4490e08a8c47",
+-- MAGIC             "LogicalName": "characteristic",
+-- MAGIC             "PrimaryIdAttribute": "characteristicid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "f4925d51-36f2-4b2c-8038-e9cc36cba2c9",
+-- MAGIC             "LogicalName": "chat",
+-- MAGIC             "PrimaryIdAttribute": "activityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "3b052046-a8e3-4821-9dbb-8212b4deae05",
+-- MAGIC             "LogicalName": "clientupdate",
+-- MAGIC             "PrimaryIdAttribute": "clientupdateid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "ab188b02-1cef-43d3-a9fd-4907b1ec15c4",
+-- MAGIC             "LogicalName": "columnmapping",
+-- MAGIC             "PrimaryIdAttribute": "columnmappingid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "f985924e-e2ea-4c30-bc6e-e4de3b741b3e",
+-- MAGIC             "LogicalName": "comment",
+-- MAGIC             "PrimaryIdAttribute": "commentid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "9d97b2fd-58c3-4480-8213-c8bf1958666a",
+-- MAGIC             "LogicalName": "commitment",
+-- MAGIC             "PrimaryIdAttribute": "commitmentid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "983909d6-6ae1-45a7-bd60-1a496d5bee7f",
+-- MAGIC             "LogicalName": "competitor",
+-- MAGIC             "PrimaryIdAttribute": "competitorid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "f699f4b0-b6c6-4f1f-8507-c757f6c44741",
+-- MAGIC             "LogicalName": "competitoraddress",
+-- MAGIC             "PrimaryIdAttribute": "competitoraddressid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "724dc8b7-6ffd-4738-8a14-dd55a77a7873",
+-- MAGIC             "LogicalName": "competitorproduct",
+-- MAGIC             "PrimaryIdAttribute": "competitorproductid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "6d288da2-4a4c-4cd8-a724-727ab46ee232",
+-- MAGIC             "LogicalName": "competitorsalesliterature",
+-- MAGIC             "PrimaryIdAttribute": "competitorsalesliteratureid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "c7866019-d3d1-40d7-b483-381fcdccffb2",
+-- MAGIC             "LogicalName": "connection",
+-- MAGIC             "PrimaryIdAttribute": "connectionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "981e0b01-2dd2-4230-805f-419ff4f75f57",
+-- MAGIC             "LogicalName": "connectioninstance",
+-- MAGIC             "PrimaryIdAttribute": "connectioninstanceid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "34609bee-6c05-478a-96bd-65c9aac75d38",
+-- MAGIC             "LogicalName": "connectionreference",
+-- MAGIC             "PrimaryIdAttribute": "connectionreferenceid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "eebdee4a-12c8-4da1-b661-6efa465f6f24",
+-- MAGIC             "LogicalName": "connectionrole",
+-- MAGIC             "PrimaryIdAttribute": "connectionroleid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "23222d7a-870c-4eb9-9c8b-32501ab89957",
+-- MAGIC             "LogicalName": "connectionroleassociation",
+-- MAGIC             "PrimaryIdAttribute": "connectionroleassociationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "5dcb6d54-0d8a-4c15-a931-5f0a1dd2b5d7",
+-- MAGIC             "LogicalName": "connectionroleobjecttypecode",
+-- MAGIC             "PrimaryIdAttribute": "connectionroleobjecttypecodeid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "4df28767-88f9-45e8-af87-30f2899e4d1e",
+-- MAGIC             "LogicalName": "connector",
+-- MAGIC             "PrimaryIdAttribute": "connectorid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "8da58755-34fb-415c-891b-5aa20113bfd1",
+-- MAGIC             "LogicalName": "constraintbasedgroup",
+-- MAGIC             "PrimaryIdAttribute": "constraintbasedgroupid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "608861bc-50a4-4c5f-a02c-21fe1943e2cf",
+-- MAGIC             "LogicalName": "contact",
+-- MAGIC             "PrimaryIdAttribute": "contactid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "0a7a18ac-58e7-4a61-852f-91e39ff4b29d",
+-- MAGIC             "LogicalName": "contactinvoices",
+-- MAGIC             "PrimaryIdAttribute": "contactinvoiceid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "0469b962-1964-4f7c-ac4e-fbc96894b28f",
+-- MAGIC             "LogicalName": "contactleads",
+-- MAGIC             "PrimaryIdAttribute": "contactleadid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "b7efa38d-803a-44a1-aea9-a373eb71e090",
+-- MAGIC             "LogicalName": "contactorders",
+-- MAGIC             "PrimaryIdAttribute": "contactorderid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "0a83316a-af1d-45cd-a22c-7ff1281cdb2f",
+-- MAGIC             "LogicalName": "contactquotes",
+-- MAGIC             "PrimaryIdAttribute": "contactquoteid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "741b2843-e4c2-404f-b99d-a786a3871973",
+-- MAGIC             "LogicalName": "contract",
+-- MAGIC             "PrimaryIdAttribute": "contractid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "824dd762-b368-4470-945b-2741364194fb",
+-- MAGIC             "LogicalName": "contractdetail",
+-- MAGIC             "PrimaryIdAttribute": "contractdetailid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "3297bc4c-e8d3-43da-84d7-0b37566308f1",
+-- MAGIC             "LogicalName": "contracttemplate",
+-- MAGIC             "PrimaryIdAttribute": "contracttemplateid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "de2901a9-5287-43c1-9d15-3cc975818fc0",
+-- MAGIC             "LogicalName": "conversationtranscript",
+-- MAGIC             "PrimaryIdAttribute": "conversationtranscriptid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "145e132d-0130-4591-ba36-7fbe059df17c",
+-- MAGIC             "LogicalName": "convertrule",
+-- MAGIC             "PrimaryIdAttribute": "convertruleid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "dcd7a339-780f-44f2-9cb9-5e96c50ac611",
+-- MAGIC             "LogicalName": "convertruleitem",
+-- MAGIC             "PrimaryIdAttribute": "convertruleitemid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "ef92442b-8d1c-4123-b974-a68680241365",
+-- MAGIC             "LogicalName": "copilotexamplequestion",
+-- MAGIC             "PrimaryIdAttribute": "copilotexamplequestionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "ca5adcb6-e94d-4310-ae32-0037e07c5eed",
+-- MAGIC             "LogicalName": "copilotglossaryterm",
+-- MAGIC             "PrimaryIdAttribute": "copilotglossarytermid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "9e9f1f74-ea2f-4ade-93ec-bc8442515be1",
+-- MAGIC             "LogicalName": "copilotsynonyms",
+-- MAGIC             "PrimaryIdAttribute": "copilotsynonymsid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "9a71fbde-a371-491c-b70e-15451029280b",
+-- MAGIC             "LogicalName": "credential",
+-- MAGIC             "PrimaryIdAttribute": "credentialid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "e8d62df7-1b44-4c8c-8815-41a1469acb0b",
+-- MAGIC             "LogicalName": "customapi",
+-- MAGIC             "PrimaryIdAttribute": "customapiid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "cc01bd39-1ee7-4057-bf5e-52fe6c1550b1",
+-- MAGIC             "LogicalName": "customapirequestparameter",
+-- MAGIC             "PrimaryIdAttribute": "customapirequestparameterid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "d64525fe-a095-42be-a982-56e835bba53d",
+-- MAGIC             "LogicalName": "customapiresponseproperty",
+-- MAGIC             "PrimaryIdAttribute": "customapiresponsepropertyid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "4c292731-aee5-4105-b958-c29b28116eea",
+-- MAGIC             "LogicalName": "customcontrol",
+-- MAGIC             "PrimaryIdAttribute": "customcontrolid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "16ea7771-4da6-46c6-a677-41a403afc181",
+-- MAGIC             "LogicalName": "customcontroldefaultconfig",
+-- MAGIC             "PrimaryIdAttribute": "customcontroldefaultconfigid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "5b62060d-c350-4b0c-809a-46ceaa6116cf",
+-- MAGIC             "LogicalName": "customcontrolresource",
+-- MAGIC             "PrimaryIdAttribute": "customcontrolresourceid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "f51cf246-e2ba-4e33-a22f-87e6edccf3ab",
+-- MAGIC             "LogicalName": "customeraddress",
+-- MAGIC             "PrimaryIdAttribute": "customeraddressid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "3c039ff1-d475-4e31-a1b9-82b338af4089",
+-- MAGIC             "LogicalName": "customeropportunityrole",
+-- MAGIC             "PrimaryIdAttribute": "customeropportunityroleid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "945331a8-5b1d-4a36-ab5a-12966602be54",
+-- MAGIC             "LogicalName": "customerrelationship",
+-- MAGIC             "PrimaryIdAttribute": "customerrelationshipid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "22fb5055-1ab8-47cb-9ab4-c081b4dbf697",
+-- MAGIC             "LogicalName": "datalakefolder",
+-- MAGIC             "PrimaryIdAttribute": "datalakefolderid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "b5e07ddb-c0f3-4434-987a-9bb3bd8f7f7a",
+-- MAGIC             "LogicalName": "datalakefolderpermission",
+-- MAGIC             "PrimaryIdAttribute": "datalakefolderpermissionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "f37e6605-71ce-40c4-94c3-89bc2ccd02b5",
+-- MAGIC             "LogicalName": "datalakeworkspace",
+-- MAGIC             "PrimaryIdAttribute": "datalakeworkspaceid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "873353d4-667a-4b7b-9206-0513c7b12587",
+-- MAGIC             "LogicalName": "datalakeworkspacepermission",
+-- MAGIC             "PrimaryIdAttribute": "datalakeworkspacepermissionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "0efbee18-9ac2-465d-9041-c431820d50bd",
+-- MAGIC             "LogicalName": "dataprocessingconfiguration",
+-- MAGIC             "PrimaryIdAttribute": "dataprocessingconfigurationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "d8f98e77-f198-4a36-8bc1-2640ed20acc3",
+-- MAGIC             "LogicalName": "datasyncstate",
+-- MAGIC             "PrimaryIdAttribute": "datasyncstateid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "07d5ca00-377b-4587-adef-0d7139cdc68f",
+-- MAGIC             "LogicalName": "deleteditemreference",
+-- MAGIC             "PrimaryIdAttribute": "deleteditemreferenceid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "c74485f0-38da-11de-9d3f-00188b01e34f",
+-- MAGIC             "LogicalName": "dependency",
+-- MAGIC             "PrimaryIdAttribute": "dependencyid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "458a4fa0-38df-11de-9d3f-00188b01e34f",
+-- MAGIC             "LogicalName": "dependencynode",
+-- MAGIC             "PrimaryIdAttribute": "dependencynodeid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "c05c74a0-cf19-4e4f-bb64-c9be56e82461",
+-- MAGIC             "LogicalName": "deploymentorchestration",
+-- MAGIC             "PrimaryIdAttribute": "deploymentorchestrationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "cf2e7bb3-4619-4962-a6b9-36110c0e3149",
+-- MAGIC             "LogicalName": "desktopflowbinary",
+-- MAGIC             "PrimaryIdAttribute": "desktopflowbinaryid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "05104115-b849-472e-b721-31052b663645",
+-- MAGIC             "LogicalName": "desktopflowmodule",
+-- MAGIC             "PrimaryIdAttribute": "desktopflowmoduleid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "3fd9fdee-e2a6-47c2-9c21-34c0cac3a777",
+-- MAGIC             "LogicalName": "discount",
+-- MAGIC             "PrimaryIdAttribute": "discountid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "ba88da0e-f4aa-4208-803d-be19be644100",
+-- MAGIC             "LogicalName": "discounttype",
+-- MAGIC             "PrimaryIdAttribute": "discounttypeid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "6b8e65e9-33f4-403b-a645-e35257778798",
+-- MAGIC             "LogicalName": "displaystring",
+-- MAGIC             "PrimaryIdAttribute": "displaystringid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "c607220a-af3d-4d6a-8422-dba0fb4df106",
+-- MAGIC             "LogicalName": "displaystringmap",
+-- MAGIC             "PrimaryIdAttribute": "displaystringmapid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "c5fb211f-ce3d-438f-bc56-3794ec91c7cf",
+-- MAGIC             "LogicalName": "documentindex",
+-- MAGIC             "PrimaryIdAttribute": "documentindexid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "08da1da7-51a6-4d47-a44a-2f7fbef0c491",
+-- MAGIC             "LogicalName": "documenttemplate",
+-- MAGIC             "PrimaryIdAttribute": "documenttemplateid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "fb7a470e-6964-4e5b-9aee-9ac8442d94b4",
+-- MAGIC             "LogicalName": "duplicaterecord",
+-- MAGIC             "PrimaryIdAttribute": "duplicateid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "40283d28-eb4c-46a6-85fc-b621e54ef9b1",
+-- MAGIC             "LogicalName": "duplicaterule",
+-- MAGIC             "PrimaryIdAttribute": "duplicateruleid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "863a7e54-2d58-43e9-8e4d-aa8365aa6e07",
+-- MAGIC             "LogicalName": "duplicaterulecondition",
+-- MAGIC             "PrimaryIdAttribute": "duplicateruleconditionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "ae112696-146a-417e-8566-4c63dd420363",
+-- MAGIC             "LogicalName": "dvfilesearch",
+-- MAGIC             "PrimaryIdAttribute": "dvfilesearchid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "776c6857-482c-47f4-9f10-98c5a23040ac",
+-- MAGIC             "LogicalName": "dvfilesearchattribute",
+-- MAGIC             "PrimaryIdAttribute": "dvfilesearchattributeid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "bead3f5d-2ae5-43cd-8cb3-c00088e99f5d",
+-- MAGIC             "LogicalName": "dvfilesearchentity",
+-- MAGIC             "PrimaryIdAttribute": "dvfilesearchentityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "bf3cc6d3-c913-4e7d-bd56-fe6ad84eff79",
+-- MAGIC             "LogicalName": "dvtablesearch",
+-- MAGIC             "PrimaryIdAttribute": "dvtablesearchid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "66417517-430a-4541-a46b-34eb1575af1d",
+-- MAGIC             "LogicalName": "dvtablesearchattribute",
+-- MAGIC             "PrimaryIdAttribute": "dvtablesearchattributeid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "1ed86a04-c463-4c5f-9a32-3ca1818fa14b",
+-- MAGIC             "LogicalName": "dvtablesearchentity",
+-- MAGIC             "PrimaryIdAttribute": "dvtablesearchentityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "6e440a51-7fe5-4890-b316-e6a5760c331b",
+-- MAGIC             "LogicalName": "dynamicproperty",
+-- MAGIC             "PrimaryIdAttribute": "dynamicpropertyid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "a124c061-3e23-4ce0-824d-80035ea0b6d4",
+-- MAGIC             "LogicalName": "dynamicpropertyassociation",
+-- MAGIC             "PrimaryIdAttribute": "dynamicpropertyassociationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "658a5105-7b4f-4ef6-b517-afde5209566e",
+-- MAGIC             "LogicalName": "dynamicpropertyinstance",
+-- MAGIC             "PrimaryIdAttribute": "dynamicpropertyinstanceid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "5283e25a-287d-4513-97c8-1164d722f020",
+-- MAGIC             "LogicalName": "dynamicpropertyoptionsetitem",
+-- MAGIC             "PrimaryIdAttribute": "dynamicpropertyoptionsetvalueid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "701e317a-d7c9-4beb-bb40-a6164c863c81",
+-- MAGIC             "LogicalName": "elasticfileattachment",
+-- MAGIC             "PrimaryIdAttribute": "elasticfileattachmentid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "95ae88b3-cc0c-45ac-a2db-655dceec238b",
+-- MAGIC             "LogicalName": "email",
+-- MAGIC             "PrimaryIdAttribute": "activityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "d52d3fdc-356a-44e0-9c1a-df04cf89435d",
+-- MAGIC             "LogicalName": "emailhash",
+-- MAGIC             "PrimaryIdAttribute": "emailhashid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "96c8060d-ed63-40b0-8a0c-3db10d857eaa",
+-- MAGIC             "LogicalName": "emailsearch",
+-- MAGIC             "PrimaryIdAttribute": "emailsearchid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "cb507395-fb05-4597-9290-4679863c1cea",
+-- MAGIC             "LogicalName": "emailserverprofile",
+-- MAGIC             "PrimaryIdAttribute": "emailserverprofileid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "40a6ea76-1a38-45ed-b250-9672857dcdff",
+-- MAGIC             "LogicalName": "emailsignature",
+-- MAGIC             "PrimaryIdAttribute": "emailsignatureid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "c3b53284-001c-4947-8035-5113762c3a47",
+-- MAGIC             "LogicalName": "enablearchivalrequest",
+-- MAGIC             "PrimaryIdAttribute": "enablearchivalrequestid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "bb42b386-82dd-48cb-82ea-f74be1f3ebf9",
+-- MAGIC             "LogicalName": "entitlement",
+-- MAGIC             "PrimaryIdAttribute": "entitlementid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "3779e077-cce3-4eba-8f1b-126a462f914c",
+-- MAGIC             "LogicalName": "entitlementchannel",
+-- MAGIC             "PrimaryIdAttribute": "entitlementchannelid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "2bd1af00-2713-433f-a210-c84a647e2916",
+-- MAGIC             "LogicalName": "entitlementcontacts",
+-- MAGIC             "PrimaryIdAttribute": "entitlementcontactid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "84b3f848-0340-4a8a-8105-ee1b38f03f17",
+-- MAGIC             "LogicalName": "entitlemententityallocationtypemapping",
+-- MAGIC             "PrimaryIdAttribute": "entitlemententityallocationtypemappingid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "5ce36ada-8460-45a8-be8b-d7260880fa4a",
+-- MAGIC             "LogicalName": "entitlementproducts",
+-- MAGIC             "PrimaryIdAttribute": "entitlementproductid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "eaa359df-aad0-401d-9d19-052dc336dddc",
+-- MAGIC             "LogicalName": "entitlementtemplate",
+-- MAGIC             "PrimaryIdAttribute": "entitlementtemplateid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "229fa1f1-fb79-4136-b496-f5d944ae7518",
+-- MAGIC             "LogicalName": "entitlementtemplatechannel",
+-- MAGIC             "PrimaryIdAttribute": "entitlementtemplatechannelid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "21deb91c-99af-4240-89e6-41b5af79a12a",
+-- MAGIC             "LogicalName": "entitlementtemplateproducts",
+-- MAGIC             "PrimaryIdAttribute": "entitlementtemplateproductid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "9d0f025b-11ce-40f1-a7f4-a8088f4985aa",
+-- MAGIC             "LogicalName": "entity",
+-- MAGIC             "PrimaryIdAttribute": "entityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "7418d6af-4ef8-4d99-a30e-91ba0cd2f460",
+-- MAGIC             "LogicalName": "entityanalyticsconfig",
+-- MAGIC             "PrimaryIdAttribute": "entityanalyticsconfigid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "a878d3f8-d9ec-4ca7-9add-3b4e15d2888a",
+-- MAGIC             "LogicalName": "entityclusterconfig",
+-- MAGIC             "PrimaryIdAttribute": "entityclusterconfigid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "ddf625c7-a00b-4a20-9f5e-1a363f7d422c",
+-- MAGIC             "LogicalName": "entitydataprovider",
+-- MAGIC             "PrimaryIdAttribute": "entitydataproviderid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "1d1d911f-8491-433e-bc1a-8c9801eb248d",
+-- MAGIC             "LogicalName": "entitydatasource",
+-- MAGIC             "PrimaryIdAttribute": "entitydatasourceid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "4fba0106-0e8b-4199-ad9c-57c680424d94",
+-- MAGIC             "LogicalName": "entityimageconfig",
+-- MAGIC             "PrimaryIdAttribute": "entityimageconfigid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "2a4789b5-b166-4226-9470-c6d4a3196024",
+-- MAGIC             "LogicalName": "entitykey",
+-- MAGIC             "PrimaryIdAttribute": "entitykeyid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "d19c08a4-b757-4d0a-bcf6-509cae402f7d",
+-- MAGIC             "LogicalName": "entitymap",
+-- MAGIC             "PrimaryIdAttribute": "entitymapid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "6d8b3e20-292f-434f-adf4-5d213269732a",
+-- MAGIC             "LogicalName": "entityrecordfilter",
+-- MAGIC             "PrimaryIdAttribute": "entityrecordfilterid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "98b4b49e-ee82-4d97-ba06-fdc1a12d94c4",
+-- MAGIC             "LogicalName": "entityrelationship",
+-- MAGIC             "PrimaryIdAttribute": "entityrelationshipid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "b7a05c4d-f99f-4ebe-9079-fe01e517f823",
+-- MAGIC             "LogicalName": "environmentvariabledefinition",
+-- MAGIC             "PrimaryIdAttribute": "environmentvariabledefinitionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "f7a17a3f-1b68-4541-87bc-0e81b4d6187c",
+-- MAGIC             "LogicalName": "environmentvariablevalue",
+-- MAGIC             "PrimaryIdAttribute": "environmentvariablevalueid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "a7a0b367-219b-44de-9ee9-239e3b5c7a4e",
+-- MAGIC             "LogicalName": "equipment",
+-- MAGIC             "PrimaryIdAttribute": "equipmentid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "6e2a0c12-1b6b-4ca4-9454-41fcf84a8cfe",
+-- MAGIC             "LogicalName": "eventexpanderbreadcrumb",
+-- MAGIC             "PrimaryIdAttribute": "eventexpanderbreadcrumbid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "73ae8c09-d2a8-e011-91da-00155d1dd929",
+-- MAGIC             "LogicalName": "exchangesyncidmapping",
+-- MAGIC             "PrimaryIdAttribute": "exchangesyncidmappingid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "ff98567e-87b9-45a5-ba27-5a753b6ebc8b",
+-- MAGIC             "LogicalName": "expanderevent",
+-- MAGIC             "PrimaryIdAttribute": "expandereventid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "937cd6ba-c7c7-4cbc-9aca-54e4f00da154",
+-- MAGIC             "LogicalName": "expiredprocess",
+-- MAGIC             "PrimaryIdAttribute": "businessprocessflowinstanceid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "74efa44e-4102-49dd-9f41-afe193cbedd6",
+-- MAGIC             "LogicalName": "exportedexcel",
+-- MAGIC             "PrimaryIdAttribute": "exportedexcelid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "79d0a9a9-5c14-4a89-9032-f4dce98ae94d",
+-- MAGIC             "LogicalName": "exportsolutionupload",
+-- MAGIC             "PrimaryIdAttribute": "exportsolutionuploadid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "59215dac-2fee-e411-80d9-00155dcf6500",
+-- MAGIC             "LogicalName": "externalparty",
+-- MAGIC             "PrimaryIdAttribute": "externalpartyid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "f53e47cf-4d4f-4cef-9410-9347af70e1a8",
+-- MAGIC             "LogicalName": "externalpartyitem",
+-- MAGIC             "PrimaryIdAttribute": "externalpartyitemid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "d95465a1-3082-4d6e-9eb4-982fbfabbfed",
+-- MAGIC             "LogicalName": "fabricaiskill",
+-- MAGIC             "PrimaryIdAttribute": "fabricaiskillid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "58d4edef-1ea8-4796-939b-9c37db3d2deb",
+-- MAGIC             "LogicalName": "fax",
+-- MAGIC             "PrimaryIdAttribute": "activityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "d2f62069-a430-471b-8cb8-e123b7341a93",
+-- MAGIC             "LogicalName": "featurecontrolsetting",
+-- MAGIC             "PrimaryIdAttribute": "featurecontrolsettingid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "d888fe62-ca23-451d-9281-71ee6a669f40",
+-- MAGIC             "LogicalName": "federatedknowledgeconfiguration",
+-- MAGIC             "PrimaryIdAttribute": "federatedknowledgeconfigurationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "835fdb2e-df89-44f3-a061-605f2e8cf9c7",
+-- MAGIC             "LogicalName": "federatedknowledgeentityconfiguration",
+-- MAGIC             "PrimaryIdAttribute": "federatedknowledgeentityconfigurationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "3a5083ef-0907-45f0-b52e-8d81f8f3e998",
+-- MAGIC             "LogicalName": "federatedknowledgemetadatarefresh",
+-- MAGIC             "PrimaryIdAttribute": "federatedknowledgemetadatarefreshid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "7ef8720f-10a5-4100-b908-51314067e567",
+-- MAGIC             "LogicalName": "feedback",
+-- MAGIC             "PrimaryIdAttribute": "feedbackid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "5022978e-f5d4-40d4-a3f9-6c666fec7641",
+-- MAGIC             "LogicalName": "fieldpermission",
+-- MAGIC             "PrimaryIdAttribute": "fieldpermissionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "4fa27177-f832-45e2-a756-d3f9b5108e1e",
+-- MAGIC             "LogicalName": "fieldsecurityprofile",
+-- MAGIC             "PrimaryIdAttribute": "fieldsecurityprofileid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "76507349-9f5e-4859-a479-cffbb9560e67",
+-- MAGIC             "LogicalName": "fileattachment",
+-- MAGIC             "PrimaryIdAttribute": "fileattachmentid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "9f9035f6-5fdd-4ca3-a70e-ef807d4a1633",
+-- MAGIC             "LogicalName": "filtertemplate",
+-- MAGIC             "PrimaryIdAttribute": "filtertemplateid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "6e792810-95f0-4c65-bec3-e0edd1b7d362",
+-- MAGIC             "LogicalName": "fixedmonthlyfiscalcalendar",
+-- MAGIC             "PrimaryIdAttribute": "userfiscalcalendarid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "82fe218c-64f2-492f-9980-3df5e48ae3c7",
+-- MAGIC             "LogicalName": "flowcapacityassignment",
+-- MAGIC             "PrimaryIdAttribute": "flowcapacityassignmentid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "4477c6ec-aae2-4a9f-942c-bf55ddd9d8e1",
+-- MAGIC             "LogicalName": "flowcredentialapplication",
+-- MAGIC             "PrimaryIdAttribute": "flowcredentialapplicationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "2f00aeeb-84c4-4357-a37d-b0df631539dd",
+-- MAGIC             "LogicalName": "flowevent",
+-- MAGIC             "PrimaryIdAttribute": "floweventid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "97aaaebc-c31e-4605-9ebe-4b3180a74dea",
+-- MAGIC             "LogicalName": "flowmachine",
+-- MAGIC             "PrimaryIdAttribute": "flowmachineid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "d49329f9-3492-4868-88c1-8ea8d48b8929",
+-- MAGIC             "LogicalName": "flowmachinegroup",
+-- MAGIC             "PrimaryIdAttribute": "flowmachinegroupid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "fdbd5315-04ff-4761-9bd0-908ebc1b48e0",
+-- MAGIC             "LogicalName": "flowmachineimage",
+-- MAGIC             "PrimaryIdAttribute": "flowmachineimageid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "605d7d28-3cbd-4fb5-82f6-fe25ebb61cc4",
+-- MAGIC             "LogicalName": "flowmachineimageversion",
+-- MAGIC             "PrimaryIdAttribute": "flowmachineimageversionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "34dcf770-38fe-4cea-b763-df75833179d3",
+-- MAGIC             "LogicalName": "flowmachinenetwork",
+-- MAGIC             "PrimaryIdAttribute": "flowmachinenetworkid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "c19f6f63-e3b7-472a-b852-8c59ae1a37df",
+-- MAGIC             "LogicalName": "flowrun",
+-- MAGIC             "PrimaryIdAttribute": "flowrunid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "e21ca425-c7c2-e911-a81c-000d3afe2b7d",
+-- MAGIC             "LogicalName": "flowsession",
+-- MAGIC             "PrimaryIdAttribute": "flowsessionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "e0db7b40-3d71-4636-82aa-bcefe0102cf1",
+-- MAGIC             "LogicalName": "fxexpression",
+-- MAGIC             "PrimaryIdAttribute": "fxexpressionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "0a16058b-33cd-406a-9997-818b9e261ae6",
+-- MAGIC             "LogicalName": "gitconfigurationretrievaldatasource",
+-- MAGIC             "PrimaryIdAttribute": "gitconfigurationretrievaldatasourceid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "eed75d7f-1f52-4bba-aebc-821a310554fa",
+-- MAGIC             "LogicalName": "gitorganization",
+-- MAGIC             "PrimaryIdAttribute": "gitorganizationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "c289178d-9339-4049-8103-d3bd8340b682",
+-- MAGIC             "LogicalName": "gitproject",
+-- MAGIC             "PrimaryIdAttribute": "gitprojectid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "b123b4bd-f013-df11-a16e-00155d7aa40d",
+-- MAGIC             "LogicalName": "goal",
+-- MAGIC             "PrimaryIdAttribute": "goalid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "91194109-f813-df11-a16e-00155d7aa40d",
+-- MAGIC             "LogicalName": "goalrollupquery",
+-- MAGIC             "PrimaryIdAttribute": "goalrollupqueryid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "3ce90e58-6f67-4b86-b766-fafb21e9cfb4",
+-- MAGIC             "LogicalName": "hierarchyrule",
+-- MAGIC             "PrimaryIdAttribute": "hierarchyruleid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "8e41ecb8-c8b7-436e-9de2-99c316ff00fe",
+-- MAGIC             "LogicalName": "hierarchysecurityconfiguration",
+-- MAGIC             "PrimaryIdAttribute": "hierarchysecuritymodelingsettingid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "1e692216-6e06-4a4f-b92f-35efdef90c28",
+-- MAGIC             "LogicalName": "imagedescriptor",
+-- MAGIC             "PrimaryIdAttribute": "imagedescriptorid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "d91b0f83-807c-4aac-bd7b-dd4a34f48b63",
+-- MAGIC             "LogicalName": "import",
+-- MAGIC             "PrimaryIdAttribute": "importid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "6f86a576-34eb-476e-8b80-c33a748aba6e",
+-- MAGIC             "LogicalName": "importdata",
+-- MAGIC             "PrimaryIdAttribute": "importdataid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "94335ee8-928e-49a2-ac3b-f81bca68f542",
+-- MAGIC             "LogicalName": "importentitymapping",
+-- MAGIC             "PrimaryIdAttribute": "importentitymappingid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "5aa4f989-c729-484b-8637-6b08858e4663",
+-- MAGIC             "LogicalName": "importfile",
+-- MAGIC             "PrimaryIdAttribute": "importfileid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "87dbadb2-6db5-44de-b0e3-a40fe6ef77df",
+-- MAGIC             "LogicalName": "importjob",
+-- MAGIC             "PrimaryIdAttribute": "importjobid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "ebce8e9b-a8dc-444d-bb89-92c6d1da1e6b",
+-- MAGIC             "LogicalName": "importlog",
+-- MAGIC             "PrimaryIdAttribute": "importlogid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "fd806104-65c3-4619-b5e5-142c0036cb78",
+-- MAGIC             "LogicalName": "importmap",
+-- MAGIC             "PrimaryIdAttribute": "importmapid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "e3fe4ff2-a630-49bb-a1e9-debc3a076815",
+-- MAGIC             "LogicalName": "incident",
+-- MAGIC             "PrimaryIdAttribute": "incidentid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "4153b66c-a7f4-4182-85d2-c4cdb61bbeb1",
+-- MAGIC             "LogicalName": "incidentknowledgebaserecord",
+-- MAGIC             "PrimaryIdAttribute": "incidentknowledgebaserecordid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "bceb9f02-968e-4363-beb0-ad7ecdef4908",
+-- MAGIC             "LogicalName": "incidentresolution",
+-- MAGIC             "PrimaryIdAttribute": "activityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "958a2604-1823-e611-80d5-00155d211d02",
+-- MAGIC             "LogicalName": "interactionforemail",
+-- MAGIC             "PrimaryIdAttribute": "interactionforemailid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "4419ea43-3008-4301-957b-ef8a48edbb10",
+-- MAGIC             "LogicalName": "internaladdress",
+-- MAGIC             "PrimaryIdAttribute": "internaladdressid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "560fd91c-e5d4-4329-a67d-817f6927b7f4",
+-- MAGIC             "LogicalName": "internalcatalogassignment",
+-- MAGIC             "PrimaryIdAttribute": "internalcatalogassignmentid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "238ff341-a82f-458d-84a1-9acc16143d89",
+-- MAGIC             "LogicalName": "interprocesslock",
+-- MAGIC             "PrimaryIdAttribute": "interprocesslockid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "b6e9f594-38e3-11de-9d3f-00188b01e34f",
+-- MAGIC             "LogicalName": "invaliddependency",
+-- MAGIC             "PrimaryIdAttribute": "invaliddependencyid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "4c0e7f31-a9de-45ea-b983-363b946f18c5",
+-- MAGIC             "LogicalName": "invoice",
+-- MAGIC             "PrimaryIdAttribute": "invoiceid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "8d899ec1-c0e4-4f24-82e2-3aff96a1f0ed",
+-- MAGIC             "LogicalName": "invoicedetail",
+-- MAGIC             "PrimaryIdAttribute": "invoicedetailid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "84267965-cf26-467e-9f6a-0ff592cc386c",
+-- MAGIC             "LogicalName": "isvconfig",
+-- MAGIC             "PrimaryIdAttribute": "isvconfigid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "773a670f-44d3-443a-b356-6a6768cb7f3c",
+-- MAGIC             "LogicalName": "kbarticle",
+-- MAGIC             "PrimaryIdAttribute": "kbarticleid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "e3bd897f-57c0-4704-b409-d17086106bf0",
+-- MAGIC             "LogicalName": "kbarticlecomment",
+-- MAGIC             "PrimaryIdAttribute": "kbarticlecommentid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "7421c249-8dee-4cef-9616-af4ee865ce9e",
+-- MAGIC             "LogicalName": "kbarticletemplate",
+-- MAGIC             "PrimaryIdAttribute": "kbarticletemplateid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "3bc6349a-4c35-4b34-a5a6-cb35e890ab87",
+-- MAGIC             "LogicalName": "keyvaultreference",
+-- MAGIC             "PrimaryIdAttribute": "keyvaultreferenceid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "3cd90632-a200-e511-80d2-00155d217c03",
+-- MAGIC             "LogicalName": "knowledgearticle",
+-- MAGIC             "PrimaryIdAttribute": "knowledgearticleid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "8d062aa3-1a78-4466-8c31-64bed842ff46",
+-- MAGIC             "LogicalName": "knowledgearticleincident",
+-- MAGIC             "PrimaryIdAttribute": "knowledgearticleincidentid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "0ce5b43d-5472-489f-98e0-2c0f1d2acf6f",
+-- MAGIC             "LogicalName": "knowledgearticleviews",
+-- MAGIC             "PrimaryIdAttribute": "knowledgearticleviewsid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "1eda6b9d-8419-e411-8e13-0024e8412450",
+-- MAGIC             "LogicalName": "knowledgebaserecord",
+-- MAGIC             "PrimaryIdAttribute": "knowledgebaserecordid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "3e397934-16db-446d-9872-bf24aa0593ef",
+-- MAGIC             "LogicalName": "knowledgesearchmodel",
+-- MAGIC             "PrimaryIdAttribute": "knowledgesearchmodelid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "92735047-2387-4884-9951-84fb4f3d6333",
+-- MAGIC             "LogicalName": "languagelocale",
+-- MAGIC             "PrimaryIdAttribute": "languagelocaleid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "dc6574cb-92ce-446c-a5d6-885a75107d52",
+-- MAGIC             "LogicalName": "lead",
+-- MAGIC             "PrimaryIdAttribute": "leadid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "f4a83a8e-525e-4406-952b-de07a57dff16",
+-- MAGIC             "LogicalName": "leadaddress",
+-- MAGIC             "PrimaryIdAttribute": "leadaddressid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "0e34dc03-3fb0-412f-aea7-222fea9f2802",
+-- MAGIC             "LogicalName": "leadcompetitors",
+-- MAGIC             "PrimaryIdAttribute": "leadcompetitorid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "4dfc6ad3-9f82-4f3b-aeb8-b6d5d9e8c14a",
+-- MAGIC             "LogicalName": "leadproduct",
+-- MAGIC             "PrimaryIdAttribute": "leadproductid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "ad7c2126-980b-469e-a25e-e0b4771a6f9f",
+-- MAGIC             "LogicalName": "leadtoopportunitysalesprocess",
+-- MAGIC             "PrimaryIdAttribute": "businessprocessflowinstanceid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "ebf2fb01-f630-4564-950e-79161bd655c9",
+-- MAGIC             "LogicalName": "letter",
+-- MAGIC             "PrimaryIdAttribute": "activityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "17b9c0c4-fa4e-46a8-8daa-f326033fc8d9",
+-- MAGIC             "LogicalName": "license",
+-- MAGIC             "PrimaryIdAttribute": "licenseid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "efd3a52d-04ca-4d36-a54c-2a26a64f5571",
+-- MAGIC             "LogicalName": "list",
+-- MAGIC             "PrimaryIdAttribute": "listid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "22895330-572a-4114-a704-8317ebc24309",
+-- MAGIC             "LogicalName": "listmember",
+-- MAGIC             "PrimaryIdAttribute": "listmemberid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "6ee93db5-af14-4fc1-b17a-f0196ea7fe5b",
+-- MAGIC             "LogicalName": "listoperation",
+-- MAGIC             "PrimaryIdAttribute": "listoperationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "71903251-887c-e011-b3dc-00155d7b4422",
+-- MAGIC             "LogicalName": "mailbox",
+-- MAGIC             "PrimaryIdAttribute": "mailboxid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "6e2ae977-3896-444b-90d3-4802a78b5ef8",
+-- MAGIC             "LogicalName": "mailboxstatistics",
+-- MAGIC             "PrimaryIdAttribute": "mailboxstatisticsid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "f7ea6dfc-0ceb-4999-b862-6e4737a0b120",
+-- MAGIC             "LogicalName": "mailboxtrackingcategory",
+-- MAGIC             "PrimaryIdAttribute": "mailboxtrackingcategoryid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "be0bb1a2-9255-4f89-a31d-ef6e19ebc9ca",
+-- MAGIC             "LogicalName": "mailboxtrackingfolder",
+-- MAGIC             "PrimaryIdAttribute": "mailboxtrackingfolderid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "ae7fdf89-aa62-490a-95f5-216e8789ada7",
+-- MAGIC             "LogicalName": "mailmergetemplate",
+-- MAGIC             "PrimaryIdAttribute": "mailmergetemplateid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "79db2675-7813-47b1-8cad-c9e66de9101f",
+-- MAGIC             "LogicalName": "mainfewshot",
+-- MAGIC             "PrimaryIdAttribute": "mainfewshotid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "6b22faf1-a536-4eaa-bfa9-4adb3d67429a",
+-- MAGIC             "LogicalName": "makerfewshot",
+-- MAGIC             "PrimaryIdAttribute": "makerfewshotid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "15fdf69f-dfcb-4c1f-8f6d-23e5c2358464",
+-- MAGIC             "LogicalName": "managedidentity",
+-- MAGIC             "PrimaryIdAttribute": "managedidentityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "67a933f2-fee4-4c16-bc25-0f999862b90e",
+-- MAGIC             "LogicalName": "marketingformdisplayattributes",
+-- MAGIC             "PrimaryIdAttribute": "marketingformdisplayattributesid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "d2178ab7-1169-46fb-b2e9-ccc9e8b20de6",
+-- MAGIC             "LogicalName": "maskingrule",
+-- MAGIC             "PrimaryIdAttribute": "maskingruleid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "d37b7cd4-657a-4324-a0b9-288001de501c",
+-- MAGIC             "LogicalName": "mbs_pluginprofile",
+-- MAGIC             "PrimaryIdAttribute": "mbs_pluginprofileid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "e525e1f7-54c9-4087-8577-8c30153baf28",
+-- MAGIC             "LogicalName": "metadataforarchival",
+-- MAGIC             "PrimaryIdAttribute": "metadataforarchivalid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "eea884a0-f513-df11-a16e-00155d7aa40d",
+-- MAGIC             "LogicalName": "metric",
+-- MAGIC             "PrimaryIdAttribute": "metricid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "5d95a551-37f1-417a-8f46-e58ad1781eba",
+-- MAGIC             "LogicalName": "mobileofflineprofile",
+-- MAGIC             "PrimaryIdAttribute": "mobileofflineprofileid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "ccdbb725-c08d-4192-b669-c39f99b662cc",
+-- MAGIC             "LogicalName": "mobileofflineprofileextension",
+-- MAGIC             "PrimaryIdAttribute": "mobileofflineprofileextensionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "54c223c9-bf11-419d-a451-dc1b75153460",
+-- MAGIC             "LogicalName": "mobileofflineprofileitem",
+-- MAGIC             "PrimaryIdAttribute": "mobileofflineprofileitemid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "d79f6d01-34ff-47f7-9833-a84d8aad58bf",
+-- MAGIC             "LogicalName": "mobileofflineprofileitemassociation",
+-- MAGIC             "PrimaryIdAttribute": "mobileofflineprofileitemassociationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "79c0eb27-6807-4e76-9240-8a8e5f26c3b1",
+-- MAGIC             "LogicalName": "mobileofflineprofileitemfilter",
+-- MAGIC             "PrimaryIdAttribute": "mobileofflineprofileitemfilterid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "744796e3-cf04-41cd-b424-0a509c2d172a",
+-- MAGIC             "LogicalName": "monthlyfiscalcalendar",
+-- MAGIC             "PrimaryIdAttribute": "userfiscalcalendarid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "5b8ddadf-b870-44b8-9306-431d58548310",
+-- MAGIC             "LogicalName": "multientitysearchentities",
+-- MAGIC             "PrimaryIdAttribute": "multientitysearchentityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "28f11963-c768-4e52-be72-9f82769e935d",
+-- MAGIC             "LogicalName": "navigationsetting",
+-- MAGIC             "PrimaryIdAttribute": "navigationsettingid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "140046ca-15ab-4f24-a937-3e8204bd4185",
+-- MAGIC             "LogicalName": "newprocess",
+-- MAGIC             "PrimaryIdAttribute": "businessprocessflowinstanceid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "5da8a7ff-cc08-49d0-9428-33f2e4d5d44a",
+-- MAGIC             "LogicalName": "nlsqregistration",
+-- MAGIC             "PrimaryIdAttribute": "nlsqregistrationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "34944172-f2c4-4b41-99a6-81564b3a29c1",
+-- MAGIC             "LogicalName": "notification",
+-- MAGIC             "PrimaryIdAttribute": "notificationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "9c3f0f75-a4dc-42b4-93b7-2506b45f5bc8",
+-- MAGIC             "LogicalName": "od_accommodationdetail",
+-- MAGIC             "PrimaryIdAttribute": "od_accommodationdetailid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "bd4e72f2-15d2-414d-a7c6-a9eb34f169ea",
+-- MAGIC             "LogicalName": "od_acknowledgementcode",
+-- MAGIC             "PrimaryIdAttribute": "od_acknowledgementcodeid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "284f6594-9139-4aea-a867-4f0447919c90",
+-- MAGIC             "LogicalName": "od_additionalexportinformation",
+-- MAGIC             "PrimaryIdAttribute": "od_additionalexportinformationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "4b638896-d2f7-4cf9-b219-2d3b9867400a",
+-- MAGIC             "LogicalName": "od_allocation",
+-- MAGIC             "PrimaryIdAttribute": "od_allocationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "8fca238f-cfa9-433b-a0e5-f6bd52a5ee35",
+-- MAGIC             "LogicalName": "od_applicationsetting",
+-- MAGIC             "PrimaryIdAttribute": "od_applicationsettingid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "789404ca-6ea9-e911-a821-000d3a43d70a",
+-- MAGIC             "LogicalName": "od_area",
+-- MAGIC             "PrimaryIdAttribute": "od_areaid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "9eb810d7-eb4f-41aa-b90d-253e9671240b",
+-- MAGIC             "LogicalName": "od_bankaccount",
+-- MAGIC             "PrimaryIdAttribute": "od_bankaccountid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "cd3c7069-99c5-4913-a4ca-de8dd4b9f220",
+-- MAGIC             "LogicalName": "od_bankcode",
+-- MAGIC             "PrimaryIdAttribute": "od_bankcodeid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "2dfcfdf0-b2b4-4897-8b3e-e29a4cbe1767",
+-- MAGIC             "LogicalName": "od_banksession",
+-- MAGIC             "PrimaryIdAttribute": "od_banksessionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "656eecdf-8104-4d04-ad56-6269472cb312",
+-- MAGIC             "LogicalName": "od_bankstatement",
+-- MAGIC             "PrimaryIdAttribute": "od_bankstatementid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "e080d621-96bb-4685-a864-1f698598b5e1",
+-- MAGIC             "LogicalName": "od_bankstatementline",
+-- MAGIC             "PrimaryIdAttribute": "od_bankstatementlineid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "d0d1bf38-6eeb-4f7f-bfba-61c3e56526ab",
+-- MAGIC             "LogicalName": "od_bankticketsession",
+-- MAGIC             "PrimaryIdAttribute": "od_bankticketsessionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "9e1a0e26-67ff-4c45-9f04-03af4fb6dc03",
+-- MAGIC             "LogicalName": "od_batch",
+-- MAGIC             "PrimaryIdAttribute": "od_batchid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "d6fa9f1b-f515-4f40-bdc7-998f8479e920",
+-- MAGIC             "LogicalName": "od_batchtemplate",
+-- MAGIC             "PrimaryIdAttribute": "od_batchtemplateid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "3ae5391a-8ec9-4348-b474-0789b5e931d9",
+-- MAGIC             "LogicalName": "od_calculationactivity",
+-- MAGIC             "PrimaryIdAttribute": "od_calculationactivityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "126826c9-ae9d-482d-ad92-c82d6610016c",
+-- MAGIC             "LogicalName": "od_canvasser",
+-- MAGIC             "PrimaryIdAttribute": "od_canvasserid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "010ccf63-e93b-472a-b45b-9dea4f3a49c4",
+-- MAGIC             "LogicalName": "od_canvasseractivity",
+-- MAGIC             "PrimaryIdAttribute": "activityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "e7fb1516-5d8b-4f55-b0de-11a14a1d8756",
+-- MAGIC             "LogicalName": "od_canvassertype",
+-- MAGIC             "PrimaryIdAttribute": "od_canvassertypeid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "d1cea2bf-d0ff-46ea-8c85-41095b385b82",
+-- MAGIC             "LogicalName": "od_city",
+-- MAGIC             "PrimaryIdAttribute": "od_cityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "8c7d65e2-6f51-4fd9-b0b5-37c817111af6",
+-- MAGIC             "LogicalName": "od_country",
+-- MAGIC             "PrimaryIdAttribute": "od_countryid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "0a49a1e6-c7aa-4f0e-974d-937a3d38f521",
+-- MAGIC             "LogicalName": "od_denomination",
+-- MAGIC             "PrimaryIdAttribute": "od_denominationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "4a44057f-8f2d-40ff-b1f7-fa77fef79382",
+-- MAGIC             "LogicalName": "od_destination",
+-- MAGIC             "PrimaryIdAttribute": "od_destinationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "43927965-9e47-4517-8763-d61316f1ba88",
+-- MAGIC             "LogicalName": "od_destinationtype",
+-- MAGIC             "PrimaryIdAttribute": "od_destinationtypeid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "0b83f874-8c24-4c7f-b6c3-67256859ca0d",
+-- MAGIC             "LogicalName": "od_donation",
+-- MAGIC             "PrimaryIdAttribute": "od_donationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "a8bdcb93-799e-e911-a820-000d3a43d6e1",
+-- MAGIC             "LogicalName": "od_donationbusinessprocessflow",
+-- MAGIC             "PrimaryIdAttribute": "businessprocessflowinstanceid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "5453c58b-4922-4466-9d8e-8cdc85105358",
+-- MAGIC             "LogicalName": "od_donationcanvasser",
+-- MAGIC             "PrimaryIdAttribute": "od_donationcanvasserid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "73f8bcdc-74f1-438f-86fc-69f6ad3a0913",
+-- MAGIC             "LogicalName": "od_eventorganization",
+-- MAGIC             "PrimaryIdAttribute": "activityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "7a38fc35-32fe-4e7a-a4f9-fd57e9b13ed5",
+-- MAGIC             "LogicalName": "od_exporttemplate",
+-- MAGIC             "PrimaryIdAttribute": "od_exporttemplateid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "d92c8a8f-e529-ef11-840b-000d3aaabaf4",
+-- MAGIC             "LogicalName": "od_flowtrigger",
+-- MAGIC             "PrimaryIdAttribute": "od_flowtriggerid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "491b8f90-c112-4a42-9063-d91ce4dfccc3",
+-- MAGIC             "LogicalName": "od_giftactivity",
+-- MAGIC             "PrimaryIdAttribute": "activityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "fcfb1fd9-5cdc-49d7-adf6-ea9c0111f732",
+-- MAGIC             "LogicalName": "od_groupstage",
+-- MAGIC             "PrimaryIdAttribute": "od_groupstageid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "fca1af12-9966-4f59-92ce-411aa5cc354b",
+-- MAGIC             "LogicalName": "od_household",
+-- MAGIC             "PrimaryIdAttribute": "od_householdid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "13826ac8-7bc4-ec11-a7b6-6045bd904b11",
+-- MAGIC             "LogicalName": "od_import_marketinglistmember",
+-- MAGIC             "PrimaryIdAttribute": "od_import_marketinglistmemberid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "732dbf81-600b-48a5-a824-2083ef5b56a0",
+-- MAGIC             "LogicalName": "od_individualstage",
+-- MAGIC             "PrimaryIdAttribute": "od_individualstageid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "1c8b836d-84c7-ed11-b597-000d3aaab2a8",
+-- MAGIC             "LogicalName": "od_individualstogroupconvertiontable",
+-- MAGIC             "PrimaryIdAttribute": "od_individualstogroupconvertiontableid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "050ed360-50c2-4491-8511-41cae1561ab2",
+-- MAGIC             "LogicalName": "od_intermediary",
+-- MAGIC             "PrimaryIdAttribute": "od_intermediaryid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "d3b6e7be-5fd8-40e7-8913-4bc4d1574dfa",
+-- MAGIC             "LogicalName": "od_language",
+-- MAGIC             "PrimaryIdAttribute": "od_languageid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "43286ce0-3bab-4c20-9e51-1882f73e48b1",
+-- MAGIC             "LogicalName": "od_lifecyclestage",
+-- MAGIC             "PrimaryIdAttribute": "od_lifecyclestageid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "9a323ebd-923f-4359-9fdb-65120011bc8c",
+-- MAGIC             "LogicalName": "od_magazine",
+-- MAGIC             "PrimaryIdAttribute": "activityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "deb44ddf-ab12-44d7-8c13-3e8d4c9deb4e",
+-- MAGIC             "LogicalName": "od_media",
+-- MAGIC             "PrimaryIdAttribute": "od_mediaid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "6d4c205a-97e1-4dde-8a8f-2b45096c2eac",
+-- MAGIC             "LogicalName": "od_mediachannel",
+-- MAGIC             "PrimaryIdAttribute": "od_mediachannelid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "f03b04cd-8745-4f81-afeb-575bce9912e5",
+-- MAGIC             "LogicalName": "od_mediacode",
+-- MAGIC             "PrimaryIdAttribute": "od_mediacodeid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "a3c490c3-3057-4543-aa4a-aebf537659a9",
+-- MAGIC             "LogicalName": "od_mediacodegroup",
+-- MAGIC             "PrimaryIdAttribute": "od_mediacodegroupid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "9b8662a7-44ba-ec11-983f-6045bd90ebae",
+-- MAGIC             "LogicalName": "od_mediasubchannel",
+-- MAGIC             "PrimaryIdAttribute": "od_mediasubchannelid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "efc1050f-5fa9-e911-a821-000d3a43d70a",
+-- MAGIC             "LogicalName": "od_od_language_od_presenter",
+-- MAGIC             "PrimaryIdAttribute": "od_od_language_od_presenterid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "dbdc45cc-04bb-ec11-983f-6045bd90ebae",
+-- MAGIC             "LogicalName": "od_od_volunteer_task_od_volunteer",
+-- MAGIC             "PrimaryIdAttribute": "od_od_volunteer_task_od_volunteerid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "538ec7eb-b167-4b06-88af-4a9a62c3fd2b",
+-- MAGIC             "LogicalName": "od_odeventparticipation",
+-- MAGIC             "PrimaryIdAttribute": "activityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "e9ceb204-43b4-e911-a824-000d3a43de3c",
+-- MAGIC             "LogicalName": "od_orderbusinessprocessflow",
+-- MAGIC             "PrimaryIdAttribute": "businessprocessflowinstanceid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "ecf661da-21dd-43dd-b7d3-a5ad03bc85ac",
+-- MAGIC             "LogicalName": "od_passport",
+-- MAGIC             "PrimaryIdAttribute": "od_passportid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "c0178848-d7f7-4f90-b665-741db6bb896a",
+-- MAGIC             "LogicalName": "od_paymentdetail",
+-- MAGIC             "PrimaryIdAttribute": "od_paymentdetailid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "686f6be1-922b-48e3-92ff-8a508a3ee80a",
+-- MAGIC             "LogicalName": "od_paymentmethod",
+-- MAGIC             "PrimaryIdAttribute": "od_paymentmethodid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "c5dd99d4-69a3-4445-974e-964a17bb80b3",
+-- MAGIC             "LogicalName": "od_petition",
+-- MAGIC             "PrimaryIdAttribute": "od_petitionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "7fc0b65b-8ac2-4084-a2b2-f6746cceec77",
+-- MAGIC             "LogicalName": "od_petitionactivity",
+-- MAGIC             "PrimaryIdAttribute": "activityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "ea20391a-f061-4d4b-92c4-a636f0dad10e",
+-- MAGIC             "LogicalName": "od_postalcodearea",
+-- MAGIC             "PrimaryIdAttribute": "od_postalcodeareaid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "e64e3a22-e5a7-e911-a821-000d3a43d098",
+-- MAGIC             "LogicalName": "od_presentation",
+-- MAGIC             "PrimaryIdAttribute": "activityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "0143ecd9-ee27-46b7-8bd1-2b152db4e417",
+-- MAGIC             "LogicalName": "od_presentationaction",
+-- MAGIC             "PrimaryIdAttribute": "od_presentationactionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "d00f45d3-a913-436f-a320-245e37199683",
+-- MAGIC             "LogicalName": "od_presentationfacilitatoractivity",
+-- MAGIC             "PrimaryIdAttribute": "activityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "994252d6-3081-40ac-af75-40384a856883",
+-- MAGIC             "LogicalName": "od_presentationmedia",
+-- MAGIC             "PrimaryIdAttribute": "od_presentationmediaid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "8ce2dd2d-62b5-4821-bf4d-0d902a407ec9",
+-- MAGIC             "LogicalName": "od_presentationpresenteractivity",
+-- MAGIC             "PrimaryIdAttribute": "activityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "4d49be4d-7ae0-46aa-b2a5-7fc3a083a4aa",
+-- MAGIC             "LogicalName": "od_presentationprogram",
+-- MAGIC             "PrimaryIdAttribute": "od_presentationprogramid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "1658840f-8f7b-437d-add3-dbb693140c1f",
+-- MAGIC             "LogicalName": "od_presentationtask",
+-- MAGIC             "PrimaryIdAttribute": "activityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "de699ff0-28d3-4be6-9d7b-d03548c27600",
+-- MAGIC             "LogicalName": "od_presentationtemplate",
+-- MAGIC             "PrimaryIdAttribute": "od_presentationtemplateid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "9794aab8-46a9-e911-a821-000d3a43d70a",
+-- MAGIC             "LogicalName": "od_presentationtype",
+-- MAGIC             "PrimaryIdAttribute": "od_presentationtypeid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "ac225151-4ba9-e911-a821-000d3a43d70a",
+-- MAGIC             "LogicalName": "od_presenter",
+-- MAGIC             "PrimaryIdAttribute": "od_presenterid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "0d35a17e-d6ec-4c8e-a50e-0f95f15d546d",
+-- MAGIC             "LogicalName": "od_presenterskill",
+-- MAGIC             "PrimaryIdAttribute": "od_presenterskillid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "ea195773-8fcf-4a2f-8f86-8d99d1dbccda",
+-- MAGIC             "LogicalName": "od_processstagestatus",
+-- MAGIC             "PrimaryIdAttribute": "od_processstagestatusid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "68821d58-10ce-4d6e-8af1-cb8647781b91",
+-- MAGIC             "LogicalName": "od_productstock",
+-- MAGIC             "PrimaryIdAttribute": "od_productstockid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "b87f1a5e-4698-4ca5-8b0a-6922ac992275",
+-- MAGIC             "LogicalName": "od_producttransfers",
+-- MAGIC             "PrimaryIdAttribute": "od_producttransfersid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "2cc736f2-c5f9-4915-8f7c-6321d447fd0f",
+-- MAGIC             "LogicalName": "od_region",
+-- MAGIC             "PrimaryIdAttribute": "od_regionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "a4ef6c9a-ae18-43f2-bd1a-921e8f866693",
+-- MAGIC             "LogicalName": "od_rejectioncode",
+-- MAGIC             "PrimaryIdAttribute": "od_rejectioncodeid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "1bd15e30-d1a0-49aa-b260-ef5d7f152938",
+-- MAGIC             "LogicalName": "od_richuxaction",
+-- MAGIC             "PrimaryIdAttribute": "od_richuxactionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "e3d7b91c-914e-48be-9cc6-4dec3f636108",
+-- MAGIC             "LogicalName": "od_richuxtab",
+-- MAGIC             "PrimaryIdAttribute": "od_richuxtabid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "73ed3272-ffa2-e911-a820-000d3a43de3c",
+-- MAGIC             "LogicalName": "od_richuxtab_richuxaction",
+-- MAGIC             "PrimaryIdAttribute": "od_richuxtab_richuxactionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "b17395a5-1dde-4cef-9c48-95070378bec7",
+-- MAGIC             "LogicalName": "od_richuxtabgroup",
+-- MAGIC             "PrimaryIdAttribute": "od_richuxtabgroupid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "88ed3272-ffa2-e911-a820-000d3a43de3c",
+-- MAGIC             "LogicalName": "od_richuxtabgroup_richuxtab",
+-- MAGIC             "PrimaryIdAttribute": "od_richuxtabgroup_richuxtabid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "4189edfa-84ee-448b-9eb5-94b5badcbdd6",
+-- MAGIC             "LogicalName": "od_salesactivity",
+-- MAGIC             "PrimaryIdAttribute": "activityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "08fd2c89-3c9a-49e5-9637-3dc123a07e35",
+-- MAGIC             "LogicalName": "od_salutation",
+-- MAGIC             "PrimaryIdAttribute": "od_salutationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "7f8e9444-1a6a-4654-a805-cbc5355f5b60",
+-- MAGIC             "LogicalName": "od_skill",
+-- MAGIC             "PrimaryIdAttribute": "od_skillid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "b09e8d90-ebac-4e9d-817b-d5e6cdb82551",
+-- MAGIC             "LogicalName": "od_softcreditactivity",
+-- MAGIC             "PrimaryIdAttribute": "activityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "f182973e-9ebe-48e1-bb3c-28b362758239",
+-- MAGIC             "LogicalName": "od_subscription",
+-- MAGIC             "PrimaryIdAttribute": "od_subscriptionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "f903dfc4-ad8e-4a22-b1fe-df2d0b223938",
+-- MAGIC             "LogicalName": "od_supportercategory",
+-- MAGIC             "PrimaryIdAttribute": "od_supportercategoryid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "9a790620-c174-42e0-82c6-7b9307f738a2",
+-- MAGIC             "LogicalName": "od_supportertype",
+-- MAGIC             "PrimaryIdAttribute": "od_supportertypeid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "f6471003-9a8d-4720-a685-9db6442ed76b",
+-- MAGIC             "LogicalName": "od_supportervalue",
+-- MAGIC             "PrimaryIdAttribute": "od_supportervalueid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "60716bda-9842-4d2d-b6d3-d7c40fddd281",
+-- MAGIC             "LogicalName": "od_taxdeductibility",
+-- MAGIC             "PrimaryIdAttribute": "od_taxdeductibilityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "39d4e1f4-1bf5-4a72-9e45-aeb04865e806",
+-- MAGIC             "LogicalName": "od_transaction",
+-- MAGIC             "PrimaryIdAttribute": "od_transactionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "b7dc87b5-e1df-eb11-bacb-00224884d35c",
+-- MAGIC             "LogicalName": "od_transaction_allocation",
+-- MAGIC             "PrimaryIdAttribute": "od_transaction_allocationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "e2659fd8-bde0-4053-a898-64e0b2eb5127",
+-- MAGIC             "LogicalName": "od_transportdetails",
+-- MAGIC             "PrimaryIdAttribute": "od_transportdetailsid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "4b9b81f2-6b5c-4a64-b516-c100497e6e1a",
+-- MAGIC             "LogicalName": "od_travelactivity",
+-- MAGIC             "PrimaryIdAttribute": "activityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "c7860f8d-8c18-4999-89a0-13b346b1f520",
+-- MAGIC             "LogicalName": "od_traveler",
+-- MAGIC             "PrimaryIdAttribute": "od_travelerid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "a12475f4-ba03-43a4-84f6-501bd58b0ce7",
+-- MAGIC             "LogicalName": "od_trip",
+-- MAGIC             "PrimaryIdAttribute": "od_tripid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "efdd1021-61b4-e911-a824-000d3a43de3c",
+-- MAGIC             "LogicalName": "od_tripbusinessprocessflow",
+-- MAGIC             "PrimaryIdAttribute": "businessprocessflowinstanceid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "748313ab-6191-403f-8e80-a2ae0813ac3b",
+-- MAGIC             "LogicalName": "od_tripkind",
+-- MAGIC             "PrimaryIdAttribute": "od_tripkindid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "56630eec-3b9f-4e61-a5ce-686676b99423",
+-- MAGIC             "LogicalName": "od_triptype",
+-- MAGIC             "PrimaryIdAttribute": "od_triptypeid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "4c8c67d5-f7ba-ec11-983f-6045bd90ebae",
+-- MAGIC             "LogicalName": "od_volunteer",
+-- MAGIC             "PrimaryIdAttribute": "od_volunteerid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "34a511ca-f8ba-ec11-983f-6045bd90ebae",
+-- MAGIC             "LogicalName": "od_volunteer_role",
+-- MAGIC             "PrimaryIdAttribute": "od_volunteer_roleid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "9b54f61e-04bb-ec11-983f-6045bd90ebae",
+-- MAGIC             "LogicalName": "od_volunteer_task",
+-- MAGIC             "PrimaryIdAttribute": "od_volunteer_taskid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "69dea61c-eda6-42fb-a648-a3b6027f69da",
+-- MAGIC             "LogicalName": "od_warehouse",
+-- MAGIC             "PrimaryIdAttribute": "od_warehouseid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "5e582dec-2dce-e911-a82a-000d3a43d6e1",
+-- MAGIC             "LogicalName": "od_workflowschedule",
+-- MAGIC             "PrimaryIdAttribute": "od_workflowscheduleid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "550b8e57-7e2c-ed11-9db1-000d3abf023d",
+-- MAGIC             "LogicalName": "odstat_groupengagementindex",
+-- MAGIC             "PrimaryIdAttribute": "odstat_groupengagementindexid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "e7b68576-7e2c-ed11-9db1-000d3abf023d",
+-- MAGIC             "LogicalName": "odstat_individualengagementindex",
+-- MAGIC             "PrimaryIdAttribute": "odstat_individualengagementindexid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "e7040620-9cb0-443d-ad1c-43fd42ec28e7",
+-- MAGIC             "LogicalName": "offlinecommanddefinition",
+-- MAGIC             "PrimaryIdAttribute": "commanddefinitionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "30b0cd7e-0081-42e1-9a48-688442277fae",
+-- MAGIC             "LogicalName": "opportunity",
+-- MAGIC             "PrimaryIdAttribute": "opportunityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "dc22c553-5e16-45d3-8842-d142bef3877e",
+-- MAGIC             "LogicalName": "opportunityclose",
+-- MAGIC             "PrimaryIdAttribute": "activityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "18eb9672-3070-478c-be5b-e0324acb1188",
+-- MAGIC             "LogicalName": "opportunitycompetitors",
+-- MAGIC             "PrimaryIdAttribute": "opportunitycompetitorid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "8a4283a8-eef3-4915-9e20-055dc136663d",
+-- MAGIC             "LogicalName": "opportunityproduct",
+-- MAGIC             "PrimaryIdAttribute": "opportunityproductid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "6109cfa4-f87c-4a75-bb61-cbd1ccb40338",
+-- MAGIC             "LogicalName": "opportunitysalesprocess",
+-- MAGIC             "PrimaryIdAttribute": "businessprocessflowinstanceid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "89fefcf4-6eec-4bb4-bfb0-87dfb9bb9930",
+-- MAGIC             "LogicalName": "orderclose",
+-- MAGIC             "PrimaryIdAttribute": "activityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "e1bd1119-6e9d-45a4-bc15-12051e65a0bd",
+-- MAGIC             "LogicalName": "organization",
+-- MAGIC             "PrimaryIdAttribute": "organizationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "c55665b1-9f59-45cb-acbb-4826420ad00b",
+-- MAGIC             "LogicalName": "organizationdatasyncfnostate",
+-- MAGIC             "PrimaryIdAttribute": "organizationdatasyncfnostateid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "5cd61c39-0d69-44c2-9eab-8e30a6804019",
+-- MAGIC             "LogicalName": "organizationdatasyncstate",
+-- MAGIC             "PrimaryIdAttribute": "organizationdatasyncstateid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "25457bb2-9f09-4eec-a1b7-16a2905c04c0",
+-- MAGIC             "LogicalName": "organizationdatasyncsubscription",
+-- MAGIC             "PrimaryIdAttribute": "organizationdatasyncsubscriptionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "a813f495-ea5f-48f5-8691-99c19d7046df",
+-- MAGIC             "LogicalName": "organizationdatasyncsubscriptionentity",
+-- MAGIC             "PrimaryIdAttribute": "organizationdatasyncsubscriptionentityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "844510a5-03b7-45b4-806e-493d95fdf035",
+-- MAGIC             "LogicalName": "organizationdatasyncsubscriptionfnotable",
+-- MAGIC             "PrimaryIdAttribute": "organizationdatasyncsubscriptionfnotableid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "fc13df9a-32a6-4e46-89ce-2b6b5911aec4",
+-- MAGIC             "LogicalName": "organizationsetting",
+-- MAGIC             "PrimaryIdAttribute": "organizationsettingid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "b96a4113-d5a7-470f-963e-e421d6a2ff15",
+-- MAGIC             "LogicalName": "organizationstatistic",
+-- MAGIC             "PrimaryIdAttribute": "organizationstatisticid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "d502d3ca-6ef4-406c-8bc3-c3c9de070505",
+-- MAGIC             "LogicalName": "organizationui",
+-- MAGIC             "PrimaryIdAttribute": "formid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "37b56e80-7493-4eb1-b845-49ca0dc13e45",
+-- MAGIC             "LogicalName": "ownermapping",
+-- MAGIC             "PrimaryIdAttribute": "ownermappingid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "0a2f95d5-330f-4e7f-ab72-2eda6b46e8fd",
+-- MAGIC             "LogicalName": "package",
+-- MAGIC             "PrimaryIdAttribute": "packageid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "508c383c-2ff5-ea11-a816-000d3a4aa70c",
+-- MAGIC             "LogicalName": "package_solution",
+-- MAGIC             "PrimaryIdAttribute": "package_solutionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "fae8ee65-5710-45be-9e60-79538484c7b2",
+-- MAGIC             "LogicalName": "packagehistory",
+-- MAGIC             "PrimaryIdAttribute": "packagehistoryid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "7f1abc2d-bb52-451d-85b7-85a1b9d88ba2",
+-- MAGIC             "LogicalName": "pdfsetting",
+-- MAGIC             "PrimaryIdAttribute": "pdfsettingid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "2c5a4778-c84d-43d3-981e-e07599d65884",
+-- MAGIC             "LogicalName": "personaldocumenttemplate",
+-- MAGIC             "PrimaryIdAttribute": "personaldocumenttemplateid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "21538890-1e54-4171-aca8-7ec97a9c652c",
+-- MAGIC             "LogicalName": "phonecall",
+-- MAGIC             "PrimaryIdAttribute": "activityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "6e5d8ab9-7517-4044-a991-539e99e1c34c",
+-- MAGIC             "LogicalName": "phonetocaseprocess",
+-- MAGIC             "PrimaryIdAttribute": "businessprocessflowinstanceid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "599edf51-04df-4262-848c-767a067c3f04",
+-- MAGIC             "LogicalName": "picklistmapping",
+-- MAGIC             "PrimaryIdAttribute": "picklistmappingid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "3fca523c-3350-4900-991d-ce4640a08c6b",
+-- MAGIC             "LogicalName": "plannerbusinessscenario",
+-- MAGIC             "PrimaryIdAttribute": "plannerbusinessscenarioid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "5733eda8-99ae-451b-b5a3-c618f5bee10f",
+-- MAGIC             "LogicalName": "plannersyncaction",
+-- MAGIC             "PrimaryIdAttribute": "plannersyncactionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "fa68dfce-e3f3-4b1c-95dc-619707cfbe44",
+-- MAGIC             "LogicalName": "plugin",
+-- MAGIC             "PrimaryIdAttribute": "pluginid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "a082a3da-e001-485a-b3e6-c7bdc272bb5a",
+-- MAGIC             "LogicalName": "pluginassembly",
+-- MAGIC             "PrimaryIdAttribute": "pluginassemblyid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "307c2e89-8a71-eb11-bb2b-000d3a6ea556",
+-- MAGIC             "LogicalName": "pluginpackage",
+-- MAGIC             "PrimaryIdAttribute": "pluginpackageid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "e5ccda81-e811-4a39-bb1d-3b963c1feca3",
+-- MAGIC             "LogicalName": "plugintracelog",
+-- MAGIC             "PrimaryIdAttribute": "plugintracelogid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "19c3d508-f870-43a6-8703-aa35812a4c96",
+-- MAGIC             "LogicalName": "plugintype",
+-- MAGIC             "PrimaryIdAttribute": "plugintypeid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "5965a037-fa31-49ba-8cfb-3630cb81d8db",
+-- MAGIC             "LogicalName": "plugintypestatistic",
+-- MAGIC             "PrimaryIdAttribute": "plugintypestatisticid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "9e750f35-13ae-e311-80c2-00155d9dac1a",
+-- MAGIC             "LogicalName": "position",
+-- MAGIC             "PrimaryIdAttribute": "positionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "dedd090c-0602-4109-bf1b-b1aeeb7e1274",
+-- MAGIC             "LogicalName": "powerbidataset",
+-- MAGIC             "PrimaryIdAttribute": "powerbidatasetid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "8a4f2591-bcad-43fd-ae12-0de758869e3d",
+-- MAGIC             "LogicalName": "powerbidatasetapdx",
+-- MAGIC             "PrimaryIdAttribute": "powerbidatasetapdxid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "e2068df4-71a9-430e-b995-d13c49e35dd3",
+-- MAGIC             "LogicalName": "powerbimashupparameter",
+-- MAGIC             "PrimaryIdAttribute": "powerbimashupparameterid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "0684c36d-329c-45a1-a35d-65b6297411d6",
+-- MAGIC             "LogicalName": "powerbireport",
+-- MAGIC             "PrimaryIdAttribute": "powerbireportid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "bb4db828-c859-478e-82e9-d73bcd519756",
+-- MAGIC             "LogicalName": "powerbireportapdx",
+-- MAGIC             "PrimaryIdAttribute": "powerbireportapdxid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "012f0d9d-7a09-4cc1-abb2-3ac8df7e39d6",
+-- MAGIC             "LogicalName": "powerfxrule",
+-- MAGIC             "PrimaryIdAttribute": "powerfxruleid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "ead2d4fd-86ad-4dd7-b97e-fce1e3bb3a1f",
+-- MAGIC             "LogicalName": "powerpagecomponent",
+-- MAGIC             "PrimaryIdAttribute": "powerpagecomponentid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "4d13db5d-7256-ee11-be6f-000d3aaab2a8",
+-- MAGIC             "LogicalName": "powerpagecomponent_mspp_webrole_account",
+-- MAGIC             "PrimaryIdAttribute": "powerpagecomponent_mspp_webrole_accountid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "5b13db5d-7256-ee11-be6f-000d3aaab2a8",
+-- MAGIC             "LogicalName": "powerpagecomponent_mspp_webrole_contact",
+-- MAGIC             "PrimaryIdAttribute": "powerpagecomponent_mspp_webrole_contactid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "2060f168-6e56-ee11-be6f-000d3aaab2a8",
+-- MAGIC             "LogicalName": "powerpagecomponent_powerpagecomponent",
+-- MAGIC             "PrimaryIdAttribute": "powerpagecomponent_powerpagecomponentid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "4460f168-6e56-ee11-be6f-000d3aaab2a8",
+-- MAGIC             "LogicalName": "powerpagecomponent_webrole_systemuser",
+-- MAGIC             "PrimaryIdAttribute": "powerpagecomponent_webrole_systemuserid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "78f259c3-cf74-408f-808d-1a6566c847f1",
+-- MAGIC             "LogicalName": "powerpagesite",
+-- MAGIC             "PrimaryIdAttribute": "powerpagesiteid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "48a9ea1f-6515-ef11-9f8a-000d3aaabaf4",
+-- MAGIC             "LogicalName": "powerpagesite_dvfilesearch",
+-- MAGIC             "PrimaryIdAttribute": "powerpagesite_dvfilesearchid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "1aca83d3-d8eb-4bc4-bfc8-73fadd98f003",
+-- MAGIC             "LogicalName": "powerpagesitelanguage",
+-- MAGIC             "PrimaryIdAttribute": "powerpagesitelanguageid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "90772001-6bd9-4b83-bdc5-9d5a76037b09",
+-- MAGIC             "LogicalName": "powerpagesitepublished",
+-- MAGIC             "PrimaryIdAttribute": "powerpagesitepublishedid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "de32cf88-56a9-4893-b8aa-627318cfcc63",
+-- MAGIC             "LogicalName": "powerpageslog",
+-- MAGIC             "PrimaryIdAttribute": "powerpageslogid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "06f028d8-2e7c-4faa-ae9e-9fcddd6d0906",
+-- MAGIC             "LogicalName": "powerpagesmanagedidentity",
+-- MAGIC             "PrimaryIdAttribute": "powerpagesmanagedidentityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "04cffb0b-1ea1-40a6-9231-9afbd0e5ba61",
+-- MAGIC             "LogicalName": "powerpagesscanreport",
+-- MAGIC             "PrimaryIdAttribute": "powerpagesscanreportid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "6c4d0047-fd2b-45a1-a37f-30c94039505a",
+-- MAGIC             "LogicalName": "powerpagessiteaifeedback",
+-- MAGIC             "PrimaryIdAttribute": "powerpagessiteaifeedbackid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "e995200c-5fe8-4843-8325-80bd2a429d1e",
+-- MAGIC             "LogicalName": "pricelevel",
+-- MAGIC             "PrimaryIdAttribute": "pricelevelid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "5358a6e8-96c9-de11-9a56-00137299e1c2",
+-- MAGIC             "LogicalName": "principalattributeaccessmap",
+-- MAGIC             "PrimaryIdAttribute": "principalattributeaccessmapid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "f0dd452c-f7ec-43e8-84b6-8f2f8881ddc8",
+-- MAGIC             "LogicalName": "principalentitymap",
+-- MAGIC             "PrimaryIdAttribute": "principalentitymapid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "92355f2a-7f6e-4b9a-8294-7b9b88cb663a",
+-- MAGIC             "LogicalName": "principalobjectaccess",
+-- MAGIC             "PrimaryIdAttribute": "principalobjectaccessid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "e931255f-bbd0-de11-b297-00155d8bf603",
+-- MAGIC             "LogicalName": "principalobjectattributeaccess",
+-- MAGIC             "PrimaryIdAttribute": "principalobjectattributeaccessid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "79f9f3e4-a285-4a7f-b4fb-be96f03df3ae",
+-- MAGIC             "LogicalName": "privilege",
+-- MAGIC             "PrimaryIdAttribute": "privilegeid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "a0ac058b-8f62-4d27-8453-d81e7e3537d2",
+-- MAGIC             "LogicalName": "privilegecheckerlog",
+-- MAGIC             "PrimaryIdAttribute": "privilegecheckerlogid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "94469dc1-df88-489c-a415-b0632ae21b7c",
+-- MAGIC             "LogicalName": "privilegecheckerrun",
+-- MAGIC             "PrimaryIdAttribute": "privilegecheckerrunid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "4aefc30d-0a4e-458f-9eb1-d828e2c0d6a8",
+-- MAGIC             "LogicalName": "privilegeobjecttypecodes",
+-- MAGIC             "PrimaryIdAttribute": "privilegeobjecttypecodeid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "4ba12fd4-d026-ec11-94fb-002248780fb5",
+-- MAGIC             "LogicalName": "privilegesremovalsetting",
+-- MAGIC             "PrimaryIdAttribute": "privilegesremovalsettingid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "bc6bc5e5-0aa7-45de-a8fb-530a92473706",
+-- MAGIC             "LogicalName": "processorregistration",
+-- MAGIC             "PrimaryIdAttribute": "processorregistrationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "8c4505e6-1258-4072-a5c0-714847ab1cca",
+-- MAGIC             "LogicalName": "processsession",
+-- MAGIC             "PrimaryIdAttribute": "processsessionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "d4266731-55c5-4767-9f49-bb0447f6cfbc",
+-- MAGIC             "LogicalName": "processstage",
+-- MAGIC             "PrimaryIdAttribute": "processstageid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "7bb91662-4e6e-4a13-93c0-acb996a26d1e",
+-- MAGIC             "LogicalName": "processstageparameter",
+-- MAGIC             "PrimaryIdAttribute": "processstageparameterid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "81c04c93-b7ad-49b7-adc8-1f4b68e95898",
+-- MAGIC             "LogicalName": "processtrigger",
+-- MAGIC             "PrimaryIdAttribute": "processtriggerid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "aaf9be65-10c2-415d-8c19-fb1489021330",
+-- MAGIC             "LogicalName": "product",
+-- MAGIC             "PrimaryIdAttribute": "productid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "2f8ec4ea-91c0-495d-bc35-6f8b5ea5cc0c",
+-- MAGIC             "LogicalName": "productassociation",
+-- MAGIC             "PrimaryIdAttribute": "productassociationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "3c63dc0a-1fef-4d07-a399-5045f4dbb114",
+-- MAGIC             "LogicalName": "productpricelevel",
+-- MAGIC             "PrimaryIdAttribute": "productpricelevelid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "146c4cb2-a840-4666-bf7a-f96859adfa9d",
+-- MAGIC             "LogicalName": "productsalesliterature",
+-- MAGIC             "PrimaryIdAttribute": "productsalesliteratureid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "b387f6e3-9860-4cb4-a2fc-2aa54f3e56a5",
+-- MAGIC             "LogicalName": "productsubstitute",
+-- MAGIC             "PrimaryIdAttribute": "productsubstituteid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "e18e9f85-6124-4aee-b86b-3e3388e7f54b",
+-- MAGIC             "LogicalName": "provisionlanguageforuser",
+-- MAGIC             "PrimaryIdAttribute": "provisionlanguageforuserid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "fcd2b9c5-4a53-4083-880d-16da4be49ac3",
+-- MAGIC             "LogicalName": "publisher",
+-- MAGIC             "PrimaryIdAttribute": "publisherid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "24622a75-2b15-40c3-a9ad-54c05c607aff",
+-- MAGIC             "LogicalName": "publisheraddress",
+-- MAGIC             "PrimaryIdAttribute": "publisheraddressid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "9d5314c7-5c28-497d-b1ea-b2ee30198ed1",
+-- MAGIC             "LogicalName": "quarterlyfiscalcalendar",
+-- MAGIC             "PrimaryIdAttribute": "userfiscalcalendarid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "ca8f4305-eaad-4cd8-8e34-bd2aaa8c1657",
+-- MAGIC             "LogicalName": "queue",
+-- MAGIC             "PrimaryIdAttribute": "queueid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "cd7432ec-9b1a-46ec-a869-152a890e7c2b",
+-- MAGIC             "LogicalName": "queueitem",
+-- MAGIC             "PrimaryIdAttribute": "queueitemid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "3dfd8aba-50a1-4126-b79f-49f7251a063e",
+-- MAGIC             "LogicalName": "queuemembership",
+-- MAGIC             "PrimaryIdAttribute": "queuemembershipid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "107a7272-ebb3-469a-be46-76036d858623",
+-- MAGIC             "LogicalName": "quote",
+-- MAGIC             "PrimaryIdAttribute": "quoteid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "f58ee955-da78-4e95-8608-01e0092fd684",
+-- MAGIC             "LogicalName": "quoteclose",
+-- MAGIC             "PrimaryIdAttribute": "activityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "68b92c2b-4bfd-43f2-b183-0f0e8b49639c",
+-- MAGIC             "LogicalName": "quotedetail",
+-- MAGIC             "PrimaryIdAttribute": "quotedetailid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "6d24f8d3-ad83-4146-a10f-c6df2c9e0823",
+-- MAGIC             "LogicalName": "ratingmodel",
+-- MAGIC             "PrimaryIdAttribute": "ratingmodelid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "59a0082d-681d-497d-a239-a2402f03c048",
+-- MAGIC             "LogicalName": "ratingvalue",
+-- MAGIC             "PrimaryIdAttribute": "ratingvalueid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "c2fa1a8c-d5a8-4c0e-9814-914656f25949",
+-- MAGIC             "LogicalName": "recentlyused",
+-- MAGIC             "PrimaryIdAttribute": "recentlyusedid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "b005a747-f7cb-e511-8e7e-00219b619656",
+-- MAGIC             "LogicalName": "recommendeddocument",
+-- MAGIC             "PrimaryIdAttribute": "recommendeddocumentid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "8fe76832-0ecb-4d95-819a-1ed5000b7e5d",
+-- MAGIC             "LogicalName": "reconciliationentityinfo",
+-- MAGIC             "PrimaryIdAttribute": "reconciliationentityinfoid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "03239d8c-f110-4a64-8dab-fc020cff9725",
+-- MAGIC             "LogicalName": "reconciliationentitystepinfo",
+-- MAGIC             "PrimaryIdAttribute": "reconciliationentitystepinfoid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "8da658ec-44ea-4e50-9087-cd4ba5353d30",
+-- MAGIC             "LogicalName": "reconciliationinfo",
+-- MAGIC             "PrimaryIdAttribute": "reconciliationinfoid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "18ad7789-a8e1-4b05-a67a-39489f1086db",
+-- MAGIC             "LogicalName": "recordcountsnapshot",
+-- MAGIC             "PrimaryIdAttribute": "recordcountsnapshotid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "94b99f3e-5f60-40b0-a6d7-1d578dd4284d",
+-- MAGIC             "LogicalName": "recordfilter",
+-- MAGIC             "PrimaryIdAttribute": "recordfilterid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "07ce9134-ab80-4955-8d3d-2c9db190c324",
+-- MAGIC             "LogicalName": "recurrencerule",
+-- MAGIC             "PrimaryIdAttribute": "ruleid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "e4796c89-bd47-4413-a5ff-92959ac3a3e0",
+-- MAGIC             "LogicalName": "recurringappointmentmaster",
+-- MAGIC             "PrimaryIdAttribute": "activityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "cfa94a16-57e2-4f49-9476-6698fcd86241",
+-- MAGIC             "LogicalName": "recyclebinconfig",
+-- MAGIC             "PrimaryIdAttribute": "recyclebinconfigid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "05bc0aad-3dae-426b-a4ac-7cf6b89290d2",
+-- MAGIC             "LogicalName": "relationship",
+-- MAGIC             "PrimaryIdAttribute": "relationshipid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "c7572cf7-4c1b-4c3e-8d0c-d26a959d70b6",
+-- MAGIC             "LogicalName": "relationshipattribute",
+-- MAGIC             "PrimaryIdAttribute": "relationshipattributeid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "33e62135-900b-4d8f-91fb-99b77f4fea87",
+-- MAGIC             "LogicalName": "relationshiprole",
+-- MAGIC             "PrimaryIdAttribute": "relationshiproleid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "e4295804-d8d7-4f47-b09d-9166c982bc4e",
+-- MAGIC             "LogicalName": "relationshiprolemap",
+-- MAGIC             "PrimaryIdAttribute": "relationshiprolemapid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "6e58eade-89ea-40a8-9f3a-3d54c1d1dedd",
+-- MAGIC             "LogicalName": "replicationbacklog",
+-- MAGIC             "PrimaryIdAttribute": "replicationbacklogid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "fdc8b608-418c-4967-891f-333c5d137312",
+-- MAGIC             "LogicalName": "report",
+-- MAGIC             "PrimaryIdAttribute": "reportid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "9fffd74b-e669-47e3-bd37-7c0d2cb6904d",
+-- MAGIC             "LogicalName": "reportcategory",
+-- MAGIC             "PrimaryIdAttribute": "reportcategoryid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "a02dd468-4f3e-49f8-99cb-409b5576c25f",
+-- MAGIC             "LogicalName": "reportentity",
+-- MAGIC             "PrimaryIdAttribute": "reportentityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "c021b5b8-163a-4c72-9809-44b4cf1fee6d",
+-- MAGIC             "LogicalName": "reportlink",
+-- MAGIC             "PrimaryIdAttribute": "reportlinkid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "81403510-5209-4d9f-a5b5-28ae4ed89b46",
+-- MAGIC             "LogicalName": "reportparameter",
+-- MAGIC             "PrimaryIdAttribute": "reportparameterid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "8e5240d5-8553-4c80-ac0a-91a1e9237b52",
+-- MAGIC             "LogicalName": "reportvisibility",
+-- MAGIC             "PrimaryIdAttribute": "reportvisibilityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "2b7c9352-dec6-4d10-8708-8ecfb3fdd726",
+-- MAGIC             "LogicalName": "resource",
+-- MAGIC             "PrimaryIdAttribute": "resourceid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "743a9252-84c3-4151-8419-c7ce33d71763",
+-- MAGIC             "LogicalName": "resourcegroup",
+-- MAGIC             "PrimaryIdAttribute": "resourcegroupid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "af77f07a-4af6-4f26-b5c4-901d4b10a384",
+-- MAGIC             "LogicalName": "resourcegroupdatasource",
+-- MAGIC             "PrimaryIdAttribute": "resourcegroupdatasourceid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "e061e83b-0590-42ed-a6e7-260b0ab83377",
+-- MAGIC             "LogicalName": "resourcegroupexpansion",
+-- MAGIC             "PrimaryIdAttribute": "resourcegroupexpansionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "afdd8741-98aa-4465-bd47-a613e3bf8d2d",
+-- MAGIC             "LogicalName": "resourcespec",
+-- MAGIC             "PrimaryIdAttribute": "resourcespecid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "c2be4f45-2c15-4254-ad02-ebad1ced2901",
+-- MAGIC             "LogicalName": "retaineddataexcel",
+-- MAGIC             "PrimaryIdAttribute": "retaineddataexcelid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "dfa71193-b150-447f-ba82-66383c1614e1",
+-- MAGIC             "LogicalName": "retentioncleanupinfo",
+-- MAGIC             "PrimaryIdAttribute": "retentioncleanupinfoid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "3846b1e8-e226-4b6f-abb3-5181c7741d20",
+-- MAGIC             "LogicalName": "retentioncleanupoperation",
+-- MAGIC             "PrimaryIdAttribute": "retentioncleanupoperationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "3ff848f0-0066-4c55-b0c9-3e6bc0683435",
+-- MAGIC             "LogicalName": "retentionconfig",
+-- MAGIC             "PrimaryIdAttribute": "retentionconfigid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "f86a6300-b078-43f6-95b9-488944aa65cf",
+-- MAGIC             "LogicalName": "retentionfailuredetail",
+-- MAGIC             "PrimaryIdAttribute": "retentionfailuredetailid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "123bb06a-e38c-4d87-b55b-bd6a966256e1",
+-- MAGIC             "LogicalName": "retentionoperation",
+-- MAGIC             "PrimaryIdAttribute": "retentionoperationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "4cc84214-b492-4373-8dcf-e9f148e098b2",
+-- MAGIC             "LogicalName": "retentionoperationdetail",
+-- MAGIC             "PrimaryIdAttribute": "retentionoperationdetailid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "31121e94-da2b-4481-a628-70199e524d97",
+-- MAGIC             "LogicalName": "retentionsuccessdetail",
+-- MAGIC             "PrimaryIdAttribute": "retentionsuccessdetailid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "d2827dc7-78f4-ea11-a81c-000d3a4a4423",
+-- MAGIC             "LogicalName": "revokeinheritedaccessrecordstracker",
+-- MAGIC             "PrimaryIdAttribute": "revokeinheritedaccessrecordstrackerid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "7d2166cb-1116-4090-a2f3-ff8a97e1019e",
+-- MAGIC             "LogicalName": "ribboncommand",
+-- MAGIC             "PrimaryIdAttribute": "ribboncommandid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "7d2166cb-1115-4090-a2f3-ff8a97e1019e",
+-- MAGIC             "LogicalName": "ribboncontextgroup",
+-- MAGIC             "PrimaryIdAttribute": "ribboncontextgroupid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "62dc69de-8286-408c-8868-24540d06f47b",
+-- MAGIC             "LogicalName": "ribboncustomization",
+-- MAGIC             "PrimaryIdAttribute": "ribboncustomizationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "7d2166cb-1130-4090-a2f3-ff8a97e1019e",
+-- MAGIC             "LogicalName": "ribbondiff",
+-- MAGIC             "PrimaryIdAttribute": "ribbondiffid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "7d2166cb-1117-4090-a2f3-ff8a97e1019e",
+-- MAGIC             "LogicalName": "ribbonrule",
+-- MAGIC             "PrimaryIdAttribute": "ribbonruleid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "7d2166cb-1113-4090-a2f3-ff8a97e1019e",
+-- MAGIC             "LogicalName": "ribbontabtocommandmap",
+-- MAGIC             "PrimaryIdAttribute": "ribbontabtocommandmapid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "42dd5681-6a4a-47f2-8169-5efede47689e",
+-- MAGIC             "LogicalName": "role",
+-- MAGIC             "PrimaryIdAttribute": "roleid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "0f231577-5d5e-4c02-adb6-3c800cf1ffef",
+-- MAGIC             "LogicalName": "roleeditorlayout",
+-- MAGIC             "PrimaryIdAttribute": "roleeditorlayoutid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "e141c620-de95-4cf8-b01e-e3a4cbd895db",
+-- MAGIC             "LogicalName": "roleprivileges",
+-- MAGIC             "PrimaryIdAttribute": "roleprivilegeid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "58294352-0071-4b30-beb7-02f703cbba49",
+-- MAGIC             "LogicalName": "roletemplate",
+-- MAGIC             "PrimaryIdAttribute": "roletemplateid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "07489d49-98e8-489d-b68c-207cc7ce28bf",
+-- MAGIC             "LogicalName": "roletemplateprivileges",
+-- MAGIC             "PrimaryIdAttribute": "roletemplateprivilegeid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "c70886de-f513-df11-a16e-00155d7aa40d",
+-- MAGIC             "LogicalName": "rollupfield",
+-- MAGIC             "PrimaryIdAttribute": "rollupfieldid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "62f3541c-bdbd-4f3f-9690-40fbec9d04e1",
+-- MAGIC             "LogicalName": "rollupjob",
+-- MAGIC             "PrimaryIdAttribute": "rollupjobid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "811ed93f-b6be-e211-b29e-00219b669420",
+-- MAGIC             "LogicalName": "routingrule",
+-- MAGIC             "PrimaryIdAttribute": "routingruleid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "214931a4-b6be-e211-b29e-00219b669420",
+-- MAGIC             "LogicalName": "routingruleitem",
+-- MAGIC             "PrimaryIdAttribute": "routingruleitemid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "803dd4b5-9565-46d6-81f1-1d55f1a82600",
+-- MAGIC             "LogicalName": "salesliterature",
+-- MAGIC             "PrimaryIdAttribute": "salesliteratureid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "d9181672-e751-4beb-9a0f-50d2578649de",
+-- MAGIC             "LogicalName": "salesliteratureitem",
+-- MAGIC             "PrimaryIdAttribute": "salesliteratureitemid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "38ded7b5-9ec6-4e77-919a-c408023a4db4",
+-- MAGIC             "LogicalName": "salesorder",
+-- MAGIC             "PrimaryIdAttribute": "salesorderid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "cfe9fca6-0f11-4466-a639-33ea27370100",
+-- MAGIC             "LogicalName": "salesorderdetail",
+-- MAGIC             "PrimaryIdAttribute": "salesorderdetailid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "86cda3d7-a63f-4e2a-b598-cd92e0749770",
+-- MAGIC             "LogicalName": "salesprocessinstance",
+-- MAGIC             "PrimaryIdAttribute": "salesprocessinstanceid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "09d937ab-664d-4869-b9cd-d52bf11eb3de",
+-- MAGIC             "LogicalName": "savedquery",
+-- MAGIC             "PrimaryIdAttribute": "savedqueryid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "7ada6319-1ea7-4ed5-85d7-2a97013ff2c0",
+-- MAGIC             "LogicalName": "savedqueryvisualization",
+-- MAGIC             "PrimaryIdAttribute": "savedqueryvisualizationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "22169f19-48f6-42ff-b12d-bcc0280bf428",
+-- MAGIC             "LogicalName": "semiannualfiscalcalendar",
+-- MAGIC             "PrimaryIdAttribute": "userfiscalcalendarid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "8f9d8c85-8523-4017-8afb-002661a8ddbb",
+-- MAGIC             "LogicalName": "service",
+-- MAGIC             "PrimaryIdAttribute": "serviceid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "b9399b55-f032-4104-a8ca-6b0f9a083e32",
+-- MAGIC             "LogicalName": "serviceappointment",
+-- MAGIC             "PrimaryIdAttribute": "activityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "e7bdf74c-d882-4f71-a89f-bcc496fb4a18",
+-- MAGIC             "LogicalName": "servicecontractcontacts",
+-- MAGIC             "PrimaryIdAttribute": "servicecontractcontactid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "7e55cfcc-1f2d-4cd6-9952-272cca534ed9",
+-- MAGIC             "LogicalName": "serviceendpoint",
+-- MAGIC             "PrimaryIdAttribute": "serviceendpointid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "d6b1d15c-733f-45a2-871c-24dd1aee18b2",
+-- MAGIC             "LogicalName": "serviceplan",
+-- MAGIC             "PrimaryIdAttribute": "serviceplanid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "7a5d1995-ad1e-ea11-a813-000d3a4aa70c",
+-- MAGIC             "LogicalName": "serviceplanappmodules",
+-- MAGIC             "PrimaryIdAttribute": "serviceplanappmodulesid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "106fa50f-2c45-ee11-be6f-000d3aaab2a8",
+-- MAGIC             "LogicalName": "serviceplancustomcontrol",
+-- MAGIC             "PrimaryIdAttribute": "serviceplancustomcontrolid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "91f094ca-d308-4c17-880f-b245551ca767",
+-- MAGIC             "LogicalName": "serviceplanmapping",
+-- MAGIC             "PrimaryIdAttribute": "serviceplanmappingid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "356f495a-3446-4957-b14e-51d43f76b840",
+-- MAGIC             "LogicalName": "settingdefinition",
+-- MAGIC             "PrimaryIdAttribute": "settingdefinitionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "e4423277-5e7e-4920-8dd1-da0dc5d555c1",
+-- MAGIC             "LogicalName": "sharedlinksetting",
+-- MAGIC             "PrimaryIdAttribute": "sharedlinksettingid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "cf738b00-a387-4c1a-acd2-3f786e8640ab",
+-- MAGIC             "LogicalName": "sharedobject",
+-- MAGIC             "PrimaryIdAttribute": "sharedobjectid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "c4931ef0-a95c-4599-9cc6-4249ba60e088",
+-- MAGIC             "LogicalName": "sharedworkspace",
+-- MAGIC             "PrimaryIdAttribute": "sharedworkspaceid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "6e9450bc-0a2d-4171-be11-b60476c8a0f9",
+-- MAGIC             "LogicalName": "sharedworkspacepool",
+-- MAGIC             "PrimaryIdAttribute": "sharedworkspacepoolid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "df40ce13-715d-495d-892e-0bbe2cf15acd",
+-- MAGIC             "LogicalName": "sharepointdocument",
+-- MAGIC             "PrimaryIdAttribute": "sharepointdocumentid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "3298c11a-224d-425d-a58e-dd0713ed87e2",
+-- MAGIC             "LogicalName": "sharepointdocumentlocation",
+-- MAGIC             "PrimaryIdAttribute": "sharepointdocumentlocationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "09596b22-716f-4362-869c-1e7ec9e2422d",
+-- MAGIC             "LogicalName": "sharepointmanagedidentity",
+-- MAGIC             "PrimaryIdAttribute": "sharepointmanagedidentityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "e279559e-31ba-4bdf-8d24-b6f51341bf68",
+-- MAGIC             "LogicalName": "sharepointsite",
+-- MAGIC             "PrimaryIdAttribute": "sharepointsiteid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "38b4b06e-f272-402e-81af-06bf8917da3f",
+-- MAGIC             "LogicalName": "sideloadedaiplugin",
+-- MAGIC             "PrimaryIdAttribute": "sideloadedaipluginid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "da30d709-4438-4b02-b3ec-a28cf71c7d8b",
+-- MAGIC             "LogicalName": "signal",
+-- MAGIC             "PrimaryIdAttribute": "signalid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "3c02ee3a-4d6b-4322-ba50-e19200c2bcc3",
+-- MAGIC             "LogicalName": "signalregistration",
+-- MAGIC             "PrimaryIdAttribute": "signalregistrationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "23d6d050-ebf2-e411-93a4-00219b3e9ee9",
+-- MAGIC             "LogicalName": "similarityrule",
+-- MAGIC             "PrimaryIdAttribute": "similarityruleid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "fe123477-e0c0-458e-ad50-a79ed5fff928",
+-- MAGIC             "LogicalName": "site",
+-- MAGIC             "PrimaryIdAttribute": "siteid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "5b5a9f9c-c011-4389-b925-66cefc8694a3",
+-- MAGIC             "LogicalName": "sitemap",
+-- MAGIC             "PrimaryIdAttribute": "sitemapid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "93253f1a-c0b6-427b-a90d-ae3691c5e6d6",
+-- MAGIC             "LogicalName": "sla",
+-- MAGIC             "PrimaryIdAttribute": "slaid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "75a352f6-72ae-4a75-846d-31b013df97d8",
+-- MAGIC             "LogicalName": "slaitem",
+-- MAGIC             "PrimaryIdAttribute": "slaitemid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "d3b2e805-9969-49d2-bd7a-5c06e505735d",
+-- MAGIC             "LogicalName": "slakpiinstance",
+-- MAGIC             "PrimaryIdAttribute": "slakpiinstanceid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "e0a50003-7062-42ab-8a74-95eeec03c13e",
+-- MAGIC             "LogicalName": "socialactivity",
+-- MAGIC             "PrimaryIdAttribute": "activityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "c18b8120-8493-4237-bb35-b450877d460a",
+-- MAGIC             "LogicalName": "socialinsightsconfiguration",
+-- MAGIC             "PrimaryIdAttribute": "socialinsightsconfigurationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "abca28be-1051-e311-b214-00155d2d9600",
+-- MAGIC             "LogicalName": "socialprofile",
+-- MAGIC             "PrimaryIdAttribute": "socialprofileid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "a432a131-47ac-42de-b44e-1dbf119aee28",
+-- MAGIC             "LogicalName": "sqlencryptionaudit",
+-- MAGIC             "PrimaryIdAttribute": "createdon"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "a8a9d684-8363-43ee-b98a-404c97b08dfa",
+-- MAGIC             "LogicalName": "stagedentity",
+-- MAGIC             "PrimaryIdAttribute": "stagedentityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "30b6b34a-0531-489d-b875-74f4ee5e2e56",
+-- MAGIC             "LogicalName": "stagedentityattribute",
+-- MAGIC             "PrimaryIdAttribute": "stagedentityattributeid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "4cac06b1-52ac-4194-9b0a-4c3047bae70d",
+-- MAGIC             "LogicalName": "stagedmetadataasyncoperation",
+-- MAGIC             "PrimaryIdAttribute": "stagedmetadataasyncoperationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "0cbb0f8c-bbf8-4427-b789-25d818278f86",
+-- MAGIC             "LogicalName": "stagedsourcecontrolcomponent",
+-- MAGIC             "PrimaryIdAttribute": "stagedsourcecontrolcomponentid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "81b118d5-7a28-4680-91ee-8d99ba5f1be6",
+-- MAGIC             "LogicalName": "stagesolutionupload",
+-- MAGIC             "PrimaryIdAttribute": "stagesolutionuploadid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "750fa577-e2db-4cca-b870-36db33111d8e",
+-- MAGIC             "LogicalName": "statusmap",
+-- MAGIC             "PrimaryIdAttribute": "statusmapid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "d610a64a-f68e-437b-a56f-1f7e796c1bc0",
+-- MAGIC             "LogicalName": "stringmap",
+-- MAGIC             "PrimaryIdAttribute": "stringmapid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "cdc3f520-0248-431b-8edb-3da1b78c1a66",
+-- MAGIC             "LogicalName": "subject",
+-- MAGIC             "PrimaryIdAttribute": "subjectid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "ba982470-5ae5-4dff-808a-eae5edea6ebb",
+-- MAGIC             "LogicalName": "subscription",
+-- MAGIC             "PrimaryIdAttribute": "subscriptionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "49749cfc-b8ad-44e1-ba2d-48272c2cf008",
+-- MAGIC             "LogicalName": "subscriptionclients",
+-- MAGIC             "PrimaryIdAttribute": "subscriptionclientid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "2b26f472-25e9-4b62-aa79-abaf2522d3a7",
+-- MAGIC             "LogicalName": "subscriptionmanuallytrackedobject",
+-- MAGIC             "PrimaryIdAttribute": "subscriptionmanuallytrackedobjectid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "af207686-2b48-4b81-aa19-42894c0d0fb2",
+-- MAGIC             "LogicalName": "subscriptionstatisticsoffline",
+-- MAGIC             "PrimaryIdAttribute": "subscriptionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "15d2f2fd-78eb-47bd-995a-3b7efbfacd42",
+-- MAGIC             "LogicalName": "subscriptionstatisticsoutlook",
+-- MAGIC             "PrimaryIdAttribute": "subscriptionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "9dceed2b-9513-4a14-b09e-c176a6f1d9c3",
+-- MAGIC             "LogicalName": "subscriptionsyncentryoffline",
+-- MAGIC             "PrimaryIdAttribute": "subscriptionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "0ca2c46b-3ac5-4b7a-88c4-1502501fb8a3",
+-- MAGIC             "LogicalName": "subscriptionsyncentryoutlook",
+-- MAGIC             "PrimaryIdAttribute": "subscriptionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "b7fb12e9-88de-406f-a69e-297a671c3993",
+-- MAGIC             "LogicalName": "subscriptionsyncinfo",
+-- MAGIC             "PrimaryIdAttribute": "subscriptionsyncinfoid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "773934dd-920d-4482-98cd-4894e168ec40",
+-- MAGIC             "LogicalName": "subscriptiontrackingdeletedobject",
+-- MAGIC             "PrimaryIdAttribute": "timestamp"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "b2a47a17-b5fc-e611-80d4-00155d42b26e",
+-- MAGIC             "LogicalName": "suggestioncardtemplate",
+-- MAGIC             "PrimaryIdAttribute": "suggestioncardtemplateid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "1c451017-dcf3-4df5-8b01-2e36a990561c",
+-- MAGIC             "LogicalName": "supportusertable",
+-- MAGIC             "PrimaryIdAttribute": "supportusertableid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "02f866a7-646e-4730-a599-6f22f7773327",
+-- MAGIC             "LogicalName": "syncattributemapping",
+-- MAGIC             "PrimaryIdAttribute": "syncattributemappingid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "02491122-e11d-4933-8791-6e3bea557960",
+-- MAGIC             "LogicalName": "syncattributemappingprofile",
+-- MAGIC             "PrimaryIdAttribute": "syncattributemappingprofileid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "1f16be2a-ebe2-45c6-b24c-7ddeb4dfa1a0",
+-- MAGIC             "LogicalName": "syncerror",
+-- MAGIC             "PrimaryIdAttribute": "syncerrorid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "f383a21a-8bd0-4c4f-a15a-12de5ea4190b",
+-- MAGIC             "LogicalName": "tag",
+-- MAGIC             "PrimaryIdAttribute": "tagid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "6bdf2a94-3b58-44d3-baa2-54837692da43",
+-- MAGIC             "LogicalName": "taggedflowsession",
+-- MAGIC             "PrimaryIdAttribute": "taggedflowsessionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "408a5a1d-0af9-41a9-b23e-66e0be71ebd3",
+-- MAGIC             "LogicalName": "taggedprocess",
+-- MAGIC             "PrimaryIdAttribute": "taggedprocessid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "78e45d5e-f22b-4e20-813f-6cd2a3777968",
+-- MAGIC             "LogicalName": "task",
+-- MAGIC             "PrimaryIdAttribute": "activityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "acbb434d-ebe4-4a13-a1f0-cc8baa505a6c",
+-- MAGIC             "LogicalName": "tdsmetadata",
+-- MAGIC             "PrimaryIdAttribute": "tdsmetadataid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "b71c0a4c-b9b6-4e12-a02e-94feba67eade",
+-- MAGIC             "LogicalName": "template",
+-- MAGIC             "PrimaryIdAttribute": "templateid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "8ff0290d-50c1-48f6-9070-cd0758bdc602",
+-- MAGIC             "LogicalName": "territory",
+-- MAGIC             "PrimaryIdAttribute": "territoryid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "638e29d0-6f03-e511-80d0-00155d42d66e",
+-- MAGIC             "LogicalName": "textanalyticsentitymapping",
+-- MAGIC             "PrimaryIdAttribute": "textanalyticsentitymappingid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "249b0860-52fc-417e-8e77-fd0b18aca558",
+-- MAGIC             "LogicalName": "textdatarecordsindexingstatus",
+-- MAGIC             "PrimaryIdAttribute": "textdatarecordsindexingstatusid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "9dd0cfe8-ca52-e411-80c6-00155d206d09",
+-- MAGIC             "LogicalName": "theme",
+-- MAGIC             "PrimaryIdAttribute": "themeid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "069954fc-b72f-4b02-af90-45558cb2f039",
+-- MAGIC             "LogicalName": "timestampdatemapping",
+-- MAGIC             "PrimaryIdAttribute": "timestampdatemappingid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "0e98ffda-9104-4f68-863d-4127d7e28029",
+-- MAGIC             "LogicalName": "timezonedefinition",
+-- MAGIC             "PrimaryIdAttribute": "timezonedefinitionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "d30d9975-d477-4ea4-82b0-74bcd5f06a60",
+-- MAGIC             "LogicalName": "timezonelocalizedname",
+-- MAGIC             "PrimaryIdAttribute": "timezonelocalizednameid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "ee5d098e-1c42-49de-9212-a01a51551ba5",
+-- MAGIC             "LogicalName": "timezonerule",
+-- MAGIC             "PrimaryIdAttribute": "timezoneruleid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "483f2897-6d0b-e511-80d1-00155d433957",
+-- MAGIC             "LogicalName": "topic",
+-- MAGIC             "PrimaryIdAttribute": "topicid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "5e44d764-7682-4062-b43e-5e28a0492b47",
+-- MAGIC             "LogicalName": "topichistory",
+-- MAGIC             "PrimaryIdAttribute": "topichistoryid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "793abe61-93f4-e411-80fc-00155dd99f01",
+-- MAGIC             "LogicalName": "topicmodel",
+-- MAGIC             "PrimaryIdAttribute": "topicmodelid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "68a1576a-6a03-e511-80d3-00155db754f6",
+-- MAGIC             "LogicalName": "topicmodelconfiguration",
+-- MAGIC             "PrimaryIdAttribute": "topicmodelconfigurationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "f0e86152-980a-e511-80d0-00155d42aa65",
+-- MAGIC             "LogicalName": "topicmodelexecutionhistory",
+-- MAGIC             "PrimaryIdAttribute": "topicmodelexecutionhistoryid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "49130910-a35a-4f68-ba52-f211ceba2a68",
+-- MAGIC             "LogicalName": "traceassociation",
+-- MAGIC             "PrimaryIdAttribute": "traceassociationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "202dcb1a-6890-41cb-8525-5d991974e385",
+-- MAGIC             "LogicalName": "tracelog",
+-- MAGIC             "PrimaryIdAttribute": "tracelogid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "4013ea6b-d48c-496a-8b48-9265ac9e2bab",
+-- MAGIC             "LogicalName": "traceregarding",
+-- MAGIC             "PrimaryIdAttribute": "traceregardingid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "ec2a6632-f9f2-44bc-bf69-3833146bb600",
+-- MAGIC             "LogicalName": "trait",
+-- MAGIC             "PrimaryIdAttribute": "traitid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "4e66956f-c354-41cc-a8d2-0cc5039f7b13",
+-- MAGIC             "LogicalName": "traitregistration",
+-- MAGIC             "PrimaryIdAttribute": "traitregistrationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "5f2e7ae7-d327-49b5-a343-61d48f1bcd28",
+-- MAGIC             "LogicalName": "transactioncurrency",
+-- MAGIC             "PrimaryIdAttribute": "transactioncurrencyid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "8ae1180f-28e1-496e-ad27-5b357df1d976",
+-- MAGIC             "LogicalName": "transformationmapping",
+-- MAGIC             "PrimaryIdAttribute": "transformationmappingid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "fe852b12-8274-456d-9f8d-654ebf012e19",
+-- MAGIC             "LogicalName": "transformationparametermapping",
+-- MAGIC             "PrimaryIdAttribute": "transformationparametermappingid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "f8c293fc-f598-4bb4-9e8e-8cff7a2a8ec7",
+-- MAGIC             "LogicalName": "translationprocess",
+-- MAGIC             "PrimaryIdAttribute": "businessprocessflowinstanceid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "129a6abf-a224-436b-a05a-511928c80bb9",
+-- MAGIC             "LogicalName": "unresolvedaddress",
+-- MAGIC             "PrimaryIdAttribute": "unresolvedaddressid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "c000abde-7474-4013-8887-203e3c9ab55f",
+-- MAGIC             "LogicalName": "untrackedemail",
+-- MAGIC             "PrimaryIdAttribute": "activityid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "02d5dd55-4cbb-4147-9534-1de9bac6d760",
+-- MAGIC             "LogicalName": "uom",
+-- MAGIC             "PrimaryIdAttribute": "uomid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "a317d38b-b2d5-4663-9a06-44611f27ed50",
+-- MAGIC             "LogicalName": "uomschedule",
+-- MAGIC             "PrimaryIdAttribute": "uomscheduleid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "945f78db-032a-e211-971f-00155da91f02",
+-- MAGIC             "LogicalName": "userapplicationmetadata",
+-- MAGIC             "PrimaryIdAttribute": "userapplicationmetadataid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "f9c6a2a9-974e-4899-849d-f19715d43aab",
+-- MAGIC             "LogicalName": "userentityinstancedata",
+-- MAGIC             "PrimaryIdAttribute": "userentityinstancedataid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "dcc617bd-0922-4c64-ade1-1a4361efb56e",
+-- MAGIC             "LogicalName": "userentityuisettings",
+-- MAGIC             "PrimaryIdAttribute": "userentityuisettingsid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "df2a6415-a40f-4ee1-ba24-407711fac7b5",
+-- MAGIC             "LogicalName": "userfiscalcalendar",
+-- MAGIC             "PrimaryIdAttribute": "userfiscalcalendarid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "ca6c722f-76c9-4b19-aa01-be44955d686b",
+-- MAGIC             "LogicalName": "userform",
+-- MAGIC             "PrimaryIdAttribute": "userformid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "3539ddaa-2555-e411-80cf-00155d211b05",
+-- MAGIC             "LogicalName": "usermapping",
+-- MAGIC             "PrimaryIdAttribute": "usermappingid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "98d7e203-6c65-440b-974e-dd4c602af9fe",
+-- MAGIC             "LogicalName": "usermobileofflineprofilemembership",
+-- MAGIC             "PrimaryIdAttribute": "usermobileofflineprofilemembershipid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "a269f502-ea98-4f6d-9e8c-16b78598b60a",
+-- MAGIC             "LogicalName": "userquery",
+-- MAGIC             "PrimaryIdAttribute": "userqueryid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "6d142bdb-3bbe-4ded-955c-f700c3cd6b90",
+-- MAGIC             "LogicalName": "userqueryvisualization",
+-- MAGIC             "PrimaryIdAttribute": "userqueryvisualizationid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "273c9fd3-6fdb-49e5-8b73-011b99cbedfe",
+-- MAGIC             "LogicalName": "userrating",
+-- MAGIC             "PrimaryIdAttribute": "userratingid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "55c0b160-036d-4c47-809b-e9a4617b8926",
+-- MAGIC             "LogicalName": "usersearchfacet",
+-- MAGIC             "PrimaryIdAttribute": "usersearchfacetid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "c08f6212-5638-4d84-903f-9643afdd8219",
+-- MAGIC             "LogicalName": "usersettings",
+-- MAGIC             "PrimaryIdAttribute": "systemuserid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "c4c4179f-b7a5-415d-bc65-a707d33de749",
+-- MAGIC             "LogicalName": "viewasexamplequestion",
+-- MAGIC             "PrimaryIdAttribute": "viewasexamplequestionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "5b1a6dfc-6ba8-4c07-a1de-7d80e4927aa1",
+-- MAGIC             "LogicalName": "virtualentitymetadata",
+-- MAGIC             "PrimaryIdAttribute": "virtualentitymetadataid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "c2da318e-b276-4ef7-b381-cd99b14e0523",
+-- MAGIC             "LogicalName": "virtualresourcegroupresource",
+-- MAGIC             "PrimaryIdAttribute": "virtualresourcegroupresourceid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "7e4c24bb-76e3-48fd-b5cd-586a2688db44",
+-- MAGIC             "LogicalName": "webresource",
+-- MAGIC             "PrimaryIdAttribute": "webresourceid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "3edf2c37-2bf8-4b36-9e2d-7a71ca398809",
+-- MAGIC             "LogicalName": "webwizard",
+-- MAGIC             "PrimaryIdAttribute": "webwizardid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "e43b3a0c-39bd-4a4c-b52c-519add7a633c",
+-- MAGIC             "LogicalName": "wizardaccessprivilege",
+-- MAGIC             "PrimaryIdAttribute": "wizardaccessprivilegeid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "80e6b238-b80f-4f3d-93b9-4d5b04947225",
+-- MAGIC             "LogicalName": "wizardpage",
+-- MAGIC             "PrimaryIdAttribute": "wizardpageid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "e5c40599-99d3-453d-8594-8d55e29a9579",
+-- MAGIC             "LogicalName": "workflow",
+-- MAGIC             "PrimaryIdAttribute": "workflowid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "118dd4bf-4cd0-e911-a81c-000d3af74121",
+-- MAGIC             "LogicalName": "workflowbinary",
+-- MAGIC             "PrimaryIdAttribute": "workflowbinaryid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "19dcc8e0-e65b-ee11-be6e-000d3aaab7fb",
+-- MAGIC             "LogicalName": "workflowcardconnections",
+-- MAGIC             "PrimaryIdAttribute": "workflowcardconnectionsid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "53268b70-604a-4586-b572-7fc3d1aaeb99",
+-- MAGIC             "LogicalName": "workflowdependency",
+-- MAGIC             "PrimaryIdAttribute": "workflowdependencyid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "39bbea35-9bee-4152-94ba-121ac79131db",
+-- MAGIC             "LogicalName": "workflowlog",
+-- MAGIC             "PrimaryIdAttribute": "workflowlogid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "c4def6de-0fd2-44cc-8548-b1535630ac83",
+-- MAGIC             "LogicalName": "workflowmetadata",
+-- MAGIC             "PrimaryIdAttribute": "workflowmetadataid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "2afb3820-185c-4a4b-8a60-26ce664e4b1f",
+-- MAGIC             "LogicalName": "workflowwaitsubscription",
+-- MAGIC             "PrimaryIdAttribute": "workflowwaitsubscriptionid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "a4504648-5eac-4b59-8f37-b521204d8853",
+-- MAGIC             "LogicalName": "workqueue",
+-- MAGIC             "PrimaryIdAttribute": "workqueueid"
+-- MAGIC         },
+-- MAGIC         {
+-- MAGIC             "MetadataId": "48246edd-3a86-4073-9bce-7ab1ad4e1b23",
+-- MAGIC             "LogicalName": "workqueueitem",
+-- MAGIC             "PrimaryIdAttribute": "workqueueitemid"
 -- MAGIC         }
 -- MAGIC     ]
 -- MAGIC }
@@ -328,9 +3878,12 @@ SELECT 'c3d4e5f6-g7h8-9012-3456-78901234cdef', 'activitypointer', 'dataverse', '
 -- CELL ********************
 
 select * from metadata.PipelineConfig
+order by TableName
 
 -- update metadata.PipelineConfig
--- set SchemaName = 'dataverse'
+-- set LastPurgeDate = NULL
+
+
 
 -- METADATA ********************
 

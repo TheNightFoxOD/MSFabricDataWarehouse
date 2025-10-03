@@ -151,7 +151,7 @@
 # CELL ********************
 
 # MAGIC %%sql
-# MAGIC drop table dataverse.od_transaction
+# MAGIC drop table dataverse.od_donation
 
 # METADATA ********************
 
@@ -165,7 +165,7 @@
 # CELL ********************
 
 # MAGIC %%sql
-# MAGIC drop table dataverse.activitypointer
+# MAGIC drop table dataverse.contact
 
 # METADATA ********************
 
@@ -193,6 +193,7 @@
 
 # MAGIC %%sql
 # MAGIC select * from metadata.pipelineconfig
+# MAGIC where TableName = 'account'
 # MAGIC 
 # MAGIC -- DELETE from metadata.pipelineconfig
 # MAGIC -- where TableName = 'activitypointer'
@@ -272,10 +273,12 @@
 # CELL ********************
 
 # MAGIC %%sql
-# MAGIC select count(*) from temp.od_donation_staging
-# MAGIC -- select * from temp.od_donation_staging
+# MAGIC -- describe table temp.account_staging
+# MAGIC -- select count(*) from temp.od_donation_staging
+# MAGIC -- select * from temp.account_staging
 # MAGIC -- where od_donationid = '0f6219ea-1ee8-4329-a8c4-63ba5ae335d7'
 # MAGIC -- or od_donationid = '3b5f38d9-1c5c-48b1-af7d-2d63a4e2fe4f'
+# MAGIC drop table temp.account_staging
 
 # METADATA ********************
 
@@ -355,13 +358,56 @@
 
 # MAGIC %%sql
 # MAGIC UPDATE metadata.pipelineconfig
-# MAGIC SET LastDailySync = NULL
+# MAGIC SET SyncEnabled = false
+# MAGIC where TableName <> 'account'
 
 # METADATA ********************
 
 # META {
 # META   "language": "sparksql",
 # META   "language_group": "synapse_pyspark",
-# META   "frozen": true,
-# META   "editable": false
+# META   "frozen": false,
+# META   "editable": true
+# META }
+
+# CELL ********************
+
+# MAGIC %%sql
+# MAGIC -- Count tables in a specific schema
+# MAGIC SELECT COUNT(*) AS TableCount
+# MAGIC FROM INFORMATION_SCHEMA.TABLES
+# MAGIC WHERE TABLE_TYPE = 'BASE TABLE'
+# MAGIC   AND TABLE_SCHEMA = 'dataverse';
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# MAGIC %%sql
+# MAGIC SHOW TBLPROPERTIES dataverse.od_donation ('primaryKey');
+
+# METADATA ********************
+
+# META {
+# META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# MAGIC %%sql
+# MAGIC select * from dataverse.account
+# MAGIC where accountid is null
+
+# METADATA ********************
+
+# META {
+# META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark"
 # META }

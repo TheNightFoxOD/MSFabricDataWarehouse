@@ -24,10 +24,35 @@
 
 # MAGIC %%sql
 # MAGIC -- describe table dataverse.account
-# MAGIC select od_groupname, accountid, address1_city, od_startdate, IsDeleted, LastSynced from dataverse.account
+# MAGIC select od_groupname, accountid, address1_line1, IsDeleted, LastSynced, createdon, IsDeleted, DeletedDate, IsPurged, PurgedDate, modifiedon
+# MAGIC  from dataverse.account
 # MAGIC where 1=1
 # MAGIC -- and IsDeleted = true
-# MAGIC order by modifiedon desc 
+# MAGIC and (accountid = '0a204a8b-03f0-ee11-904b-000d3a498565' -- address updated
+# MAGIC     or accountid = '9fb628a9-7e0f-ea11-a811-000d3a4aadc8' -- purged
+# MAGIC     or accountid = '1a67afc9-7767-ea11-a811-000d3a4aa1c2' -- purged
+# MAGIC     or accountid = 'e714475a-e9da-ee11-904c-000d3ab6f7f6' -- deleted
+# MAGIC     or accountid = 'e9634737-29a0-f011-b41b-7c1e524e35c2') -- new
+# MAGIC -- order by modifiedon desc 
+
+# METADATA ********************
+
+# META {
+# META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# MAGIC %%sql
+# MAGIC SELECT count(*)
+# MAGIC from dataverse.account
+# MAGIC where IsDeleted = true
+# MAGIC and IsPurged = true
+# MAGIC 
+# MAGIC -- update dataverse.account
+# MAGIC -- set IsDeleted = NULL
+# MAGIC -- where IsPurged = true
 
 # METADATA ********************
 
@@ -65,9 +90,11 @@
 # CELL ********************
 
 # MAGIC %%sql
-# MAGIC -- select * from metadata.pipelineconfig
-# MAGIC update metadata.pipelineconfig
-# MAGIC set SyncEnable = false
+# MAGIC select * from metadata.pipelineconfig
+# MAGIC where TableName = 'account'
+# MAGIC -- update metadata.pipelineconfig
+# MAGIC -- set LastPurgeDate = '2023-01-01'
+# MAGIC -- where TableName = 'account'    
 
 # METADATA ********************
 

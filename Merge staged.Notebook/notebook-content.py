@@ -14,6 +14,9 @@
 # META       "known_lakehouses": [
 # META         {
 # META           "id": "4aee8a32-be91-489f-89f3-1a819b188807"
+# META         },
+# META         {
+# META           "id": "234e6789-2254-455f-b2b2-36d881cb1c17"
 # META         }
 # META       ]
 # META     }
@@ -48,8 +51,8 @@ from datetime import datetime
 
 try:
     # Build table names
-    target_table = f"{schema_name}.{table_name}"
-    staging_table = f"temp.{table_name}_staging"
+    target_table = f"Master_Bronze.{schema_name}.{table_name}"
+    staging_table = f"dataverse_opendoorsmas_cds2_workspace_org42a53679.dbo.{table_name}"
 
     print(f"Starting MERGE operation:")
     print(f"- Target table: {target_table}")
@@ -67,7 +70,7 @@ try:
         raise Exception(f"Staging table {staging_table} does not exist")
 
     # Get row count from staging table for metrics
-    staging_count = spark.sql(f"SELECT COUNT(*) as cnt FROM {staging_table}").collect()[0]['cnt']
+    staging_count = spark.sql(f"SELECT COUNT(*) as cnt FROM {staging_table} where {primary_key_column} is not null").collect()[0]['cnt']
     print(f"Staging table contains {staging_count} records")
 
     if staging_count == 0:
@@ -114,7 +117,7 @@ try:
         ON CAST(target.{primary_key_column} AS STRING) = CAST(staging.{primary_key_column} AS STRING)
         WHEN MATCHED AND staging.modifiedon > date_sub(current_date(), {lookback_range}) THEN 
             UPDATE SET {update_set_clause}
-        WHEN NOT MATCHED THEN INSERT 
+        WHEN NOT MATCHED AND {primary_key_column} is not null THEN INSERT 
             ({insert_columns_str})
             VALUES ({insert_values_str})
         """
@@ -133,6 +136,7 @@ try:
             SELECT COUNT(*) as count 
             FROM {staging_table} 
             WHERE modifiedon > date_sub(current_date(), {lookback_range})
+            AND {primary_key_column} is not null
         """).collect()[0]['count']
         target_count_after = spark.sql(f"SELECT COUNT(*) as cnt FROM {target_table}").collect()[0]['cnt']
 
@@ -145,10 +149,6 @@ try:
         print(f"- Inserted: {insert_count} records")
         print(f"- Updated: {update_count} records")
         print(f"- Total processed: {total_upsert_count} records")
-
-        # # Clean up staging table
-        # spark.sql(f"TRUNCATE TABLE {staging_table}")
-        # print(f"Staging table {staging_table} truncated")
 
         # Prepare success result
         result = {

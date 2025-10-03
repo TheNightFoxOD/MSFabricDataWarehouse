@@ -14,6 +14,9 @@
 # META       "known_lakehouses": [
 # META         {
 # META           "id": "4aee8a32-be91-489f-89f3-1a819b188807"
+# META         },
+# META         {
+# META           "id": "234e6789-2254-455f-b2b2-36d881cb1c17"
 # META         }
 # META       ]
 # META     }
@@ -63,10 +66,10 @@ def purge_aware_delete_detection():
     
     try:
         # Initialize variables
-        full_table_name = f"{schema_name}.{table_name}"
-        temp_table = f"temp.{table_name}_CurrentIDs"
+        target_table = f"Master_Bronze.{schema_name}.{table_name}"
+        staging_table = f"dataverse_opendoorsmas_cds2_workspace_org42a53679.dbo.{table_name}"
         
-        print(f"Starting purge-aware detection for table: {full_table_name}")
+        print(f"Starting purge-aware detection for table: {target_table}")
         print(f"Primary key: {primary_key}")
         print(f"Last purge date: {last_purge_date}")
         
@@ -74,21 +77,21 @@ def purge_aware_delete_detection():
         # STEP 1: Load temp table with current IDs
         # ==========================================
         try:
-            temp_df = spark.table(temp_table)
-            current_id_count = temp_df.count()
-            print(f"✓ Temp table {temp_table} found with {current_id_count} current IDs")
+            staging_df = spark.table(staging_table)
+            current_id_count = staging_df.count()
+            print(f"✓ Temp table {staging_table} found with {current_id_count} current IDs")
         except Exception as e:
-            raise Exception(f"Temp table {temp_table} not found. Ensure Copy Activity completed successfully: {str(e)}")
+            raise Exception(f"Temp table {staging_table} not found. Ensure Copy Activity completed successfully: {str(e)}")
         
         # ==========================================
         # STEP 2: Load Bronze layer table
         # ==========================================
         try:
-            bronze_df = spark.table(full_table_name)
+            bronze_df = spark.table(target_table)
             total_bronze_records = bronze_df.count()
-            print(f"✓ Bronze table {full_table_name} loaded with {total_bronze_records} total records")
+            print(f"✓ Bronze table {target_table} loaded with {total_bronze_records} total records")
         except Exception as e:
-            raise Exception(f"Failed to load Bronze table {full_table_name}: {str(e)}")
+            raise Exception(f"Failed to load Bronze table {target_table}: {str(e)}")
         
         # ==========================================
         # STEP 3: Identify missing records
@@ -96,9 +99,9 @@ def purge_aware_delete_detection():
         
         # Get records that exist in Bronze but not in current Dataverse
         missing_records_df = bronze_df.join(
-            temp_df, 
-            bronze_df[primary_key] == temp_df[primary_key], 
-            "left_anti"  # Records in bronze_df that are NOT in temp_df
+            staging_df, 
+            bronze_df[primary_key] == staging_df[primary_key], 
+            "left_anti"  # Records in bronze_df that are NOT in staging_df
         )
         
         missing_count = missing_records_df.count()
@@ -155,7 +158,7 @@ def purge_aware_delete_detection():
                 when(
                     # Record is missing from current IDs AND created after purge date
                     col(primary_key).isin(missing_ids) &
-                    (col("CreatedDate") >= purge_date_lit),
+                    (col("createdon") >= purge_date_lit),
                     lit(True)  # Recent missing record = deleted
                 ).otherwise(col("IsDeleted"))  # Keep existing value
             ).withColumn(
@@ -163,7 +166,7 @@ def purge_aware_delete_detection():
                 when(
                     # Record is missing from current IDs AND created before purge date AND not already purged
                     col(primary_key).isin(missing_ids) &
-                    (col("CreatedDate") < purge_date_lit) &
+                    (col("createdon") < purge_date_lit) &
                     (coalesce(col("IsPurged"), lit(False)) == lit(False)),
                     lit(True)  # Old missing record = purged
                 ).otherwise(col("IsPurged"))  # Keep existing value
@@ -172,7 +175,7 @@ def purge_aware_delete_detection():
                 when(
                     # Set DeletedDate for newly deleted records
                     col(primary_key).isin(missing_ids) &
-                    (col("CreatedDate") >= purge_date_lit) &
+                    (col("createdon") >= purge_date_lit) &
                     col("DeletedDate").isNull(),
                     current_ts
                 ).otherwise(col("DeletedDate"))
@@ -181,7 +184,7 @@ def purge_aware_delete_detection():
                 when(
                     # Set PurgedDate for newly purged records
                     col(primary_key).isin(missing_ids) &
-                    (col("CreatedDate") < purge_date_lit) &
+                    (col("createdon") < purge_date_lit) &
                     (coalesce(col("IsPurged"), lit(False)) == lit(False)) &
                     col("PurgedDate").isNull(),
                     current_ts
@@ -216,7 +219,7 @@ def purge_aware_delete_detection():
             .format("delta") \
             .mode("overwrite") \
             .option("overwriteSchema", "true") \
-            .saveAsTable(full_table_name)
+            .saveAsTable(target_table)
         
         print("✓ Bronze table updated successfully")
         
@@ -224,7 +227,7 @@ def purge_aware_delete_detection():
         # STEP 7: Calculate metrics for reporting
         # ==========================================
         
-        updated_df = spark.table(full_table_name)
+        updated_df = spark.table(target_table)
         
         # Get comprehensive metrics
         total_records = updated_df.count()
@@ -255,11 +258,11 @@ def purge_aware_delete_detection():
         # ==========================================
         # STEP 8: Clean up temporary table
         # ==========================================
-        try:
-            spark.sql(f"DROP TABLE IF EXISTS {temp_table}")
-            print(f"✓ Temporary table {temp_table} cleaned up")
-        except Exception as e:
-            print(f"⚠ Warning: Could not clean up temp table {temp_table}: {str(e)}")
+        # try:
+        #     spark.sql(f"DROP TABLE IF EXISTS {staging_table}")
+        #     print(f"✓ Temporary table {staging_table} cleaned up")
+        # except Exception as e:
+        #     print(f"⚠ Warning: Could not clean up temp table {staging_table}: {str(e)}")
         
         # ==========================================
         # STEP 9: Prepare results
