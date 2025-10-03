@@ -373,12 +373,10 @@ if (sync_operations["status"] == "success" and
         StructField("ValidationStatus", StringType(), False),
         StructField("RetentionDate", DateType(), False),
         StructField("IsActive", BooleanType(), False),
-        StructField("Notes", StringType(), True)
     ])
     
     try:
         retention_date = (end_time + timedelta(days=7)).date()
-        notes = f"Operations: {', '.join(sync_operations['successful_operations'])}"
         
         checkpoint_entry = [(
             str(uuid.uuid4()),
@@ -389,8 +387,7 @@ if (sync_operations["status"] == "success" and
             total_processed_records,
             'Validated',
             retention_date,
-            True,
-            notes
+            True
         )]
         
         checkpoint_df = spark.createDataFrame(checkpoint_entry, checkpoint_schema)

@@ -708,7 +708,7 @@
     "parameters": {
       "lookback_range": {
         "type": "int",
-        "defaultValue": 7
+        "defaultValue": 1
       }
     },
     "variables": {

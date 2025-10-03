@@ -158,7 +158,7 @@ def purge_aware_delete_detection():
                 when(
                     # Record is missing from current IDs AND created after purge date
                     col(primary_key).isin(missing_ids) &
-                    (col("createdon") >= purge_date_lit),
+                    (col("CreatedOn") >= purge_date_lit),
                     lit(True)  # Recent missing record = deleted
                 ).otherwise(col("IsDeleted"))  # Keep existing value
             ).withColumn(
@@ -166,7 +166,7 @@ def purge_aware_delete_detection():
                 when(
                     # Record is missing from current IDs AND created before purge date AND not already purged
                     col(primary_key).isin(missing_ids) &
-                    (col("createdon") < purge_date_lit) &
+                    (col("CreatedOn") < purge_date_lit) &
                     (coalesce(col("IsPurged"), lit(False)) == lit(False)),
                     lit(True)  # Old missing record = purged
                 ).otherwise(col("IsPurged"))  # Keep existing value
@@ -175,7 +175,7 @@ def purge_aware_delete_detection():
                 when(
                     # Set DeletedDate for newly deleted records
                     col(primary_key).isin(missing_ids) &
-                    (col("createdon") >= purge_date_lit) &
+                    (col("CreatedOn") >= purge_date_lit) &
                     col("DeletedDate").isNull(),
                     current_ts
                 ).otherwise(col("DeletedDate"))
@@ -183,10 +183,11 @@ def purge_aware_delete_detection():
                 "PurgedDate",
                 when(
                     # Set PurgedDate for newly purged records
+                    # FIXED: Removed IsPurged check since it was checking the modified column
+                    # The PurgedDate.isNull() check is sufficient to identify new purges
                     col(primary_key).isin(missing_ids) &
-                    (col("createdon") < purge_date_lit) &
-                    (coalesce(col("IsPurged"), lit(False)) == lit(False)) &
-                    col("PurgedDate").isNull(),
+                    (col("CreatedOn") < purge_date_lit) &
+                    col("PurgedDate").isNull(),  # Only set if not already set
                     current_ts
                 ).otherwise(col("PurgedDate"))
             )
@@ -236,6 +237,11 @@ def purge_aware_delete_detection():
         active_count = updated_df.filter(
             (col("IsDeleted") == False) & (col("IsPurged") == False)
         ).count()
+
+        # validation check
+        calculated_total = active_count + all_deleted_count + all_purged_count
+        if calculated_total != total_records:
+            print(f"⚠ WARNING: Count mismatch detected!")
         
         # Calculate records affected in this execution (for logging)
         if has_purge_date:

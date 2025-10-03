@@ -146,6 +146,9 @@ try:
         total_upsert_count = insert_count + update_count
 
         print(f"MERGE completed successfully:")
+        print(f"- Target table records before merge: {target_count_before}")
+        print(f"- Target table records after merge: {target_count_after}")
+        print(f"- Staging table records: {staging_count}")
         print(f"- Inserted: {insert_count} records")
         print(f"- Updated: {update_count} records")
         print(f"- Total processed: {total_upsert_count} records")
@@ -157,6 +160,8 @@ try:
             "insert_count": insert_count,
             "update_count": update_count,
             "staging_records": staging_count,
+            "target_table_records_before_merge": target_count_before,
+            "target_table_records_after_merge": target_count_after,
             "table_name": table_name,
             "target_table": target_table,
             "staging_table": staging_table,
