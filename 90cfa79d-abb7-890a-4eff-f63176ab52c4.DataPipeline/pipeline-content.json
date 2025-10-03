@@ -471,6 +471,13 @@
                             "type": "Expression"
                           },
                           "type": "int"
+                        },
+                        "staging_lakehouse": {
+                          "value": {
+                            "value": "@pipeline().parameters.staging_lakehouse",
+                            "type": "Expression"
+                          },
+                          "type": "string"
                         }
                       }
                     },
@@ -514,6 +521,13 @@
                         "last_purge_date": {
                           "value": {
                             "value": "@item().LastPurgeDate",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        },
+                        "staging_lakehouse": {
+                          "value": {
+                            "value": "@pipeline().parameters.staging_lakehouse",
                             "type": "Expression"
                           },
                           "type": "string"
@@ -709,6 +723,10 @@
       "lookback_range": {
         "type": "int",
         "defaultValue": 1
+      },
+      "staging_lakehouse": {
+        "type": "string",
+        "defaultValue": "Dataverse_Master_Staging"
       }
     },
     "variables": {
