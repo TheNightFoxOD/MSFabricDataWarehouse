@@ -49,15 +49,30 @@
 # MAGIC -- where 1=1
 # MAGIC -- and IsPurged = true
 # MAGIC 
-# MAGIC -- update dataverse.account
-# MAGIC -- set IsPurged = null, PurgedDate = null
-# MAGIC -- where accountid = 'd6c03ef4-de74-ea11-a811-000d3a4aadc8'
+# MAGIC update dataverse.account
+# MAGIC set IsPurged = null, PurgedDate = null
+# MAGIC where accountid = 'd6c03ef4-de74-ea11-a811-000d3a4aadc8'
 # MAGIC 
 # MAGIC -- update dataverse.account
 # MAGIC -- set IsDeleted = null, DeletedDate = null
 # MAGIC -- where accountid = '5cbf316c-0ac6-ee11-9079-000d3ab6fbae'
 # MAGIC 
 
+
+# METADATA ********************
+
+# META {
+# META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# MAGIC %%sql
+# MAGIC 
+# MAGIC update dataverse.account
+# MAGIC set IsDeleted = null, DeletedDate = null
+# MAGIC where accountid = '5cbf316c-0ac6-ee11-9079-000d3ab6fbae'
 
 # METADATA ********************
 

@@ -159,7 +159,6 @@ for operation, details in execution_results["operation_results"].items():
             upserted_records += details["rows_processed"]
         elif operation == "DeleteDetection":
             deleted_records += details["rows_deleted"]
-        elif operation == "PurgeDetection":
             purged_records += details["rows_purged"]
     else:
         failed_operations.append({

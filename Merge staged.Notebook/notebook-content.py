@@ -28,7 +28,8 @@
 table_name = "PARAM_NOT_SET_table_name"
 schema_name = "PARAM_NOT_SET_schema_name"
 primary_key_column = "PARAM_NOT_SET_primary_key_column"
-lookback_range = 3
+lookback_range = 1
+staging_lakehouse = "PARAM_NOT_SET_staging_lakehouse"
 
 # METADATA ********************
 
@@ -52,7 +53,7 @@ from datetime import datetime
 try:
     # Build table names
     target_table = f"Master_Bronze.{schema_name}.{table_name}"
-    staging_table = f"dataverse_opendoorsmas_cds2_workspace_org42a53679.dbo.{table_name}"
+    staging_table = f"{staging_lakehouse}.dbo.{table_name}"
 
     print(f"Starting MERGE operation:")
     print(f"- Target table: {target_table}")

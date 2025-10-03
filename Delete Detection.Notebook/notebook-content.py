@@ -28,7 +28,8 @@
 schema_name = "default_schema_name"
 table_name = "default_table_name"
 primary_key = "default_primary_key"
-last_purge_date = "" 
+last_purge_date = ""
+staging_lakehouse = "default_staging_lakehouse"
 
 # METADATA ********************
 
@@ -67,7 +68,7 @@ def purge_aware_delete_detection():
     try:
         # Initialize variables
         target_table = f"Master_Bronze.{schema_name}.{table_name}"
-        staging_table = f"dataverse_opendoorsmas_cds2_workspace_org42a53679.dbo.{table_name}"
+        staging_table = f"{staging_lakehouse}.dbo.{table_name}"
         
         print(f"Starting purge-aware detection for table: {target_table}")
         print(f"Primary key: {primary_key}")
