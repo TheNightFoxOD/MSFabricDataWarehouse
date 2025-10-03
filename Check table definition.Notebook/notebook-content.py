@@ -24,7 +24,6 @@
 
 table_name = "default_table_name"
 schema_name = "default_schema_name"
-sync_enabled = False
 
 # METADATA ********************
 
@@ -37,7 +36,6 @@ sync_enabled = False
 
 # table_name = "account"
 # schema_name = "dataverse"
-# sync_enabled = False
 
 # METADATA ********************
 
@@ -71,38 +69,35 @@ try:
    
     results["table_exists"] = table_exists
    
-    if sync_enabled is True:
-        if not table_exists:
-            # Check if this table requires manual creation
-            if table_name in manual_creation_tables:
-                # ERROR OUT: Table needs manual creation - stop pipeline execution
-                error_msg = f"Table '{table_name}' does not exist and requires manual creation. Please create the table manually before running the pipeline."
-                print(f"ERROR: {error_msg}")
-                raise Exception(error_msg)
-            else:
-                # Table doesn't exist, need to create it AND add tracking columns
-                results["required_actions"].append("CREATE_TABLE")
-                results["required_actions"].append("ADD_TRACKING_COLUMNS")
+    if not table_exists:
+        # Check if this table requires manual creation
+        if table_name in manual_creation_tables:
+            # ERROR OUT: Table needs manual creation - stop pipeline execution
+            error_msg = f"Table '{table_name}' does not exist and requires manual creation. Please create the table manually before running the pipeline."
+            print(f"ERROR: {error_msg}")
+            raise Exception(error_msg)
         else:
-            # Table exists, validate schema
-            results["required_actions"].append("VALIDATE_SCHEMA")        
-            results["required_actions"].append("SYNC_DATA")
-            
-            # Get current schema
-            current_schema = spark.sql(f"DESCRIBE {full_table_name}").collect()
-            results["current_columns"] = [row['col_name'] for row in current_schema if row['col_name'] not in ['', '# Partitioning']]
-        
-            # Check if tracking columns exist
-            tracking_columns = ['IsDeleted', 'IsPurged', 'DeletedDate', 'PurgedDate', 'LastSynced']
-            existing_columns = [col.lower() for col in results["current_columns"]]
-            missing_tracking = [col for col in tracking_columns if col.lower() not in existing_columns]
-        
-            if missing_tracking:
-                results["required_actions"].append("ADD_TRACKING_COLUMNS")
-    
-        print(f"Schema check results: {results}")
+            # Table doesn't exist, need to create it AND add tracking columns
+            results["required_actions"].append("CREATE_TABLE")
+            results["required_actions"].append("ADD_TRACKING_COLUMNS")
     else:
-        print("Sync is not enabled. No required actions.")
+        # Table exists, validate schema
+        results["required_actions"].append("VALIDATE_SCHEMA")        
+        results["required_actions"].append("SYNC_DATA")
+        
+        # Get current schema
+        current_schema = spark.sql(f"DESCRIBE {full_table_name}").collect()
+        results["current_columns"] = [row['col_name'] for row in current_schema if row['col_name'] not in ['', '# Partitioning']]
+    
+        # Check if tracking columns exist
+        tracking_columns = ['IsDeleted', 'IsPurged', 'DeletedDate', 'PurgedDate', 'LastSynced']
+        existing_columns = [col.lower() for col in results["current_columns"]]
+        missing_tracking = [col for col in tracking_columns if col.lower() not in existing_columns]
+    
+        if missing_tracking:
+            results["required_actions"].append("ADD_TRACKING_COLUMNS")
+
+    print(f"Schema check results: {results}")
    
 except Exception as e:
     # If it's our manual creation error, re-raise it to fail the activity

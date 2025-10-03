@@ -1,0 +1,45 @@
+# Fabric notebook source
+
+# METADATA ********************
+
+# META {
+# META   "kernel_info": {
+# META     "name": "synapse_pyspark"
+# META   },
+# META   "dependencies": {
+# META     "lakehouse": {
+# META       "default_lakehouse": "234e6789-2254-455f-b2b2-36d881cb1c17",
+# META       "default_lakehouse_name": "dataverse_opendoorsmas_cds2_workspace_org42a53679",
+# META       "default_lakehouse_workspace_id": "b0f83c07-a701-49bb-a165-e06ca0ee4000",
+# META       "known_lakehouses": [
+# META         {
+# META           "id": "234e6789-2254-455f-b2b2-36d881cb1c17"
+# META         }
+# META       ]
+# META     }
+# META   }
+# META }
+
+# CELL ********************
+
+# MAGIC %%sql
+# MAGIC SHOW TBLPROPERTIES account ('primaryKey');
+
+# METADATA ********************
+
+# META {
+# META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# MAGIC %%sql
+# MAGIC describe od_donation
+
+# METADATA ********************
+
+# META {
+# META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark"
+# META }

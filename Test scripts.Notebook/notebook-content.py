@@ -24,11 +24,15 @@
 
 # MAGIC %%sql
 # MAGIC -- describe table dataverse.account
-# MAGIC select od_groupname, accountid, address1_city, od_startdate, IsDeleted, LastSynced, IsDeleted, IsPurged
+# MAGIC select od_groupname, accountid, address1_line1, IsDeleted, LastSynced, createdon, IsDeleted, DeletedDate, IsPurged, PurgedDate, modifiedon
 # MAGIC  from dataverse.account
 # MAGIC where 1=1
 # MAGIC -- and IsDeleted = true
-# MAGIC and accountid = '08e2aec7-85ac-ea11-a812-000d3aad0b76'
+# MAGIC and (accountid = '0a204a8b-03f0-ee11-904b-000d3a498565' -- address updated
+# MAGIC     or accountid = '9fb628a9-7e0f-ea11-a811-000d3a4aadc8' -- purged
+# MAGIC     or accountid = '1a67afc9-7767-ea11-a811-000d3a4aa1c2' -- purged
+# MAGIC     or accountid = 'e714475a-e9da-ee11-904c-000d3ab6f7f6' -- deleted
+# MAGIC     or accountid = 'e9634737-29a0-f011-b41b-7c1e524e35c2') -- new
 # MAGIC -- order by modifiedon desc 
 
 # METADATA ********************
@@ -45,6 +49,10 @@
 # MAGIC from dataverse.account
 # MAGIC where IsDeleted = true
 # MAGIC and IsPurged = true
+# MAGIC 
+# MAGIC -- update dataverse.account
+# MAGIC -- set IsDeleted = NULL
+# MAGIC -- where IsPurged = true
 
 # METADATA ********************
 
@@ -83,8 +91,10 @@
 
 # MAGIC %%sql
 # MAGIC select * from metadata.pipelineconfig
+# MAGIC where TableName = 'account'
 # MAGIC -- update metadata.pipelineconfig
 # MAGIC -- set LastPurgeDate = '2023-01-01'
+# MAGIC -- where TableName = 'account'    
 
 # METADATA ********************
 

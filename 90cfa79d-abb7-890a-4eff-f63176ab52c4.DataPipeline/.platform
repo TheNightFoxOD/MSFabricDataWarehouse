@@ -2,10 +2,10 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
   "metadata": {
     "type": "DataPipeline",
-    "displayName": "Daily Sync Pipeline_V1"
+    "displayName": "Daily Sync Pipeline"
   },
   "config": {
     "version": "2.0",
-    "logicalId": "f72a7a21-2d62-a047-4f7a-02bccced4bcd"
+    "logicalId": "90cfa79d-abb7-890a-4eff-f63176ab52c4"
   }
 }
