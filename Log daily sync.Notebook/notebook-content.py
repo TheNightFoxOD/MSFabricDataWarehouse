@@ -112,6 +112,7 @@ def parse_exitvalue_success_and_count(exit_value_dict, count_field):
 # Parse results with correct count fields
 upsert_success, upsert_count = parse_exitvalue_success_and_count(upsert_activity, 'upsert_count')  # Changed field name
 delete_success, delete_count = parse_exitvalue_success_and_count(delete_detection, 'deleted_records')
+_, purge_count = parse_exitvalue_success_and_count(delete_detection, 'purged_records')
 
 # Generate timestamps
 end_time = datetime.now(timezone.utc)
@@ -127,7 +128,7 @@ except:
     start_time = end_time
 
 print(f"Upsert: success={upsert_success}, count={upsert_count}")
-print(f"Delete detection: success={delete_success}, count={delete_count}")
+print(f"Delete detection: success={delete_success}, deleted={delete_count}, purged={purge_count}")
 
 # METADATA ********************
 
@@ -182,9 +183,9 @@ if delete_detection:  # Check if activity was attempted (has data)
     if delete_success:
         log_entries.append((
             str(uuid.uuid4()), safe_pipeline_run_id, 'DailySync', safe_full_table_name, 'DeleteDetection',
-            start_time, end_time, 0, delete_count, 0, 'Success', None, 0, end_time
+            start_time, end_time, 0, delete_count, purge_count, 'Success', None, 0, end_time
         ))
-        print(f"Logged successful DeleteDetection: {delete_count} records")
+        print(f"Logged successful DeleteDetection: {delete_count + purge_count} records. deleted={delete_count}, purged={purge_count}")
     else:
         # Activity attempted but failed - extract error message
         error_msg = delete_detection.get('error_message', 'Delete detection operation failed')

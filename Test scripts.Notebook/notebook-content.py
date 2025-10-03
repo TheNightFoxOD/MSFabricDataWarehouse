@@ -44,14 +44,20 @@
 # CELL ********************
 
 # MAGIC %%sql
-# MAGIC SELECT od_groupname, accountid, address1_line1, IsDeleted, LastSynced, createdon, IsDeleted, DeletedDate, IsPurged, PurgedDate, createdon, modifiedon
-# MAGIC from dataverse.account
-# MAGIC where 1=1
-# MAGIC and IsPurged = true
+# MAGIC -- SELECT od_groupname, accountid, address1_line1, IsDeleted, LastSynced, createdon, IsDeleted, DeletedDate, IsPurged, PurgedDate, createdon, modifiedon
+# MAGIC -- from dataverse.account
+# MAGIC -- where 1=1
+# MAGIC -- and IsPurged = true
 # MAGIC 
 # MAGIC -- update dataverse.account
-# MAGIC -- set IsDeleted = NULL
-# MAGIC -- where IsPurged = true
+# MAGIC -- set IsPurged = null, PurgedDate = null
+# MAGIC -- where accountid = 'd6c03ef4-de74-ea11-a811-000d3a4aadc8'
+# MAGIC 
+# MAGIC -- update dataverse.account
+# MAGIC -- set IsDeleted = null, DeletedDate = null
+# MAGIC -- where accountid = '5cbf316c-0ac6-ee11-9079-000d3ab6fbae'
+# MAGIC 
+
 
 # METADATA ********************
 
@@ -64,6 +70,7 @@
 
 # MAGIC %%sql
 # MAGIC select * from metadata.syncauditlog
+# MAGIC -- where RowsDeleted > 0
 # MAGIC order by CreatedDate desc
 
 # METADATA ********************

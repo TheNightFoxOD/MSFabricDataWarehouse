@@ -235,7 +235,8 @@ def purge_aware_delete_detection():
         all_deleted_count = updated_df.filter(col("IsDeleted") == True).count()
         all_purged_count = updated_df.filter(col("IsPurged") == True).count()
         active_count = updated_df.filter(
-            (col("IsDeleted") == False) & (col("IsPurged") == False)
+            (coalesce(col("IsDeleted"), lit(False)) == lit(False)) & 
+            (coalesce(col("IsPurged"), lit(False)) == lit(False))
         ).count()
 
         # validation check
