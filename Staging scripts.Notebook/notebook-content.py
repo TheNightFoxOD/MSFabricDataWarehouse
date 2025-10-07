@@ -9,7 +9,7 @@
 # META   "dependencies": {
 # META     "lakehouse": {
 # META       "default_lakehouse": "234e6789-2254-455f-b2b2-36d881cb1c17",
-# META       "default_lakehouse_name": "dataverse_opendoorsmas_cds2_workspace_org42a53679",
+# META       "default_lakehouse_name": "Dataverse_Master_Staging",
 # META       "default_lakehouse_workspace_id": "b0f83c07-a701-49bb-a165-e06ca0ee4000",
 # META       "known_lakehouses": [
 # META         {
