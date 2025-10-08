@@ -427,33 +427,33 @@ print(f"Found {len(tables)} tables in Master_Bronze.dataverse schema:")
 for i, table in enumerate(tables, 1):
     print(f"  {i}. {table}")
 
-# # COMMAND ----------
+# COMMAND ----------
 
-# # Drop all tables
-# if tables:
-#     print(f"\n🗑️  Dropping {len(tables)} tables...")
-#     for table in tables:
-#         try:
-#             spark.sql(f"DROP TABLE IF EXISTS Master_Bronze.dataverse.{table}")
-#             print(f"✅ Dropped: {table}")
-#         except Exception as e:
-#             print(f"❌ Error dropping {table}: {e}")
+# Drop all tables
+if tables:
+    print(f"\n🗑️  Dropping {len(tables)} tables...")
+    for table in tables:
+        try:
+            spark.sql(f"DROP TABLE IF EXISTS Master_Bronze.dataverse.{table}")
+            print(f"✅ Dropped: {table}")
+        except Exception as e:
+            print(f"❌ Error dropping {table}: {e}")
     
-#     print(f"\n✅ Completed! Dropped {len(tables)} tables from dataverse schema")
-# else:
-#     print("\nℹ️  No tables found in dataverse schema")
+    print(f"\n✅ Completed! Dropped {len(tables)} tables from dataverse schema")
+else:
+    print("\nℹ️  No tables found in dataverse schema")
 
-# # COMMAND ----------
+# COMMAND ----------
 
-# # Verify all tables are gone
-# remaining = spark.sql("SHOW TABLES IN Master_Bronze.dataverse")
-# remaining_count = remaining.count()
+# Verify all tables are gone
+remaining = spark.sql("SHOW TABLES IN Master_Bronze.dataverse")
+remaining_count = remaining.count()
 
-# if remaining_count == 0:
-#     print("✅ Confirmed: All tables successfully dropped from dataverse schema")
-# else:
-#     print(f"⚠️  Warning: {remaining_count} tables still remain:")
-#     remaining.show(truncate=False)
+if remaining_count == 0:
+    print("✅ Confirmed: All tables successfully dropped from dataverse schema")
+else:
+    print(f"⚠️  Warning: {remaining_count} tables still remain:")
+    remaining.show(truncate=False)
 
 # METADATA ********************
 

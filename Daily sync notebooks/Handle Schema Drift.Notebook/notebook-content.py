@@ -29,6 +29,7 @@ table_name = "default_table"
 schema_name = "default_schema"
 pipeline_run_id = "default_run_id"
 pipeline_trigger_time = "2024-01-01T00:00:00Z"
+staging_lakehouse = "default_staging_lakehouse"
 
 # METADATA ********************
 
@@ -40,10 +41,10 @@ pipeline_trigger_time = "2024-01-01T00:00:00Z"
 # CELL ********************
 
 # PARAMETERS CELL
-table_name = "account"
-schema_name = "dataverse"
-pipeline_run_id = "db506216-0b3b-4a34-b414-810480fdf313"
-pipeline_trigger_time = "2024-01-01T00:00:00Z"
+# table_name = "account"
+# schema_name = "dataverse"
+# pipeline_run_id = "db506216-0b3b-4a34-b414-810480fdf313"
+# pipeline_trigger_time = "2024-01-01T00:00:00Z"
 
 # CELL 1 - Main Schema Drift Logic
 import json
@@ -69,7 +70,7 @@ execution_start = datetime.now()
 safe_table_name = table_name.replace("'", "''")
 safe_schema_name = schema_name.replace("'", "''")
 full_table_name = f"{safe_schema_name}.{safe_table_name}"
-staging_table_name = f"Dataverse_Master_Staging.dbo.{safe_table_name}"
+staging_table_name = f"{staging_lakehouse}.dbo.{safe_table_name}"
 safe_pipeline_run_id = pipeline_run_id.replace("'", "''")
 
 try:
@@ -132,21 +133,36 @@ try:
     print(f"\n--- Step 4: Get staging table schema (source of truth) ---")
     staging_schema_raw = spark.sql(f"DESCRIBE {staging_table_name}").collect()
     
+    # Link to Fabric adds system columns
+    # We EXCLUDE from comparison: Id, IsDelete, PartitionId (dropped from Bronze)
+    # We INCLUDE in comparison: SinkCreatedOn, SinkModifiedOn (kept in Bronze)
+    fabric_system_columns_to_exclude = ['id', 'isdelete', 'partitionid']
+    
     staging_columns = {}
+    excluded_count = 0
     for row in staging_schema_raw:
         col_name = row['col_name']
         col_type = row['data_type']
+        col_lower = col_name.lower() if col_name else ''
         
         # Skip metadata rows and rows starting with #
         if not col_name or col_name.startswith('#') or not col_type:
             continue
         
-        staging_columns[col_name.lower()] = {
+        # Exclude only the 3 Fabric columns we drop (Id, IsDelete, PartitionId)
+        if col_lower in fabric_system_columns_to_exclude:
+            excluded_count += 1
+            print(f"  Excluding Fabric system column: {col_name}")
+            continue
+        
+        staging_columns[col_lower] = {
             'name': col_name,
             'type': col_type
         }
     
-    print(f"Staging table has {len(staging_columns)} columns from Dataverse source")
+    print(f"Staging table has {len(staging_columns)} Dataverse business columns")
+    print(f"  (Excluded {excluded_count} Fabric system columns: Id, IsDelete, PartitionId)")
+    print(f"  (Included SinkCreatedOn, SinkModifiedOn as business columns)")
     
     # Step 5: Detect schema drift
     print(f"\n--- Step 5: Detect schema drift ---")
@@ -231,6 +247,7 @@ try:
         StructField("RowsPurged", IntegerType(), True),
         StructField("Status", StringType(), False),
         StructField("ErrorMessage", StringType(), True),
+        StructField("Notes", StringType(), True),
         StructField("RetryCount", IntegerType(), True),
         StructField("CreatedDate", TimestampType(), True)
     ])
@@ -238,7 +255,7 @@ try:
     # Log column additions
     if added_columns:
         col_names = ', '.join([col['name'] for col in added_columns])
-        error_msg = f"Columns added: {col_names}"[:1000]  # Use ErrorMessage field for details
+        note_msg = f"Columns added: {col_names}"[:1000]
         log_entries.append((
             str(uuid.uuid4()),
             safe_pipeline_run_id,
@@ -251,7 +268,8 @@ try:
             0,
             0,
             'Success',
-            error_msg,  # Store details in ErrorMessage (even for success)
+            None,
+            note_msg,
             0,
             execution_end
         ))
@@ -260,7 +278,7 @@ try:
     # Log column drops (informational)
     if dropped_columns:
         col_names = ', '.join([col['name'] for col in dropped_columns])
-        error_msg = f"Columns dropped in source (kept in Bronze): {col_names}"[:1000]
+        note_msg = f"Columns dropped in source (kept in Bronze): {col_names}"[:1000]
         log_entries.append((
             str(uuid.uuid4()),
             safe_pipeline_run_id,
@@ -273,7 +291,8 @@ try:
             0,
             0,
             'Success',
-            error_msg,  # Store details in ErrorMessage (even for success)
+            None,
+            note_msg,
             0,
             execution_end
         ))
@@ -312,6 +331,7 @@ except Exception as e:
             0,
             'Error',
             str(e)[:1000],
+            None,
             0,
             execution_end
         )]
@@ -329,6 +349,7 @@ except Exception as e:
             StructField("RowsPurged", IntegerType(), True),
             StructField("Status", StringType(), False),
             StructField("ErrorMessage", StringType(), True),
+            StructField("Notes", StringType(), True),
             StructField("RetryCount", IntegerType(), True),
             StructField("CreatedDate", TimestampType(), True)
         ])

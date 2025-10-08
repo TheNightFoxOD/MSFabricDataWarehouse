@@ -94,18 +94,24 @@
                     "type": "Copy",
                     "typeProperties": {
                       "source": {
-                        "type": "CommonDataServiceForAppsSource",
+                        "type": "LakehouseTableSource",
                         "datasetSettings": {
-                          "type": "CommonDataServiceForAppsEntity",
+                          "type": "LakehouseTable",
                           "typeProperties": {
-                            "entityName": {
-                              "value": "@item().TableName",
-                              "type": "Expression"
-                            }
+                            "table": "@item().TableName"
                           },
                           "schema": [],
-                          "externalReferences": {
-                            "connection": "47553726-c8ed-444b-a11b-9915574eac39"
+                          "linkedService": {
+                            "name": "Dataverse_Master_Staging",
+                            "properties": {
+                              "type": "Lakehouse",
+                              "typeProperties": {
+                                "artifactId": "81cb1c17-36d8-b2b2-455f-2254234e6789",
+                                "workspaceId": "00000000-0000-0000-0000-000000000000",
+                                "rootFolder": "Tables"
+                              },
+                              "annotations": []
+                            }
                           },
                           "annotations": []
                         }
@@ -140,6 +146,14 @@
                             }
                           },
                           "annotations": []
+                        }
+                      },
+                      "translator": {
+                        "type": "TabularTranslator",
+                        "typeConversion": true,
+                        "typeConversionSettings": {
+                          "allowDataTruncation": true,
+                          "treatBooleanAsNumber": false
                         }
                       },
                       "enableStaging": false
@@ -187,7 +201,7 @@
                     "name": "Optimize on create",
                     "dependsOn": [
                       {
-                        "activity": "Create New Table",
+                        "activity": "Drop Fabric System Columns",
                         "dependencyConditions": [
                           "Succeeded"
                         ]
@@ -255,6 +269,53 @@
                     "dependsOn": [
                       {
                         "activity": "Optimize on create",
+                        "dependencyConditions": [
+                          "Succeeded"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "TridentNotebook",
+                    "typeProperties": {
+                      "notebookId": "a38d840c-c592-a198-4cd2-526567185e0f",
+                      "workspaceId": "00000000-0000-0000-0000-000000000000",
+                      "parameters": {
+                        "schema_name": {
+                          "value": {
+                            "value": "@{item().SchemaName}",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        },
+                        "table_name": {
+                          "value": {
+                            "value": "@{item().TableName}",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        },
+                        "pipeline_run_id": {
+                          "value": "@{pipeline().RunId}",
+                          "type": "string"
+                        },
+                        "pipeline_trigger_time": {
+                          "value": "@{pipeline().TriggerTime}",
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "policy": {
+                      "timeout": "0.12:00:00",
+                      "retry": 0,
+                      "retryIntervalInSeconds": 30,
+                      "secureInput": false,
+                      "secureOutput": false
+                    },
+                    "name": "Drop Fabric System Columns",
+                    "dependsOn": [
+                      {
+                        "activity": "Create New Table",
                         "dependencyConditions": [
                           "Succeeded"
                         ]
@@ -426,6 +487,10 @@
                         },
                         "pipeline_trigger_time": {
                           "value": "@{pipeline().TriggerTime}",
+                          "type": "string"
+                        },
+                        "staging_lakehouse": {
+                          "value": "@pipeline().parameters.staging_lakehouse",
                           "type": "string"
                         }
                       }

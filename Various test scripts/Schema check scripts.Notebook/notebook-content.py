@@ -26,7 +26,7 @@
 # CELL ********************
 
 # MAGIC %%sql
-# MAGIC describe TABLE Dataverse_Master_Staging.od_donation
+# MAGIC describe TABLE Dataverse_Master_Staging.account
 
 
 # METADATA ********************
@@ -39,7 +39,24 @@
 # CELL ********************
 
 # MAGIC %%sql
-# MAGIC describe TABLE  Master_Bronze.dataverse.od_donation
+# MAGIC describe TABLE  Master_Bronze.dataverse.account
+
+# METADATA ********************
+
+# META {
+# META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# MAGIC %%sql
+# MAGIC SELECT *
+# MAGIC FROM metadata.syncauditlog 
+# MAGIC WHERE 1=1
+# MAGIC -- AND PipelineRunId = 'e13e5a80-cba7-4305-8002-c923f1ca61ef' 
+# MAGIC   -- AND TableName = 'dataverse.account'
+# MAGIC ORDER BY CreatedDate DESC
 
 # METADATA ********************
 
@@ -57,5 +74,67 @@
 
 # META {
 # META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark",
+# META   "frozen": true,
+# META   "editable": false
+# META }
+
+# CELL ********************
+
+# MAGIC %%sql
+# MAGIC select od_groupname, od_temp1, od_temp2 from dataverse.account
+# MAGIC where 1=1
+# MAGIC -- and od_groupname = 'Test Group'
+# MAGIC and (od_temp1 <> '' or od_temp2 <> '')
+
+# METADATA ********************
+
+# META {
+# META   "language": "sparksql",
 # META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# MAGIC %%sql
+# MAGIC UPDATE metadata.pipelineconfig
+# MAGIC SET SyncEnabled = true
+# MAGIC where 1=1
+# MAGIC and (TableName = 'account' or TableName = 'od_donation')
+
+# METADATA ********************
+
+# META {
+# META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark",
+# META   "frozen": true,
+# META   "editable": false
+# META }
+
+# CELL ********************
+
+# MAGIC %%sql
+# MAGIC select * from metadata.pipelineconfig
+# MAGIC where SyncEnabled = true
+
+# METADATA ********************
+
+# META {
+# META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# MAGIC %%sql
+# MAGIC drop table Master_Bronze.dataverse.account
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark",
+# META   "frozen": true,
+# META   "editable": false
 # META }

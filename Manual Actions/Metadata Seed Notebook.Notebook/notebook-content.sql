@@ -629,6 +629,7 @@ select count(*) from dbo.entity_definitions
 -- MAGIC     RowsPurged INT,
 -- MAGIC     Status STRING NOT NULL,
 -- MAGIC     ErrorMessage STRING,
+-- MAGIC     Notes STRING,
 -- MAGIC     RetryCount INT NOT NULL,
 -- MAGIC     CreatedDate TIMESTAMP NOT NULL
 -- MAGIC ) USING DELTA

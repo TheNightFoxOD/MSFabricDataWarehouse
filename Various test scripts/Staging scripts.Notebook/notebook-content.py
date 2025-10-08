@@ -35,7 +35,22 @@
 # CELL ********************
 
 # MAGIC %%sql
-# MAGIC describe od_donation
+# MAGIC describe account
+
+# METADATA ********************
+
+# META {
+# META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# MAGIC %%sql
+# MAGIC select od_groupname, od_temp1, od_temp2 from account
+# MAGIC where 1=1
+# MAGIC -- and od_groupname = 'Test Group'
+# MAGIC and (od_temp1 <> '' or od_temp2 <> '')
 
 # METADATA ********************
 
