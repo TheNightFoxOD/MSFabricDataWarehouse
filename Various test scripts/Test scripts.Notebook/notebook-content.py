@@ -85,7 +85,9 @@
 
 # MAGIC %%sql
 # MAGIC select * from metadata.syncauditlog
-# MAGIC -- where RowsDeleted > 0
+# MAGIC where 1=1
+# MAGIC     and Operation = 'CreateTable'
+# MAGIC     and TableName = 'dataverse.account'
 # MAGIC order by CreatedDate desc
 
 # METADATA ********************
@@ -133,6 +135,20 @@
 # MAGIC --    'delta.columnMapping.mode' = 'name',
 # MAGIC --    'delta.minReaderVersion' = '2',
 # MAGIC --    'delta.minWriterVersion' = '5')
+
+# METADATA ********************
+
+# META {
+# META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark",
+# META   "frozen": true,
+# META   "editable": false
+# META }
+
+# CELL ********************
+
+# MAGIC %%sql
+# MAGIC describe table dataverse.od_donation
 
 # METADATA ********************
 

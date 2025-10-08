@@ -14,9 +14,6 @@
 # META       "known_lakehouses": [
 # META         {
 # META           "id": "4aee8a32-be91-489f-89f3-1a819b188807"
-# META         },
-# META         {
-# META           "id": "234e6789-2254-455f-b2b2-36d881cb1c17"
 # META         }
 # META       ]
 # META     }
@@ -26,32 +23,23 @@
 # CELL ********************
 
 # MAGIC %%sql
-# MAGIC describe TABLE Dataverse_Master_Staging.od_donation
+# MAGIC SELECT 
+# MAGIC     TableName,
+# MAGIC     Operation,
+# MAGIC     Status,
+# MAGIC     DATEDIFF(minute, StartTime, EndTime) as DurationMinutes,
+# MAGIC     RowsProcessed,
+# MAGIC     RowsDeleted,
+# MAGIC     StartTime,
+# MAGIC     EndTime
+# MAGIC FROM metadata.SyncAuditLog
+# MAGIC WHERE PipelineRunId = (
+# MAGIC     SELECT TOP 1 PipelineRunId 
+# MAGIC     FROM metadata.SyncAuditLog 
+# MAGIC     ORDER BY CreatedDate DESC
+# MAGIC )
+# MAGIC ORDER BY StartTime
 
-
-# METADATA ********************
-
-# META {
-# META   "language": "sparksql",
-# META   "language_group": "synapse_pyspark"
-# META }
-
-# CELL ********************
-
-# MAGIC %%sql
-# MAGIC describe TABLE  Master_Bronze.dataverse.od_donation
-
-# METADATA ********************
-
-# META {
-# META   "language": "sparksql",
-# META   "language_group": "synapse_pyspark"
-# META }
-
-# CELL ********************
-
-# MAGIC %%sql
-# MAGIC select * from metadata.entity_definitions
 
 # METADATA ********************
 

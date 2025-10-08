@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "KQLDashboard",
+    "displayName": "Engagement Master Performance Monitoring Dashboard",
+    "description": "Engagement Master Performance Monitoring Dashboard"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "e0e3ffb8-4305-af60-4a23-65970b19b95e"
+  }
+}

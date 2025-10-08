@@ -400,8 +400,35 @@
                   {
                     "type": "TridentNotebook",
                     "typeProperties": {
-                      "notebookId": "8765d33d-4dc2-4f88-8437-08a4c9f72bb5",
-                      "workspaceId": "b0f83c07-a701-49bb-a165-e06ca0ee4000"
+                      "notebookId": "c9f72bb5-08a4-8437-4f88-4dc28765d33d",
+                      "workspaceId": "00000000-0000-0000-0000-000000000000",
+                      "parameters": {
+                        "schema_name": {
+                          "value": {
+                            "value": "@{item().SchemaName}",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        },
+                        "table_name": {
+                          "value": {
+                            "value": "@{item().TableName}",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        },
+                        "pipeline_run_id": {
+                          "value": {
+                            "value": "@{pipeline().RunId}",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        },
+                        "pipeline_trigger_time": {
+                          "value": "@{pipeline().TriggerTime}",
+                          "type": "string"
+                        }
+                      }
                     },
                     "policy": {
                       "timeout": "0.12:00:00",
@@ -411,16 +438,12 @@
                       "secureOutput": false
                     },
                     "name": "Handle Schema Drift",
-                    "state": "Inactive",
-                    "onInactiveMarkAs": "Succeeded",
                     "dependsOn": []
                   }
                 ],
                 "ifFalseActivities": []
               },
               "name": "Needs schema validation",
-              "state": "Inactive",
-              "onInactiveMarkAs": "Succeeded",
               "dependsOn": [
                 {
                   "activity": "Needs Tracking Columns",
