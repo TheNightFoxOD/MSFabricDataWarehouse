@@ -127,7 +127,7 @@
 # CELL ********************
 
 # MAGIC %%sql
-# MAGIC drop table Master_Bronze.dataverse.account
+# MAGIC drop table Master_Bronze.dataverse.od_donation
 
 
 # METADATA ********************

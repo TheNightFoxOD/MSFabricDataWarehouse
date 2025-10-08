@@ -152,6 +152,7 @@ sync_audit_schema = StructType([
     StructField("RowsPurged", IntegerType(), True),
     StructField("Status", StringType(), False),
     StructField("ErrorMessage", StringType(), True),
+    StructField("Notes", StringType(), True),
     StructField("RetryCount", IntegerType(), False),
     StructField("CreatedDate", TimestampType(), False)
 ])
@@ -166,7 +167,7 @@ if upsert_activity:  # Check if activity was attempted (has data)
     if upsert_success:
         log_entries.append((
             str(uuid.uuid4()), safe_pipeline_run_id, 'DailySync', safe_full_table_name, 'DataSync',
-            start_time, end_time, upsert_count, 0, 0, 'Success', None, 0, end_time
+            start_time, end_time, upsert_count, 0, 0, 'Success', None, None, 0, end_time
         ))
         print(f"Logged successful DataSync: {upsert_count} records")
     else:
@@ -174,29 +175,44 @@ if upsert_activity:  # Check if activity was attempted (has data)
         error_msg = upsert_activity.get('error_message', 'DataSync operation failed')
         log_entries.append((
             str(uuid.uuid4()), safe_pipeline_run_id, 'DailySync', safe_full_table_name, 'DataSync',
-            start_time, end_time, 0, 0, 0, 'Error', error_msg, 0, end_time
+            start_time, end_time, 0, 0, 0, 'Error', error_msg, None, 0, end_time
         ))
         print(f"Logged failed DataSync: {error_msg}")
 
 # 2. Delete Detection entry - Log both success and failure  
 if delete_detection:  # Check if activity was attempted (has data)
     if delete_success:
+        # Determine which detection mode was used
+        # Check if purge logic was applied (purge_count > 0 OR purge_date configured)
+        purge_date_value = delete_detection.get('purge_date')
+        
+        if purge_count > 0 or purge_date_value:
+            # Purge-aware detection was applied
+            if purge_date_value:
+                note_msg = f"Purge-aware detection applied (cutoff: {purge_date_value})"
+            else:
+                note_msg = "Purge-aware detection applied (cutoff: configured date)"
+        else:
+            # Standard delete detection (no purge date configured)
+            note_msg = "Standard delete detection applied"
+        
         log_entries.append((
             str(uuid.uuid4()), safe_pipeline_run_id, 'DailySync', safe_full_table_name, 'DeleteDetection',
-            start_time, end_time, 0, delete_count, purge_count, 'Success', None, 0, end_time
+            start_time, end_time, 0, delete_count, purge_count, 'Success', None, note_msg, 0, end_time
         ))
-        print(f"Logged successful DeleteDetection: {delete_count + purge_count} records. deleted={delete_count}, purged={purge_count}")
-    else:
-        # Activity attempted but failed - extract error message
-        error_msg = delete_detection.get('error_message', 'Delete detection operation failed')
+        print(f"Added DeleteDetection log entry with notes: {note_msg}")
+        print(f"  RowsDeleted={delete_count}, RowsPurged={purge_count}")
+    elif delete_detection:
+        # DeleteDetection attempted but failed
+        error_msg = delete_detection.get('error_message', 'Delete detection failed')
         log_entries.append((
             str(uuid.uuid4()), safe_pipeline_run_id, 'DailySync', safe_full_table_name, 'DeleteDetection',
-            start_time, end_time, 0, 0, 0, 'Error', error_msg, 0, end_time
+            start_time, end_time, 0, 0, 0, 'Error', error_msg, None, 0, end_time
         ))
-        print(f"Logged failed DeleteDetection: {error_msg}")
+        print(f"Added DeleteDetection error entry")
 
 # 3. Handle case where no activities were attempted due to parameter issues
-if not upsert_activity and not delete_activity:
+if not upsert_activity and not delete_detection:
     log_entries.append((
         str(uuid.uuid4()), safe_pipeline_run_id, 'DailySync', safe_full_table_name, 'DailySyncAttempt',
         start_time, end_time, 0, 0, 0, 'Error', 

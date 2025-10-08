@@ -153,6 +153,7 @@ sync_audit_schema = StructType([
     StructField("RowsPurged", IntegerType(), True),
     StructField("Status", StringType(), False),
     StructField("ErrorMessage", StringType(), True),
+    StructField("Notes", StringType(), True),
     StructField("RetryCount", IntegerType(), False),
     StructField("CreatedDate", TimestampType(), False)
 ])
@@ -163,26 +164,34 @@ safe_full_table_name = full_table_name if not "PARAM_NOT_SET" in full_table_name
 log_entries = []
 
 # 1. Schema Check entry - Log both success and failure
-if schema_check:  # Check if activity was attempted (has data)
+if schema_check:
     schema_error_msg = schema_check.get('error_message')
     if schema_error_msg:
+        # Error scenario - no Notes, use ErrorMessage
         log_entries.append((
             str(uuid.uuid4()), safe_pipeline_run_id, 'DailySync', safe_full_table_name, 'SchemaCheck',
-            start_time, end_time, 0, 0, 0, 'Error', schema_error_msg, 0, end_time
+            start_time, end_time, 0, 0, 0, 'Error', schema_error_msg, None, 0, end_time
         ))
         print(f"Logged failed SchemaCheck: {schema_error_msg}")
     else:
+        # Success - capture what schema check determined
+        required_actions = schema_check.get('required_actions', [])
+        if required_actions:
+            note_msg = f"Required actions: {', '.join(required_actions)}"
+        else:
+            note_msg = "No actions required"
+        
         log_entries.append((
             str(uuid.uuid4()), safe_pipeline_run_id, 'DailySync', safe_full_table_name, 'SchemaCheck',
-            start_time, end_time, 0, 0, 0, 'Success', None, 0, end_time
+            start_time, end_time, 0, 0, 0, 'Success', None, note_msg, 0, end_time
         ))
-        print(f"Logged successful SchemaCheck")
+        print(f"Logged successful SchemaCheck with notes: {note_msg}")
 else:
     # Schema check not attempted due to parameter issues
     log_entries.append((
         str(uuid.uuid4()), safe_pipeline_run_id, 'DailySync', safe_full_table_name, 'SchemaCheck',
         start_time, end_time, 0, 0, 0, 'Error', 
-        'Schema check could not be parsed from input parameters', 0, end_time
+        'Schema check could not be parsed from input parameters', None, None, 0, end_time
     ))
     print("Logged schema check failure due to parameter parsing issues")
 
@@ -192,14 +201,14 @@ if table_creation:  # Check if activity was attempted (has data)
         # Log successful table creation
         log_entries.append((
             str(uuid.uuid4()), safe_pipeline_run_id, 'DailySync', safe_full_table_name, 'CreateTable',
-            start_time, end_time, table_creation_count, 0, 0, 'Success', None, 0, end_time
+            start_time, end_time, table_creation_count, 0, 0, 'Success', None, None, 0, end_time
         ))
         print(f"Logged successful CreateTable: {table_creation_count} records")
         
         # Log successful initial sync (same operation, different log entry)
         log_entries.append((
             str(uuid.uuid4()), safe_pipeline_run_id, 'DailySync', safe_full_table_name, 'InitialSync',
-            start_time, end_time, table_creation_count, 0, 0, 'Success', None, 0, end_time
+            start_time, end_time, table_creation_count, 0, 0, 'Success', None, None, 0, end_time
         ))
         print(f"Logged successful InitialSync: {table_creation_count} records")
     else:
@@ -210,7 +219,7 @@ if table_creation:  # Check if activity was attempted (has data)
         
         log_entries.append((
             str(uuid.uuid4()), safe_pipeline_run_id, 'DailySync', safe_full_table_name, 'CreateTable',
-            start_time, end_time, 0, 0, 0, 'Error', str(error_msg), 0, end_time
+            start_time, end_time, 0, 0, 0, 'Error', str(error_msg), None, 0, end_time
         ))
         print(f"Logged failed CreateTable: {error_msg}")
 else:
@@ -218,7 +227,7 @@ else:
     log_entries.append((
         str(uuid.uuid4()), safe_pipeline_run_id, 'DailySync', safe_full_table_name, 'CreateTable',
         start_time, end_time, 0, 0, 0, 'Error', 
-        'Table creation activity could not be parsed from input parameters', 0, end_time
+        'Table creation activity could not be parsed from input parameters', None, 0, end_time
     ))
     print("Logged table creation failure due to parameter parsing issues")
 
