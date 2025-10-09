@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
   "metadata": {
     "type": "Notebook",
-    "displayName": "Data Sync scripts",
+    "displayName": "Tables seed",
     "description": "New notebook"
   },
   "config": {
     "version": "2.0",
-    "logicalId": "705326bf-24d4-be83-4a9f-907a377e9d06"
+    "logicalId": "03cf7c70-5198-a4d8-4c4d-921aaaf402fd"
   }
 }

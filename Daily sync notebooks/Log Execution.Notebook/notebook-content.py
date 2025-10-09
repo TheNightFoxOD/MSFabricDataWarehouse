@@ -76,10 +76,10 @@ print(f"Pipeline Run ID: {pipeline_run_id}")
 # Query what operations were logged for this table/pipeline run
 try:
     query = f"""
-    SELECT Operation, Status, RowsProcessed, RowsDeleted, RowsPurged, StartTime, EndTime, ErrorMessage
+    SELECT Operation, Status, RowsProcessed, RowsDeleted, RowsPurged, StartTime, EndTime, ErrorMessage, Notes
     FROM metadata.SyncAuditLog 
     WHERE PipelineRunId = '{pipeline_run_id}' 
-      AND TableName = '{full_table_name}'
+    AND TableName = '{full_table_name}'
     ORDER BY CreatedDate
     """
     
@@ -91,6 +91,7 @@ try:
         operation = row['Operation']
         status = row['Status']
         error_msg = row['ErrorMessage']
+        notes = row['Notes']
         
         # Track operation results
         execution_results["operation_results"][operation] = {
@@ -98,16 +99,20 @@ try:
             "rows_processed": row['RowsProcessed'] or 0,
             "rows_deleted": row['RowsDeleted'] or 0,
             "rows_purged": row['RowsPurged'] or 0,
-            "error_message": error_msg
+            "error_message": error_msg,
+            "notes": row['Notes']
         }
         
         if status == "Success":
-            print(f"✅ {operation}: SUCCESS (Processed: {row['RowsProcessed']}, Deleted: {row['RowsDeleted']}, Purged: {row['RowsPurged']})")
+            # Always show both counters and notes for all operations
+            notes_display = f" - {notes}" if notes else ""
+            print(f"✅ {operation}: SUCCESS (Processed: {row['RowsProcessed']}, Deleted: {row['RowsDeleted']}, Purged: {row['RowsPurged']}){notes_display}")
         elif status == "Error":
             print(f"❌ {operation}: FAILED - {error_msg}")
             execution_results["errors"].append(f"{operation} failed: {error_msg}")
         else:
-            print(f"⚠️  {operation}: {status} (Processed: {row['RowsProcessed']}, Deleted: {row['RowsDeleted']}, Purged: {row['RowsPurged']})")
+            notes_display = f" - {notes}" if notes else ""
+            print(f"⚠️  {operation}: {status} (Processed: {row['RowsProcessed']}, Deleted: {row['RowsDeleted']}, Purged: {row['RowsPurged']}){notes_display}")
             
 except Exception as e:
     execution_results["errors"].append(f"Error querying logged operations: {str(e)}")
@@ -167,7 +172,7 @@ for operation, details in execution_results["operation_results"].items():
         })
 
 # Determine overall status based on critical vs non-critical failures
-critical_operations = ["CreateTable", "DataSync"]  # These are essential for sync
+critical_operations = ["CreateTable", "DataSync", "ColumnAddition", "ColumnDrop"]  # These are essential for sync
 critical_failures = [op for op in failed_operations if op["operation"] in critical_operations]
 
 if not log_results:

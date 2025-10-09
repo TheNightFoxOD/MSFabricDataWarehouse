@@ -1742,6 +1742,32 @@
     }
   },
   {
+    "name": "od_temp2",
+    "path": "/Tables",
+    "target": {
+      "type": "Dataverse",
+      "dataverse": {
+        "connectionId": "47553726-c8ed-444b-a11b-9915574eac39",
+        "deltaLakeFolder": "https://aeth7469c0784b69435e8e14.dfs.core.windows.net/aeth-f074e45b-a5f9-4f10-9adb-d7e2e6f35a8f/CDS2/deltalake",
+        "environmentDomain": "https://od-master.crm4.dynamics.com",
+        "tableName": "od_temp2_partitioned"
+      }
+    }
+  },
+  {
+    "name": "od_temp1",
+    "path": "/Tables",
+    "target": {
+      "type": "Dataverse",
+      "dataverse": {
+        "connectionId": "47553726-c8ed-444b-a11b-9915574eac39",
+        "deltaLakeFolder": "https://aeth7469c0784b69435e8e14.dfs.core.windows.net/aeth-f074e45b-a5f9-4f10-9adb-d7e2e6f35a8f/CDS2/deltalake",
+        "environmentDomain": "https://od-master.crm4.dynamics.com",
+        "tableName": "od_temp1_partitioned"
+      }
+    }
+  },
+  {
     "name": "od_taxdeductibility",
     "path": "/Tables",
     "target": {

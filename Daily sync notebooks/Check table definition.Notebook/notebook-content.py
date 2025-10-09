@@ -82,8 +82,7 @@ try:
             results["required_actions"].append("ADD_TRACKING_COLUMNS")
     else:
         # Table exists, validate schema
-        results["required_actions"].append("VALIDATE_SCHEMA")        
-        results["required_actions"].append("SYNC_DATA")
+        results["required_actions"].append("SYNC")
         
         # Get current schema
         current_schema = spark.sql(f"DESCRIBE {full_table_name}").collect()

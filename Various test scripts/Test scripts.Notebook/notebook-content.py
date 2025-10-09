@@ -30,8 +30,8 @@
 # MAGIC -- and IsDeleted = true
 # MAGIC and (accountid = '0a204a8b-03f0-ee11-904b-000d3a498565' -- address updated
 # MAGIC     or accountid = 'd6c03ef4-de74-ea11-a811-000d3a4aadc8' -- purged
-# MAGIC     or accountid = '5cbf316c-0ac6-ee11-9079-000d3ab6fbae' -- deleted
-# MAGIC     or accountid = '33f235ee-4fa0-f011-bbd3-6045bd9b7cb3') -- new
+# MAGIC     or accountid = 'e4ac267e-2a40-ef11-8409-000d3a4c66d5' -- deleted
+# MAGIC     or accountid = '23d25b45-5ba4-f011-bbd2-000d3a27f8e4') -- new
 # MAGIC -- order by modifiedon desc 
 
 # METADATA ********************
@@ -49,13 +49,13 @@
 # MAGIC -- where 1=1
 # MAGIC -- and IsPurged = true
 # MAGIC 
-# MAGIC update dataverse.account
-# MAGIC set IsPurged = null, PurgedDate = null
-# MAGIC where accountid = 'd6c03ef4-de74-ea11-a811-000d3a4aadc8'
-# MAGIC 
 # MAGIC -- update dataverse.account
-# MAGIC -- set IsDeleted = null, DeletedDate = null
-# MAGIC -- where accountid = '5cbf316c-0ac6-ee11-9079-000d3ab6fbae'
+# MAGIC -- set IsPurged = null, PurgedDate = null
+# MAGIC -- where accountid = 'd6c03ef4-de74-ea11-a811-000d3a4aadc8'
+# MAGIC 
+# MAGIC update dataverse.account
+# MAGIC set address1_line1 = 'None'
+# MAGIC where accountid = '0a204a8b-03f0-ee11-904b-000d3a498565'
 # MAGIC 
 
 
@@ -72,7 +72,7 @@
 # MAGIC 
 # MAGIC update dataverse.account
 # MAGIC set IsDeleted = null, DeletedDate = null
-# MAGIC where accountid = '5cbf316c-0ac6-ee11-9079-000d3ab6fbae'
+# MAGIC where accountid = 'e4ac267e-2a40-ef11-8409-000d3a4c66d5'
 
 # METADATA ********************
 

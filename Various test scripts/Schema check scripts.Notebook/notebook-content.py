@@ -56,6 +56,7 @@
 # MAGIC WHERE 1=1
 # MAGIC -- AND PipelineRunId = 'e13e5a80-cba7-4305-8002-c923f1ca61ef' 
 # MAGIC   -- AND TableName = 'dataverse.account'
+# MAGIC     -- and Operation = 'ColumnDrop'
 # MAGIC ORDER BY CreatedDate DESC
 
 # METADATA ********************
@@ -116,6 +117,18 @@
 # MAGIC %%sql
 # MAGIC select * from metadata.pipelineconfig
 # MAGIC where SyncEnabled = true
+
+# METADATA ********************
+
+# META {
+# META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# MAGIC %%sql
+# MAGIC SHOW TABLES IN dataverse LIKE 'od_donation';
 
 # METADATA ********************
 

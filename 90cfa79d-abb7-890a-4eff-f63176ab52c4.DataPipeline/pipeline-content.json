@@ -39,7 +39,14 @@
         },
         "name": "Get Enabled Tables",
         "description": "- Source: PipelineConfig metadata table\n- Returns: Array of tables to process\n- Includes: LastPurgeDate for each table",
-        "dependsOn": []
+        "dependsOn": [
+          {
+            "activity": "Tables seed",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
       },
       {
         "type": "ForEach",
@@ -440,7 +447,7 @@
                 ],
                 "ifFalseActivities": []
               },
-              "name": "Needs Tracking Columns",
+              "name": "Table Needs Tracking Columns",
               "dependsOn": [
                 {
                   "activity": "Table needs to be created",
@@ -454,75 +461,7 @@
               "type": "IfCondition",
               "typeProperties": {
                 "expression": {
-                  "value": "@contains(json(activity('Check table definition').output.result.exitValue).required_actions, 'VALIDATE_SCHEMA')",
-                  "type": "Expression"
-                },
-                "ifTrueActivities": [
-                  {
-                    "type": "TridentNotebook",
-                    "typeProperties": {
-                      "notebookId": "c9f72bb5-08a4-8437-4f88-4dc28765d33d",
-                      "workspaceId": "00000000-0000-0000-0000-000000000000",
-                      "parameters": {
-                        "schema_name": {
-                          "value": {
-                            "value": "@{item().SchemaName}",
-                            "type": "Expression"
-                          },
-                          "type": "string"
-                        },
-                        "table_name": {
-                          "value": {
-                            "value": "@{item().TableName}",
-                            "type": "Expression"
-                          },
-                          "type": "string"
-                        },
-                        "pipeline_run_id": {
-                          "value": {
-                            "value": "@{pipeline().RunId}",
-                            "type": "Expression"
-                          },
-                          "type": "string"
-                        },
-                        "pipeline_trigger_time": {
-                          "value": "@{pipeline().TriggerTime}",
-                          "type": "string"
-                        },
-                        "staging_lakehouse": {
-                          "value": "@pipeline().parameters.staging_lakehouse",
-                          "type": "string"
-                        }
-                      }
-                    },
-                    "policy": {
-                      "timeout": "0.12:00:00",
-                      "retry": 0,
-                      "retryIntervalInSeconds": 30,
-                      "secureInput": false,
-                      "secureOutput": false
-                    },
-                    "name": "Handle Schema Drift",
-                    "dependsOn": []
-                  }
-                ],
-                "ifFalseActivities": []
-              },
-              "name": "Needs schema validation",
-              "dependsOn": [
-                {
-                  "activity": "Needs Tracking Columns",
-                  "dependencyConditions": [
-                    "Succeeded"
-                  ]
-                }
-              ]
-            },
-            {
-              "type": "IfCondition",
-              "typeProperties": {
-                "expression": {
-                  "value": "@contains(json(activity('Check table definition').output.result.exitValue).required_actions, 'SYNC_DATA')",
+                  "value": "@contains(json(activity('Check table definition').output.result.exitValue).required_actions, 'SYNC')",
                   "type": "Expression"
                 },
                 "ifTrueActivities": [
@@ -577,7 +516,14 @@
                       "secureOutput": false
                     },
                     "name": "Merge staged",
-                    "dependsOn": []
+                    "dependsOn": [
+                      {
+                        "activity": "Handle Schema Drift",
+                        "dependencyConditions": [
+                          "Succeeded"
+                        ]
+                      }
+                    ]
                   },
                   {
                     "type": "TridentNotebook",
@@ -705,14 +651,61 @@
                         ]
                       }
                     ]
+                  },
+                  {
+                    "type": "TridentNotebook",
+                    "typeProperties": {
+                      "notebookId": "c9f72bb5-08a4-8437-4f88-4dc28765d33d",
+                      "workspaceId": "00000000-0000-0000-0000-000000000000",
+                      "parameters": {
+                        "schema_name": {
+                          "value": {
+                            "value": "@{item().SchemaName}",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        },
+                        "table_name": {
+                          "value": {
+                            "value": "@{item().TableName}",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        },
+                        "pipeline_run_id": {
+                          "value": {
+                            "value": "@{pipeline().RunId}",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        },
+                        "pipeline_trigger_time": {
+                          "value": "@{pipeline().TriggerTime}",
+                          "type": "string"
+                        },
+                        "staging_lakehouse": {
+                          "value": "@pipeline().parameters.staging_lakehouse",
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "policy": {
+                      "timeout": "0.12:00:00",
+                      "retry": 0,
+                      "retryIntervalInSeconds": 30,
+                      "secureInput": false,
+                      "secureOutput": false
+                    },
+                    "name": "Handle Schema Drift",
+                    "dependsOn": []
                   }
                 ],
                 "ifFalseActivities": []
               },
-              "name": "Table needs daily sync",
+              "name": "Table needs sync",
               "dependsOn": [
                 {
-                  "activity": "Needs schema validation",
+                  "activity": "Table Needs Tracking Columns",
                   "dependencyConditions": [
                     "Succeeded"
                   ]
@@ -765,7 +758,7 @@
               "name": "Log Execution",
               "dependsOn": [
                 {
-                  "activity": "Table needs daily sync",
+                  "activity": "Table needs sync",
                   "dependencyConditions": [
                     "Succeeded"
                   ]
@@ -805,6 +798,60 @@
             ]
           }
         ]
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "03cf7c70-5198-a4d8-4c4d-921aaaf402fd",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "BRONZE_LAKEHOUSE": {
+              "value": {
+                "value": "@pipeline().parameters.bronze_lakehouse",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "STAGING_LAKEHOUSE": {
+              "value": "@pipeline().parameters.staging_lakehouse",
+              "type": "string"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Tables seed",
+        "dependsOn": [
+          {
+            "activity": "Fetch entity definitions from Dataverse",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "RefreshDataflow",
+        "typeProperties": {
+          "dataflowId": "49e6fcc9-712c-96ee-48d1-8babd51e522b",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "notifyOption": "NoNotification",
+          "dataflowType": "DataflowFabric"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Fetch entity definitions from Dataverse",
+        "dependsOn": []
       }
     ],
     "parameters": {
@@ -815,6 +862,10 @@
       "staging_lakehouse": {
         "type": "string",
         "defaultValue": "Dataverse_Master_Staging"
+      },
+      "bronze_lakehouse": {
+        "type": "string",
+        "defaultValue": "Master_Bronze"
       }
     },
     "variables": {
