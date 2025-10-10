@@ -99,17 +99,17 @@
 
 # MAGIC %%sql
 # MAGIC UPDATE metadata.pipelineconfig
-# MAGIC SET SyncEnabled = true
+# MAGIC SET SyncEnabled = false
 # MAGIC where 1=1
-# MAGIC and (TableName = 'account' or TableName = 'od_donation')
+# MAGIC and not (TableName = 'account' or TableName = 'od_donation')
 
 # METADATA ********************
 
 # META {
 # META   "language": "sparksql",
 # META   "language_group": "synapse_pyspark",
-# META   "frozen": true,
-# META   "editable": false
+# META   "frozen": false,
+# META   "editable": true
 # META }
 
 # CELL ********************

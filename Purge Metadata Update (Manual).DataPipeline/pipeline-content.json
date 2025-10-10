@@ -1,5 +1,111 @@
 {
   "properties": {
-    "activities": []
+    "activities": [
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "36ac7ebe-0adc-b065-4b02-f59f91fbdbee",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "table_names": {
+              "value": {
+                "value": "@join(pipeline().parameters.TableNames, ',')",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "purge_date": {
+              "value": {
+                "value": "@pipeline().parameters.PurgeDate",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "pipeline_run_id": {
+              "value": {
+                "value": "@pipeline().RunId",
+                "type": "Expression"
+              },
+              "type": "string"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Validate Purge Parameters",
+        "dependsOn": []
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "9f25e810-720c-8d46-4857-5e74e37ed306",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "table_names": {
+              "value": {
+                "value": "@join(pipeline().parameters.TableNames, ',')",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "purge_date": {
+              "value": {
+                "value": "@pipeline().parameters.PurgeDate",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "pipeline_run_id": {
+              "value": {
+                "value": "@pipeline().RunId",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "validation_result": {
+              "value": {
+                "value": "@activity('Validate Purge Parameters').output.result.exitValue",
+                "type": "Expression"
+              },
+              "type": "string"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Update Purge Metadata",
+        "dependsOn": [
+          {
+            "activity": "Validate Purge Parameters",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      }
+    ],
+    "parameters": {
+      "TableNames": {
+        "type": "array",
+        "defaultValue": [
+          "account",
+          "od_donation"
+        ]
+      },
+      "PurgeDate": {
+        "type": "string",
+        "defaultValue": "2023-01-01T00:00:00Z"
+      }
+    }
   }
 }

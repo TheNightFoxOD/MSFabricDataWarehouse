@@ -44,6 +44,25 @@
 # CELL ********************
 
 # MAGIC %%sql
+# MAGIC -- describe table dataverse.account
+# MAGIC select od_donationid, IsDeleted, IsPurged, SinkCreatedOn, SinkModifiedOn, LastSynced
+# MAGIC  from dataverse.od_donation
+# MAGIC where 1=1
+# MAGIC -- and IsDeleted = true
+# MAGIC and (od_donationid = 'ca5c36ca-3511-ea11-a811-000d3a4aa1c2' -- purged
+# MAGIC     or od_donationid = 'db7810ed-ab90-4d51-ad2f-52f2e2da3dd0') -- deleted
+# MAGIC -- order by modifiedon desc 
+
+# METADATA ********************
+
+# META {
+# META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# MAGIC %%sql
 # MAGIC -- SELECT od_groupname, accountid, address1_line1, IsDeleted, LastSynced, createdon, IsDeleted, DeletedDate, IsPurged, PurgedDate, createdon, modifiedon
 # MAGIC -- from dataverse.account
 # MAGIC -- where 1=1
