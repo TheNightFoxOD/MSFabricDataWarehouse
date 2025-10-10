@@ -22,8 +22,8 @@
 
 # CELL ********************
 
-# Welcome to your new notebook
-# Type here in the cell editor to add code!
+pipeline_run_id = "pipeline_run_id_default"
+pipeline_trigger_time = "pipeline_trigger_time_default"
 
 
 # METADATA ********************
