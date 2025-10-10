@@ -645,16 +645,21 @@ select count(*) from dbo.entity_definitions
 
 -- MAGIC %%sql
 -- MAGIC -- 3. CheckpointHistory: Fallback management
+-- MAGIC -- CheckpointHistory: Recovery point tracking with multi-table coordination
+-- MAGIC -- Supports both per-table checkpoints (for diagnostics) and batch checkpoints (for synchronized rollback)
 -- MAGIC CREATE TABLE IF NOT EXISTS metadata.CheckpointHistory (
 -- MAGIC     CheckpointId STRING NOT NULL,
 -- MAGIC     CheckpointName STRING NOT NULL,
--- MAGIC     CheckpointType STRING NOT NULL,
+-- MAGIC     CheckpointType STRING NOT NULL,           -- 'Daily', 'DailyBatch', 'PrePurge', 'Manual', 'PreMaintenance', 'PostRollback'
 -- MAGIC     CreatedDate TIMESTAMP NOT NULL,
--- MAGIC     TablesIncluded INT NOT NULL,
+-- MAGIC     TablesIncluded INT NOT NULL,              -- 1 for per-table, N for batch checkpoints
 -- MAGIC     TotalRows BIGINT,
--- MAGIC     ValidationStatus STRING NOT NULL,
+-- MAGIC     ValidationStatus STRING NOT NULL,         -- 'Validated', 'Failed', 'Pending'
 -- MAGIC     RetentionDate DATE NOT NULL,
--- MAGIC     IsActive BOOLEAN NOT NULL
+-- MAGIC     IsActive BOOLEAN NOT NULL,                -- Soft delete flag - never physically delete checkpoints
+-- MAGIC     PipelineRunId STRING,                     -- Links all checkpoints from same pipeline execution
+-- MAGIC     SchemaName STRING,                        -- e.g., 'bronze' (NULL for batch checkpoints)
+-- MAGIC     TableName STRING                          -- e.g., 'account' (NULL for batch checkpoints)
 -- MAGIC ) USING DELTA
 
 -- METADATA ********************

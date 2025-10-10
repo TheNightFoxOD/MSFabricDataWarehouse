@@ -132,24 +132,32 @@ try:
             CheckpointName, 
             CheckpointType, 
             CreatedDate,
-            TablesIncluded, 
+            TablesIncluded,
+            TotalRows,
             ValidationStatus, 
             RetentionDate, 
-            IsActive
+            IsActive,
+            PipelineRunId,
+            SchemaName,
+            TableName
         ) VALUES (
             '{checkpoint_id}',
             '{checkpoint_name}',
             'PrePurge',
             current_timestamp(),
             {len(table_list)},
+            NULL,
             'Validated',
             DATE'{retention_date}',
-            true
+            true,
+            '{pipeline_run_id}',
+            NULL,
+            NULL
         )
     """
-    
+
     spark.sql(checkpoint_sql)
-    print(f"✓ Checkpoint '{checkpoint_name}' created successfully")
+    print(f"✓ Checkpoint '{checkpoint_name}' created successfully for {len(table_list)} tables")
     print(f"  Table versions: {versions_str}")
     
     checkpoint_created = True

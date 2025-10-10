@@ -377,6 +377,9 @@ if (sync_operations["status"] == "success" and
         StructField("ValidationStatus", StringType(), False),
         StructField("RetentionDate", DateType(), False),
         StructField("IsActive", BooleanType(), False),
+        StructField("PipelineRunId", StringType(), True),
+        StructField("SchemaName", StringType(), True),
+        StructField("TableName", StringType(), True),
     ])
     
     try:
@@ -384,21 +387,24 @@ if (sync_operations["status"] == "success" and
         
         checkpoint_entry = [(
             str(uuid.uuid4()),
-            f"bronze_backup_{end_time.strftime('%Y-%m-%d')}",
+            f"bronze_backup_{end_time.strftime('%Y-%m-%d')}_{table_name}",  # Include table name
             'Daily',
             end_time,
             1,
             total_processed_records,
             'Validated',
             retention_date,
-            True
+            True,
+            pipeline_run_id,  # From notebook parameters
+            schema_name,      # From notebook parameters
+            table_name        # From notebook parameters
         )]
         
         checkpoint_df = spark.createDataFrame(checkpoint_entry, checkpoint_schema)
         checkpoint_df.write.format("delta").mode("append").saveAsTable("metadata.CheckpointHistory")
         execution_results["logs_written"]["checkpoint_history"] = 1
         checkpoint_created = True
-        print(f"✅ Created checkpoint entry with {total_processed_records} total processed records")
+        print(f"✅ Created checkpoint entry for {schema_name}.{table_name} with {total_processed_records} total processed records")
         
     except Exception as e:
         execution_results["errors"].append(f"Error creating checkpoint: {str(e)}")

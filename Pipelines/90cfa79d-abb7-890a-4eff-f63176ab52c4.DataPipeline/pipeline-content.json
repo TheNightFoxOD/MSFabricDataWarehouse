@@ -105,7 +105,10 @@
                         "datasetSettings": {
                           "type": "LakehouseTable",
                           "typeProperties": {
-                            "table": "@item().TableName"
+                            "table": {
+                              "value": "@item().TableName",
+                              "type": "Expression"
+                            }
                           },
                           "schema": [],
                           "linkedService": {
@@ -303,11 +306,17 @@
                           "type": "string"
                         },
                         "pipeline_run_id": {
-                          "value": "@{pipeline().RunId}",
+                          "value": {
+                            "value": "@{pipeline().RunId}",
+                            "type": "Expression"
+                          },
                           "type": "string"
                         },
                         "pipeline_trigger_time": {
-                          "value": "@{pipeline().TriggerTime}",
+                          "value": {
+                            "value": "@{pipeline().TriggerTime}",
+                            "type": "Expression"
+                          },
                           "type": "string"
                         }
                       }
@@ -680,11 +689,17 @@
                           "type": "string"
                         },
                         "pipeline_trigger_time": {
-                          "value": "@{pipeline().TriggerTime}",
+                          "value": {
+                            "value": "@{pipeline().TriggerTime}",
+                            "type": "Expression"
+                          },
                           "type": "string"
                         },
                         "staging_lakehouse": {
-                          "value": "@pipeline().parameters.staging_lakehouse",
+                          "value": {
+                            "value": "@pipeline().parameters.staging_lakehouse",
+                            "type": "Expression"
+                          },
                           "type": "string"
                         }
                       }
@@ -802,8 +817,8 @@
       {
         "type": "TridentNotebook",
         "typeProperties": {
-          "notebookId": "03cf7c70-5198-a4d8-4c4d-921aaaf402fd",
-          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "notebookId": "aaf402fd-921a-4c4d-a4d8-519803cf7c70",
+          "workspaceId": "b0f83c07-a701-49bb-a165-e06ca0ee4000",
           "parameters": {
             "BRONZE_LAKEHOUSE": {
               "value": {
@@ -813,7 +828,10 @@
               "type": "string"
             },
             "STAGING_LAKEHOUSE": {
-              "value": "@pipeline().parameters.staging_lakehouse",
+              "value": {
+                "value": "@pipeline().parameters.staging_lakehouse",
+                "type": "Expression"
+              },
               "type": "string"
             }
           }
@@ -826,6 +844,8 @@
           "secureOutput": false
         },
         "name": "Tables seed",
+        "state": "Inactive",
+        "onInactiveMarkAs": "Succeeded",
         "dependsOn": [
           {
             "activity": "Fetch entity definitions from Dataverse",
@@ -838,8 +858,8 @@
       {
         "type": "RefreshDataflow",
         "typeProperties": {
-          "dataflowId": "49e6fcc9-712c-96ee-48d1-8babd51e522b",
-          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "dataflowId": "d51e522b-8bab-48d1-96ee-712c49e6fcc9",
+          "workspaceId": "b0f83c07-a701-49bb-a165-e06ca0ee4000",
           "notifyOption": "NoNotification",
           "dataflowType": "DataflowFabric"
         },
@@ -851,7 +871,42 @@
           "secureOutput": false
         },
         "name": "Fetch entity definitions from Dataverse",
+        "state": "Inactive",
+        "onInactiveMarkAs": "Succeeded",
         "dependsOn": []
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "7230ed19-613e-9bf0-4d9f-0f52beb5ce10",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "pipeline_run_id": {
+              "value": "@{pipeline().RunId}",
+              "type": "string"
+            },
+            "pipeline_trigger_time": {
+              "value": "@{pipeline().TriggerTime}",
+              "type": "string"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Create Batch Checkpoint",
+        "dependsOn": [
+          {
+            "activity": "Process Tables",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
       }
     ],
     "parameters": {
