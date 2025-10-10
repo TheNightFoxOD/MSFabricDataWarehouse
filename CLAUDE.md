@@ -79,11 +79,14 @@ audit_entry = {
 ```
 
 ### Parameter Passing
-Notebooks use standardized parameters:
+Microsoft Fabric notebooks use PARAMETERS CELL for pipeline parameters - no manual parameter retrieval needed.
+
+Common parameters:
 - `table_name`: Target table being processed
 - `schema_name`: Target schema (typically 'dbo')
 - `pipeline_run_id`: Unique identifier for tracking
 - `pipeline_trigger_time`: Execution timestamp
+- `dry_run`: Boolean flag for testing ("true"/"false")
 
 ### Schema Management
 - Schema drift is handled automatically via `Handle Schema Drift.Notebook`
@@ -99,7 +102,10 @@ Notebooks use standardized parameters:
 
 ## Important Notes
 
-- This is a Microsoft Fabric-specific project - code runs in Synapse PySpark environment
+- **Microsoft Fabric Environment**: This is Microsoft Fabric, NOT Databricks
+  - Use `from notebookutils import mssparkutils` (not `dbutils`)
+  - Parameters are handled via PARAMETERS CELL automatically
+  - Use `mssparkutils.notebook.exit()` for pipeline orchestration
 - All data processing uses Delta Lake format for ACID transactions
 - The system implements nonprofit-specific data patterns (donor deduplication, household modeling, RFM scoring)
 - Schema evolution is automatic but breaking changes require careful handling

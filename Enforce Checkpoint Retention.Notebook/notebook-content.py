@@ -36,14 +36,10 @@ dry_run = "false"
 import json
 from datetime import datetime, date
 
-# Get parameters (optional - for manual execution with custom settings)
-dry_run_mode = False
+# Import mssparkutils for Microsoft Fabric
+from notebookutils import mssparkutils
 
-try:
-    dry_run_param = dbutils.widgets.get("dry_run")
-    dry_run_mode = dry_run_param.lower() == "true"
-except:
-    print("ℹ️  No dry_run parameter provided, defaulting to False (will make changes)")
+dry_run_mode = dry_run.lower() == "true"
 
 print("="*80)
 print("ENFORCE CHECKPOINT RETENTION POLICY")
@@ -97,13 +93,15 @@ try:
         print("   All active checkpoints are within their retention period")
         print("   No action needed")
         
-        dbutils.notebook.exit(json.dumps({
+        exit_data = {
             "status": "success",
             "expired_count": 0,
             "deactivated_count": 0,
             "dry_run": dry_run_mode,
             "message": "No expired checkpoints found"
-        }))
+        }
+        
+        mssparkutils.notebook.exit(json.dumps(exit_data))
     
     print(f"\n📊 Found {expired_count} expired checkpoint(s) eligible for deactivation:")
     print("="*80)
@@ -146,10 +144,12 @@ except Exception as e:
     error_msg = f"Failed to query expired checkpoints: {str(e)}"
     print(f"\n❌ {error_msg}")
     
-    dbutils.notebook.exit(json.dumps({
+    exit_data = {
         "status": "error",
         "error_message": error_msg
-    }))
+    }
+    
+    mssparkutils.notebook.exit(json.dumps(exit_data))
 
 # METADATA ********************
 
@@ -165,13 +165,15 @@ if dry_run_mode:
     print("   No changes made to database")
     print("\n   To actually deactivate these checkpoints, run with dry_run = false")
     
-    dbutils.notebook.exit(json.dumps({
+    exit_data = {
         "status": "success",
         "expired_count": expired_count,
         "deactivated_count": 0,
         "dry_run": True,
         "message": f"Dry run completed - {expired_count} checkpoints would be deactivated"
-    }))
+    }
+    
+    mssparkutils.notebook.exit(json.dumps(exit_data))
 
 # Perform actual deactivation
 print(f"\n🔄 Deactivating {expired_count} expired checkpoint(s)...")
@@ -221,18 +223,20 @@ try:
     print(f"\n📋 Notebook Result:")
     print(json.dumps(result, indent=2))
     
-    dbutils.notebook.exit(json.dumps(result))
+    mssparkutils.notebook.exit(json.dumps(result))
     
 except Exception as e:
     error_msg = f"Failed to deactivate expired checkpoints: {str(e)}"
     print(f"\n❌ {error_msg}")
     
-    dbutils.notebook.exit(json.dumps({
+    exit_data = {
         "status": "error",
         "error_message": error_msg,
         "expired_count": expired_count,
         "deactivated_count": 0
-    }))
+    }
+    
+    mssparkutils.notebook.exit(json.dumps(exit_data))
 
 # METADATA ********************
 

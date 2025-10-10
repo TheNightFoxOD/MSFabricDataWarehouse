@@ -40,15 +40,8 @@ from datetime import datetime, timedelta
 import uuid
 from pyspark.sql.types import StructType, StructField, StringType, IntegerType, LongType, TimestampType, DateType, BooleanType
 
-# Get parameters from pipeline
-try:
-    pipeline_run_id = dbutils.widgets.get("pipeline_run_id")
-    pipeline_trigger_time = dbutils.widgets.get("pipeline_trigger_time")
-except Exception as e:
-    print(f"⚠️  Warning: Could not retrieve parameters: {e}")
-    print("Using default values for testing")
-    pipeline_run_id = "test-run-id"
-    pipeline_trigger_time = datetime.utcnow().isoformat()
+# Import mssparkutils for Microsoft Fabric
+from notebookutils import mssparkutils
 
 print("="*80)
 print("CREATE BATCH CHECKPOINT")
@@ -123,24 +116,28 @@ try:
         print(f"\n⏭️  Skipping batch checkpoint creation: {', '.join(reasons)}")
         print("\nExiting notebook without creating batch checkpoint.")
         
-        dbutils.notebook.exit(json.dumps({
+        exit_data = {
             "status": "skipped",
             "reason": ', '.join(reasons),
             "tables_included": int(tables_included),
             "total_rows": int(total_rows),
             "validated_count": int(validated_count),
             "total_checkpoints": int(total_checkpoints)
-        }))
+        }
+        
+        mssparkutils.notebook.exit(json.dumps(exit_data))
     
 except Exception as e:
     error_msg = f"Failed to query per-table checkpoints: {str(e)}"
     print(f"\n❌ {error_msg}")
     print(f"   Query used: {per_table_query}")
     
-    dbutils.notebook.exit(json.dumps({
+    exit_data = {
         "status": "error",
         "error_message": error_msg
-    }))
+    }
+    
+    mssparkutils.notebook.exit(json.dumps(exit_data))
 
 
 # METADATA ********************
@@ -224,18 +221,20 @@ try:
     print(f"\n📋 Notebook Result:")
     print(json.dumps(result, indent=2))
     
-    dbutils.notebook.exit(json.dumps(result))
+    mssparkutils.notebook.exit(json.dumps(result))
     
 except Exception as e:
     error_msg = f"Failed to create batch checkpoint: {str(e)}"
     print(f"\n❌ {error_msg}")
     
-    dbutils.notebook.exit(json.dumps({
+    exit_data = {
         "status": "error",
         "error_message": error_msg,
         "checkpoint_id": checkpoint_id,
         "checkpoint_name": checkpoint_name
-    }))
+    }
+    
+    mssparkutils.notebook.exit(json.dumps(exit_data))
 
 # METADATA ********************
 
