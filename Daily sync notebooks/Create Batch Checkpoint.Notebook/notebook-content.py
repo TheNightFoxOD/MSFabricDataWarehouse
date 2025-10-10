@@ -20,7 +20,7 @@
 # META   }
 # META }
 
-# CELL ********************
+# PARAMETERS CELL ********************
 
 pipeline_run_id = "pipeline_run_id_default"
 pipeline_trigger_time = "pipeline_trigger_time_default"
