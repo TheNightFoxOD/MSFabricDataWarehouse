@@ -14,9 +14,6 @@
 -- META       "known_lakehouses": [
 -- META         {
 -- META           "id": "4aee8a32-be91-489f-89f3-1a819b188807"
--- META         },
--- META         {
--- META           "id": "234e6789-2254-455f-b2b2-36d881cb1c17"
 -- META         }
 -- META       ]
 -- META     }
@@ -702,5 +699,231 @@ OPTIMIZE [metadata].DataValidation;
 
 -- META {
 -- META   "language": "sparksql",
+-- META   "language_group": "synapse_pyspark"
+-- META }
+
+-- CELL ********************
+
+-- MAGIC %%pyspark
+-- MAGIC # ============================================================
+-- MAGIC # CR-002: Enhanced Manual Rollback Capability
+-- MAGIC # Setup Cell 1 of 2: Create Rollback Metadata Tables
+-- MAGIC # ============================================================
+-- MAGIC # 
+-- MAGIC # PURPOSE: Creates metadata tables required for rollback functionality
+-- MAGIC # RUN ONCE: Execute this cell, then run the optimization cell below
+-- MAGIC # DEPENDENCIES: metadata schema must already exist (created in base setup)
+-- MAGIC #
+-- MAGIC # INSTRUCTIONS: 
+-- MAGIC #   1. Run this cell first to create tables
+-- MAGIC #   2. Wait for completion
+-- MAGIC #   3. Then run the optimization cell (Cell 2)
+-- MAGIC # ============================================================
+-- MAGIC 
+-- MAGIC print("="*60)
+-- MAGIC print("Creating Rollback Metadata Tables")
+-- MAGIC print("="*60)
+-- MAGIC 
+-- MAGIC # ============================================================
+-- MAGIC # Step 1: Create RollbackStateSnapshots table
+-- MAGIC # ============================================================
+-- MAGIC print("\n1. Creating metadata.RollbackStateSnapshots...")
+-- MAGIC 
+-- MAGIC spark.sql("""
+-- MAGIC     CREATE TABLE IF NOT EXISTS metadata.RollbackStateSnapshots (
+-- MAGIC         SnapshotId STRING NOT NULL COMMENT 'Unique identifier for snapshot',
+-- MAGIC         PipelineRunId STRING NOT NULL COMMENT 'Links to SyncAuditLog for traceability',
+-- MAGIC         TableName STRING NOT NULL COMMENT 'Bronze table being captured',
+-- MAGIC         SnapshotType STRING NOT NULL COMMENT 'PreRollback or PostRollback',
+-- MAGIC         SnapshotDate TIMESTAMP NOT NULL COMMENT 'When snapshot was captured',
+-- MAGIC         TotalRows BIGINT COMMENT 'Total records in table',
+-- MAGIC         ActiveRows BIGINT COMMENT 'Records with IsDeleted=false and IsPurged=false',
+-- MAGIC         DeletedRows BIGINT COMMENT 'Records with IsDeleted=true',
+-- MAGIC         PurgedRows BIGINT COMMENT 'Records with IsPurged=true',
+-- MAGIC         DeltaVersion BIGINT COMMENT 'Delta Lake version number at snapshot time',
+-- MAGIC         SampleRecordIds STRING COMMENT 'JSON array of top 100 primary key values',
+-- MAGIC         CreatedDate TIMESTAMP COMMENT 'Record creation timestamp'
+-- MAGIC     ) USING DELTA
+-- MAGIC     COMMENT 'Captures table state before and after rollback operations for validation'
+-- MAGIC """)
+-- MAGIC 
+-- MAGIC print("   ✓ RollbackStateSnapshots created")
+-- MAGIC 
+-- MAGIC # ============================================================
+-- MAGIC # Step 2: Create RollbackComparisonReports table
+-- MAGIC # ============================================================
+-- MAGIC print("\n2. Creating metadata.RollbackComparisonReports...")
+-- MAGIC 
+-- MAGIC spark.sql("""
+-- MAGIC     CREATE TABLE IF NOT EXISTS metadata.RollbackComparisonReports (
+-- MAGIC         ReportId STRING NOT NULL COMMENT 'Unique identifier for report',
+-- MAGIC         PipelineRunId STRING NOT NULL COMMENT 'Links to SyncAuditLog for traceability',
+-- MAGIC         CheckpointId STRING NOT NULL COMMENT 'Foreign key to CheckpointHistory.CheckpointId',
+-- MAGIC         CheckpointName STRING NOT NULL COMMENT 'Checkpoint name for readability',
+-- MAGIC         RollbackDate TIMESTAMP NOT NULL COMMENT 'When rollback was executed',
+-- MAGIC         TablesAffected INT COMMENT 'Number of tables included in rollback',
+-- MAGIC         TablesSucceeded INT COMMENT 'Number of tables successfully restored',
+-- MAGIC         TablesFailed INT COMMENT 'Number of tables that failed restoration',
+-- MAGIC         RecordsRestored BIGINT COMMENT 'Total records added by rollback',
+-- MAGIC         RecordsRemoved BIGINT COMMENT 'Total records removed by rollback',
+-- MAGIC         QualityScore DECIMAL(5,2) COMMENT 'Validation quality score 0-100%',
+-- MAGIC         ValidationPassed BOOLEAN COMMENT 'Overall validation pass/fail',
+-- MAGIC         Issues STRING COMMENT 'JSON array of validation failures if any',
+-- MAGIC         Notes STRING COMMENT 'Additional context or administrator notes',
+-- MAGIC         CreatedDate TIMESTAMP COMMENT 'Record creation timestamp'
+-- MAGIC     ) USING DELTA
+-- MAGIC     COMMENT 'Comprehensive rollback analysis and validation results'
+-- MAGIC """)
+-- MAGIC 
+-- MAGIC print("   ✓ RollbackComparisonReports created")
+-- MAGIC 
+-- MAGIC # ============================================================
+-- MAGIC # Step 3: Verify tables were created successfully
+-- MAGIC # ============================================================
+-- MAGIC print("\n3. Verifying table creation...")
+-- MAGIC 
+-- MAGIC tables = spark.sql("SHOW TABLES IN metadata").collect()
+-- MAGIC table_names = [row.tableName for row in tables]
+-- MAGIC 
+-- MAGIC if 'rollbackstatesnapshots' in table_names:
+-- MAGIC     print("   ✓ RollbackStateSnapshots verified")
+-- MAGIC else:
+-- MAGIC     print("   ✗ RollbackStateSnapshots NOT found!")
+-- MAGIC 
+-- MAGIC if 'rollbackcomparisonreports' in table_names:
+-- MAGIC     print("   ✓ RollbackComparisonReports verified")
+-- MAGIC else:
+-- MAGIC     print("   ✗ RollbackComparisonReports NOT found!")
+-- MAGIC 
+-- MAGIC # ============================================================
+-- MAGIC # Step 4: Display table schemas (optional - may need refresh)
+-- MAGIC # ============================================================
+-- MAGIC print("\n4. Verifying table schemas...")
+-- MAGIC 
+-- MAGIC try:
+-- MAGIC     print("\n--- RollbackStateSnapshots Schema ---")
+-- MAGIC     spark.sql("DESCRIBE metadata.RollbackStateSnapshots").show(truncate=False)
+-- MAGIC except Exception as e:
+-- MAGIC     print("   ⚠️ Could not describe RollbackStateSnapshots (table metadata still initializing)")
+-- MAGIC     print("   → This is normal. Refresh the lakehouse or wait a moment and try again.")
+-- MAGIC 
+-- MAGIC try:
+-- MAGIC     print("\n--- RollbackComparisonReports Schema ---")
+-- MAGIC     spark.sql("DESCRIBE metadata.RollbackComparisonReports").show(truncate=False)
+-- MAGIC except Exception as e:
+-- MAGIC     print("   ⚠️ Could not describe RollbackComparisonReports (table metadata still initializing)")
+-- MAGIC     print("   → This is normal. Refresh the lakehouse or wait a moment and try again.")
+-- MAGIC 
+-- MAGIC print("\n" + "="*60)
+-- MAGIC print("✓ Table Creation Complete!")
+-- MAGIC print("="*60)
+-- MAGIC print("\n✅ Tables successfully created:")
+-- MAGIC print("   • metadata.RollbackStateSnapshots")
+-- MAGIC print("   • metadata.RollbackComparisonReports")
+-- MAGIC print("\n⚠️ If DESCRIBE failed above, refresh your lakehouse in the left panel.")
+-- MAGIC print("\n⚠️ NEXT STEP: Run the optimization cell below")
+-- MAGIC print("="*60)
+
+-- METADATA ********************
+
+-- META {
+-- META   "language": "python",
+-- META   "language_group": "synapse_pyspark"
+-- META }
+
+-- CELL ********************
+
+-- MAGIC %%pyspark
+-- MAGIC # ============================================================
+-- MAGIC # CR-002: Enhanced Manual Rollback Capability
+-- MAGIC # Setup Cell 2 of 2: Optimize Rollback Metadata Tables
+-- MAGIC # ============================================================
+-- MAGIC # 
+-- MAGIC # PURPOSE: Optimizes the newly created rollback tables
+-- MAGIC # PREREQUISITES: Cell 1 must have completed successfully
+-- MAGIC #
+-- MAGIC # INSTRUCTIONS: Run this cell AFTER tables have been created in Cell 1
+-- MAGIC #
+-- MAGIC # NOTE: If tables are empty, OPTIMIZE may not be necessary.
+-- MAGIC #       This is optional and can be run later after tables have data.
+-- MAGIC # ============================================================
+-- MAGIC 
+-- MAGIC print("="*60)
+-- MAGIC print("Optimizing Rollback Metadata Tables")
+-- MAGIC print("="*60)
+-- MAGIC 
+-- MAGIC # ============================================================
+-- MAGIC # Step 1: Optimize RollbackStateSnapshots
+-- MAGIC # ============================================================
+-- MAGIC print("\n1. Optimizing RollbackStateSnapshots...")
+-- MAGIC 
+-- MAGIC try:
+-- MAGIC     spark.sql("OPTIMIZE metadata.RollbackStateSnapshots")
+-- MAGIC     print("   ✓ RollbackStateSnapshots optimized")
+-- MAGIC except Exception as e:
+-- MAGIC     print(f"   ⚠️ Could not optimize (table may be empty): {str(e)}")
+-- MAGIC     print("   → This is normal for new tables. OPTIMIZE will work once data is added.")
+-- MAGIC 
+-- MAGIC # ============================================================
+-- MAGIC # Step 2: Optimize RollbackComparisonReports
+-- MAGIC # ============================================================
+-- MAGIC print("\n2. Optimizing RollbackComparisonReports...")
+-- MAGIC 
+-- MAGIC try:
+-- MAGIC     spark.sql("OPTIMIZE metadata.RollbackComparisonReports")
+-- MAGIC     print("   ✓ RollbackComparisonReports optimized")
+-- MAGIC except Exception as e:
+-- MAGIC     print(f"   ⚠️ Could not optimize (table may be empty): {str(e)}")
+-- MAGIC     print("   → This is normal for new tables. OPTIMIZE will work once data is added.")
+-- MAGIC 
+-- MAGIC # ============================================================
+-- MAGIC # Step 3: Create Z-Order indexes
+-- MAGIC # ============================================================
+-- MAGIC print("\n3. Creating Z-Order indexes...")
+-- MAGIC 
+-- MAGIC try:
+-- MAGIC     spark.sql("""
+-- MAGIC         OPTIMIZE metadata.RollbackStateSnapshots 
+-- MAGIC         ZORDER BY (PipelineRunId, TableName, SnapshotType, SnapshotDate)
+-- MAGIC     """)
+-- MAGIC     print("   ✓ RollbackStateSnapshots Z-Order index created")
+-- MAGIC except Exception as e:
+-- MAGIC     print(f"   ⚠️ Could not create Z-Order index (table may be empty): {str(e)}")
+-- MAGIC     print("   → This is normal for new tables. Z-Order will work once data is added.")
+-- MAGIC 
+-- MAGIC try:
+-- MAGIC     spark.sql("""
+-- MAGIC         OPTIMIZE metadata.RollbackComparisonReports 
+-- MAGIC         ZORDER BY (PipelineRunId, CheckpointId, RollbackDate, ValidationPassed)
+-- MAGIC     """)
+-- MAGIC     print("   ✓ RollbackComparisonReports Z-Order index created")
+-- MAGIC except Exception as e:
+-- MAGIC     print(f"   ⚠️ Could not create Z-Order index (table may be empty): {str(e)}")
+-- MAGIC     print("   → This is normal for new tables. Z-Order will work once data is added.")
+-- MAGIC 
+-- MAGIC # ============================================================
+-- MAGIC # Step 4: Verify final state
+-- MAGIC # ============================================================
+-- MAGIC print("\n4. Final verification:")
+-- MAGIC 
+-- MAGIC snapshots_count = spark.sql("SELECT COUNT(*) as count FROM metadata.RollbackStateSnapshots").collect()[0].count
+-- MAGIC reports_count = spark.sql("SELECT COUNT(*) as count FROM metadata.RollbackComparisonReports").collect()[0].count
+-- MAGIC 
+-- MAGIC print(f"   RollbackStateSnapshots: {snapshots_count} rows")
+-- MAGIC print(f"   RollbackComparisonReports: {reports_count} rows")
+-- MAGIC 
+-- MAGIC print("\n" + "="*60)
+-- MAGIC print("✓ Optimization Complete!")
+-- MAGIC print("="*60)
+-- MAGIC print("\nNext Steps:")
+-- MAGIC print("1. Create the three rollback notebooks")
+-- MAGIC print("2. Create the Manual Rollback to Checkpoint pipeline")
+-- MAGIC print("3. Test with a dry-run rollback")
+-- MAGIC print("="*60)
+
+-- METADATA ********************
+
+-- META {
+-- META   "language": "python",
 -- META   "language_group": "synapse_pyspark"
 -- META }

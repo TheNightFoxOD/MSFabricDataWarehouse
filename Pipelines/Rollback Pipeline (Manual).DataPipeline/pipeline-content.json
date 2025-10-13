@@ -1,5 +1,157 @@
 {
   "properties": {
-    "activities": []
+    "activities": [
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "b392e169-8e7b-a9c7-4406-f3779581936f",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "checkpoint_id": {
+              "value": "@pipeline().parameters.CheckpointId",
+              "type": "string"
+            },
+            "tables_scope": {
+              "value": "@pipeline().parameters.TablesScope",
+              "type": "string"
+            },
+            "pipeline_run_id": {
+              "value": "@pipeline().RunId",
+              "type": "string"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Validate Checkpoint and Impact Analysis",
+        "dependsOn": []
+      },
+      {
+        "type": "IfCondition",
+        "typeProperties": {
+          "expression": {
+            "value": "@and(\n     equals(\n       json(activity('Validate Checkpoint and Impact Analysis').output.result.exitValue).validation_passed,\n       true\n     ),\n     equals(pipeline().parameters.DryRun, false)\n   )",
+            "type": "Expression"
+          },
+          "ifTrueActivities": [
+            {
+              "type": "TridentNotebook",
+              "typeProperties": {
+                "notebookId": "41a45ab2-6d2a-88ca-4bff-d08f17cdb61e",
+                "workspaceId": "00000000-0000-0000-0000-000000000000",
+                "parameters": {
+                  "checkpoint_id": {
+                    "value": "@pipeline().parameters.CheckpointId",
+                    "type": "string"
+                  },
+                  "checkpoint_name": {
+                    "value": "@json(activity('Validate Checkpoint and Generate Impact').output.result.exitValue).checkpoint_info.name",
+                    "type": "string"
+                  },
+                  "checkpoint_timestamp": {
+                    "value": "@json(activity('Validate Checkpoint and Generate Impact').output.result.exitValue).checkpoint_info.created_date",
+                    "type": "string"
+                  },
+                  "tables_json": {
+                    "value": "@string(json(activity('Validate Checkpoint and Generate Impact').output.result.exitValue).tables_affected)",
+                    "type": "string"
+                  },
+                  "pipeline_run_id": {
+                    "value": "@pipeline().RunId",
+                    "type": "string"
+                  }
+                }
+              },
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "Execute Rollback",
+              "dependsOn": []
+            },
+            {
+              "type": "TridentNotebook",
+              "typeProperties": {
+                "notebookId": "b7a22161-ec8a-ad10-4574-4f3db36ed396",
+                "workspaceId": "00000000-0000-0000-0000-000000000000",
+                "parameters": {
+                  "checkpoint_id": {
+                    "value": "@pipeline().parameters.CheckpointId",
+                    "type": "string"
+                  },
+                  "checkpoint_name": {
+                    "value": "@json(activity('Validate Checkpoint and Generate Impact').output.result.exitValue).checkpoint_info.name",
+                    "type": "string"
+                  },
+                  "restoration_details_json": {
+                    "value": "@string(json(activity('Execute Rollback').output.result.exitValue).restoration_details)",
+                    "type": "string"
+                  },
+                  "tables_json": {
+                    "value": "@string(json(activity('Validate Checkpoint and Generate Impact').output.result.exitValue).tables_affected)",
+                    "type": "string"
+                  },
+                  "pipeline_run_id": {
+                    "value": "@pipeline().RunId",
+                    "type": "string"
+                  }
+                }
+              },
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "Post-Rollback Validation",
+              "dependsOn": [
+                {
+                  "activity": "Execute Rollback",
+                  "dependencyConditions": [
+                    "Succeeded"
+                  ]
+                }
+              ]
+            }
+          ],
+          "ifFalseActivities": []
+        },
+        "name": "Check Validation and Approval",
+        "dependsOn": [
+          {
+            "activity": "Validate Checkpoint and Impact Analysis",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      }
+    ],
+    "parameters": {
+      "CheckpointId": {
+        "type": "string"
+      },
+      "TablesScope": {
+        "type": "string",
+        "defaultValue": "All"
+      },
+      "DryRun": {
+        "type": "bool",
+        "defaultValue": true
+      },
+      "RequireApproval": {
+        "type": "bool",
+        "defaultValue": true
+      }
+    }
   }
 }
