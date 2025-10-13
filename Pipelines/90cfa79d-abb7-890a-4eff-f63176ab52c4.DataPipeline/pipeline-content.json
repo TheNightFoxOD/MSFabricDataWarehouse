@@ -760,6 +760,13 @@
                       "type": "Expression"
                     },
                     "type": "string"
+                  },
+                  "daily_checkpoint_retention_days": {
+                    "value": {
+                      "value": "@{pipeline().parameters.daily_checkpoint_retention_days}",
+                      "type": "Expression"
+                    },
+                    "type": "int"
                   }
                 }
               },
@@ -882,12 +889,25 @@
           "workspaceId": "00000000-0000-0000-0000-000000000000",
           "parameters": {
             "pipeline_run_id": {
-              "value": "@{pipeline().RunId}",
+              "value": {
+                "value": "@{pipeline().RunId}",
+                "type": "Expression"
+              },
               "type": "string"
             },
             "pipeline_trigger_time": {
-              "value": "@{pipeline().TriggerTime}",
+              "value": {
+                "value": "@{pipeline().TriggerTime}",
+                "type": "Expression"
+              },
               "type": "string"
+            },
+            "batch_checkpoint_retention_days": {
+              "value": {
+                "value": "@{pipeline().parameters.batch_checkpoint_retention_days}",
+                "type": "Expression"
+              },
+              "type": "int"
             }
           }
         },
@@ -921,6 +941,14 @@
       "bronze_lakehouse": {
         "type": "string",
         "defaultValue": "Master_Bronze"
+      },
+      "daily_checkpoint_retention_days": {
+        "type": "int",
+        "defaultValue": 7
+      },
+      "batch_checkpoint_retention_days": {
+        "type": "int",
+        "defaultValue": 7
       }
     },
     "variables": {

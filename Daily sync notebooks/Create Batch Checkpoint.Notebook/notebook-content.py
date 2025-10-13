@@ -24,7 +24,7 @@
 
 pipeline_run_id = "pipeline_run_id_default"
 pipeline_trigger_time = "pipeline_trigger_time_default"
-
+batch_checkpoint_retention_days = 7
 
 # METADATA ********************
 
@@ -34,21 +34,32 @@ pipeline_trigger_time = "pipeline_trigger_time_default"
 # META }
 
 # CELL ********************
+
+# ==============================================================================
+# CELL 1: Import Libraries and Display Parameters
+# ==============================================================================
 
 import json
 from datetime import datetime, timedelta
 import uuid
 from pyspark.sql.types import StructType, StructField, StringType, IntegerType, LongType, TimestampType, DateType, BooleanType
 
-# Import mssparkutils for Microsoft Fabric
-from notebookutils import mssparkutils
+# Parameters are already set by pipeline in the parameters cell above
+# If running manually for testing, they'll use the default values
 
 print("="*80)
 print("CREATE BATCH CHECKPOINT")
 print("="*80)
 print(f"Pipeline Run ID: {pipeline_run_id}")
 print(f"Pipeline Trigger Time: {pipeline_trigger_time}")
+print(f"Retention Period: {batch_checkpoint_retention_days} days")
 print("="*80)
+
+# For testing: use test values if parameters are empty
+if not pipeline_run_id:
+    print("\n⚠️  No pipeline_run_id provided - using test value")
+    pipeline_run_id = "test-run-id"
+    pipeline_trigger_time = datetime.utcnow().isoformat()
 
 # METADATA ********************
 
@@ -58,6 +69,10 @@ print("="*80)
 # META }
 
 # CELL ********************
+
+# ==============================================================================
+# CELL 2: Query Per-Table Checkpoints from This Run
+# ==============================================================================
 
 # Query all per-table checkpoints created during this pipeline run
 per_table_query = f"""
@@ -114,31 +129,23 @@ try:
             reasons.append(f"only {validated_count}/{total_checkpoints} checkpoints validated")
         
         print(f"\n⏭️  Skipping batch checkpoint creation: {', '.join(reasons)}")
-        print("\nExiting notebook without creating batch checkpoint.")
+        print("\nExiting notebook - no batch checkpoint created.")
         
-        exit_data = {
-            "status": "skipped",
-            "reason": ', '.join(reasons),
-            "tables_included": int(tables_included),
-            "total_rows": int(total_rows),
-            "validated_count": int(validated_count),
-            "total_checkpoints": int(total_checkpoints)
-        }
-        
-        mssparkutils.notebook.exit(json.dumps(exit_data))
+        # Note: In MS Fabric, notebook just completes normally
+        # Pipeline can check output if needed
     
 except Exception as e:
     error_msg = f"Failed to query per-table checkpoints: {str(e)}"
     print(f"\n❌ {error_msg}")
     print(f"   Query used: {per_table_query}")
-    
-    exit_data = {
-        "status": "error",
-        "error_message": error_msg
-    }
-    
-    mssparkutils.notebook.exit(json.dumps(exit_data))
+    raise
 
+# Skip remaining cells if we're not creating checkpoint
+if not create_batch_checkpoint:
+    print("\nNotebook execution complete - skipped checkpoint creation")
+    # Don't execute remaining cells
+    import sys
+    sys.exit(0)
 
 # METADATA ********************
 
@@ -149,11 +156,18 @@ except Exception as e:
 
 # CELL ********************
 
+# ==============================================================================
+# CELL 3: Create Batch Checkpoint Entry
+# ==============================================================================
+
 # Prepare batch checkpoint data
 end_time = datetime.utcnow()
 checkpoint_id = str(uuid.uuid4())
 checkpoint_name = f"bronze_backup_batch_{end_time.strftime('%Y-%m-%d')}"
-retention_date = (end_time + timedelta(days=7)).date()
+
+# Use configurable retention period
+retention_days = int(batch_checkpoint_retention_days)
+retention_date = (end_time + timedelta(days=retention_days)).date()
 
 print(f"\n🔄 Creating Batch Checkpoint:")
 print("="*80)
@@ -161,6 +175,7 @@ print(f"   Checkpoint ID: {checkpoint_id}")
 print(f"   Checkpoint Name: {checkpoint_name}")
 print(f"   Tables Included: {tables_included}")
 print(f"   Total Rows: {total_rows:,}")
+print(f"   Retention Period: {retention_days} days")
 print(f"   Retention Date: {retention_date}")
 print(f"   Created Date: {end_time}")
 print("="*80)
@@ -205,36 +220,18 @@ try:
     print(f"   Checkpoint represents synchronized restore point for {tables_included} tables")
     print(f"   Aggregated {total_rows:,} total rows across all tables")
     print(f"   This checkpoint is the PRIMARY target for rollback operations")
+    print(f"   Retention: {retention_days} days (expires {retention_date})")
     
-    # Return success with details
-    result = {
-        "status": "success",
-        "checkpoint_id": checkpoint_id,
-        "checkpoint_name": checkpoint_name,
-        "checkpoint_type": "DailyBatch",
-        "tables_included": int(tables_included),
-        "total_rows": int(total_rows),
-        "retention_date": str(retention_date),
-        "created_date": end_time.isoformat()
-    }
-    
-    print(f"\n📋 Notebook Result:")
-    print(json.dumps(result, indent=2))
-    
-    mssparkutils.notebook.exit(json.dumps(result))
+    print(f"\n📋 Checkpoint Details:")
+    print(f"   ID: {checkpoint_id}")
+    print(f"   Name: {checkpoint_name}")
+    print(f"   Tables: {tables_included}")
+    print(f"   Rows: {total_rows:,}")
     
 except Exception as e:
     error_msg = f"Failed to create batch checkpoint: {str(e)}"
     print(f"\n❌ {error_msg}")
-    
-    exit_data = {
-        "status": "error",
-        "error_message": error_msg,
-        "checkpoint_id": checkpoint_id,
-        "checkpoint_name": checkpoint_name
-    }
-    
-    mssparkutils.notebook.exit(json.dumps(exit_data))
+    raise
 
 # METADATA ********************
 
@@ -244,6 +241,10 @@ except Exception as e:
 # META }
 
 # CELL ********************
+
+# ==============================================================================
+# CELL 4: Verification Query (Post-Creation)
+# ==============================================================================
 
 # Query to verify batch checkpoint was created and linked correctly
 verification_query = f"""
@@ -272,6 +273,10 @@ try:
     print("\nCheckpoint Type Summary:")
     for row in type_counts:
         print(f"   {row['CheckpointType']}: {row['count']}")
+    
+    print("\n" + "="*80)
+    print("Batch checkpoint creation complete!")
+    print("="*80)
     
 except Exception as e:
     print(f"\n⚠️  Warning: Could not run verification query: {str(e)}")

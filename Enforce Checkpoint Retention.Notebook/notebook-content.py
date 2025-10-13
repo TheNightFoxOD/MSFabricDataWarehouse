@@ -33,12 +33,14 @@ dry_run = "false"
 
 # CELL ********************
 
+# ==============================================================================
+# CELL 1: Import Libraries and Process Parameters
+# ==============================================================================
+
 import json
 from datetime import datetime, date
 
-# Import mssparkutils for Microsoft Fabric
-from notebookutils import mssparkutils
-
+# Convert string parameter to boolean
 dry_run_mode = dry_run.lower() == "true"
 
 print("="*80)
@@ -62,7 +64,11 @@ if dry_run_mode:
 
 # CELL ********************
 
- Query to find expired checkpoints that should be deactivated
+# ==============================================================================
+# CELL 2: Identify Expired Checkpoints
+# ==============================================================================
+
+# Query to find expired checkpoints that should be deactivated
 # Excludes PrePurge and Manual checkpoint types from automatic deactivation
 expired_query = """
     SELECT 
@@ -84,25 +90,18 @@ expired_query = """
     ORDER BY RetentionDate
 """
 
-try:
-    expired_df = spark.sql(expired_query)
-    expired_count = expired_df.count()
-    
-    if expired_count == 0:
-        print("\n✅ No expired checkpoints found")
-        print("   All active checkpoints are within their retention period")
-        print("   No action needed")
-        
-        exit_data = {
-            "status": "success",
-            "expired_count": 0,
-            "deactivated_count": 0,
-            "dry_run": dry_run_mode,
-            "message": "No expired checkpoints found"
-        }
-        
-        mssparkutils.notebook.exit(json.dumps(exit_data))
-    
+expired_df = spark.sql(expired_query)
+expired_count = expired_df.count()
+
+# Flag to control execution of later cells
+should_deactivate = False
+
+if expired_count == 0:
+    print("\n✅ No expired checkpoints found")
+    print("   All active checkpoints are within their retention period")
+    print("   No action needed")
+    print("\nNotebook execution complete - no changes made")
+else:
     print(f"\n📊 Found {expired_count} expired checkpoint(s) eligible for deactivation:")
     print("="*80)
     
@@ -116,7 +115,7 @@ try:
     print("="*80)
     expired_list = expired_df.collect()
     
-    display_limit = min(20, expired_count)  # Show up to 20 checkpoints
+    display_limit = min(20, expired_count)
     
     for i, checkpoint in enumerate(expired_list[:display_limit], 1):
         table_info = f"{checkpoint['SchemaName']}.{checkpoint['TableName']}" if checkpoint['TableName'] else "ALL TABLES"
@@ -140,16 +139,8 @@ try:
     print(f"Total checkpoints to deactivate: {expired_count}")
     print(f"{'='*80}")
     
-except Exception as e:
-    error_msg = f"Failed to query expired checkpoints: {str(e)}"
-    print(f"\n❌ {error_msg}")
-    
-    exit_data = {
-        "status": "error",
-        "error_message": error_msg
-    }
-    
-    mssparkutils.notebook.exit(json.dumps(exit_data))
+    # Set flag to proceed with deactivation (unless dry run)
+    should_deactivate = not dry_run_mode
 
 # METADATA ********************
 
@@ -160,27 +151,22 @@ except Exception as e:
 
 # CELL ********************
 
-if dry_run_mode:
+# ==============================================================================
+# CELL 3: Deactivate Expired Checkpoints (Conditional Execution)
+# ==============================================================================
+
+if expired_count == 0:
+    print("\nSkipping deactivation - no expired checkpoints found")
+elif dry_run_mode:
     print(f"\n🔍 DRY RUN: Would deactivate {expired_count} checkpoint(s)")
     print("   No changes made to database")
     print("\n   To actually deactivate these checkpoints, run with dry_run = false")
+    print("\nNotebook execution complete - dry run mode")
+elif should_deactivate:
+    # Perform actual deactivation
+    print(f"\n🔄 Deactivating {expired_count} expired checkpoint(s)...")
     
-    exit_data = {
-        "status": "success",
-        "expired_count": expired_count,
-        "deactivated_count": 0,
-        "dry_run": True,
-        "message": f"Dry run completed - {expired_count} checkpoints would be deactivated"
-    }
-    
-    mssparkutils.notebook.exit(json.dumps(exit_data))
-
-# Perform actual deactivation
-print(f"\n🔄 Deactivating {expired_count} expired checkpoint(s)...")
-
-try:
     # Build update statement with checkpoint IDs
-    # Using SQL UPDATE with IN clause
     checkpoint_ids_str = "','".join(checkpoint_ids)
     
     update_sql = f"""
@@ -211,32 +197,9 @@ try:
         print(f"\n⚠️  Verification warning: Expected {expired_count}, found {deactivated_count} inactive")
         print("   Some checkpoints may not have been deactivated")
     
-    # Return success
-    result = {
-        "status": "success",
-        "expired_count": expired_count,
-        "deactivated_count": deactivated_count,
-        "dry_run": False,
-        "message": f"Successfully deactivated {deactivated_count} expired checkpoints"
-    }
-    
-    print(f"\n📋 Notebook Result:")
-    print(json.dumps(result, indent=2))
-    
-    mssparkutils.notebook.exit(json.dumps(result))
-    
-except Exception as e:
-    error_msg = f"Failed to deactivate expired checkpoints: {str(e)}"
-    print(f"\n❌ {error_msg}")
-    
-    exit_data = {
-        "status": "error",
-        "error_message": error_msg,
-        "expired_count": expired_count,
-        "deactivated_count": 0
-    }
-    
-    mssparkutils.notebook.exit(json.dumps(exit_data))
+    print(f"\nDeactivated {deactivated_count} of {expired_count} expired checkpoints")
+else:
+    print("\nSkipping deactivation - conditions not met")
 
 # METADATA ********************
 
@@ -247,21 +210,25 @@ except Exception as e:
 
 # CELL ********************
 
-# Query final checkpoint statistics after retention enforcement
-stats_query = """
-    SELECT 
-        CheckpointType,
-        COUNT(*) as total_count,
-        SUM(CASE WHEN IsActive = true THEN 1 ELSE 0 END) as active_count,
-        SUM(CASE WHEN IsActive = false THEN 1 ELSE 0 END) as inactive_count,
-        MIN(RetentionDate) as earliest_retention,
-        MAX(RetentionDate) as latest_retention
-    FROM metadata.CheckpointHistory
-    GROUP BY CheckpointType
-    ORDER BY CheckpointType
-"""
+# ==============================================================================
+# CELL 4: Summary Statistics
+# ==============================================================================
 
-try:
+# Only show statistics if we actually deactivated something
+if should_deactivate and expired_count > 0:
+    stats_query = """
+        SELECT 
+            CheckpointType,
+            COUNT(*) as total_count,
+            SUM(CASE WHEN IsActive = true THEN 1 ELSE 0 END) as active_count,
+            SUM(CASE WHEN IsActive = false THEN 1 ELSE 0 END) as inactive_count,
+            MIN(RetentionDate) as earliest_retention,
+            MAX(RetentionDate) as latest_retention
+        FROM metadata.CheckpointHistory
+        GROUP BY CheckpointType
+        ORDER BY CheckpointType
+    """
+    
     print(f"\n📊 Checkpoint Statistics After Retention Enforcement:")
     print("="*80)
     
@@ -300,10 +267,11 @@ try:
         print(f"\n✅ No checkpoints expiring in the next 7 days")
     
     print("="*80)
-    
-except Exception as e:
-    print(f"\n⚠️  Warning: Could not retrieve statistics: {str(e)}")
-    print("   Deactivation was successful, but statistics query failed")
+    print("Retention enforcement complete!")
+    print("="*80)
+else:
+    print("\nNo statistics to display - no deactivations performed")
+    print("Notebook execution complete")
 
 # METADATA ********************
 

@@ -30,7 +30,7 @@
     "parameters": {
       "dry_run_mode": {
         "type": "string",
-        "defaultValue": "\"true\""
+        "defaultValue": "true"
       }
     }
   }

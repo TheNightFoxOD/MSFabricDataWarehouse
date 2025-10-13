@@ -27,6 +27,7 @@ table_name = "PARAM_NOT_SET_table_name"
 schema_name = "PARAM_NOT_SET_schema_name"
 pipeline_run_id = "PARAM_NOT_SET_pipeline_run_id"
 pipeline_trigger_time = "PARAM_NOT_SET_pipeline_trigger_time"
+daily_checkpoint_retention_days = 7
 
 # METADATA ********************
 
@@ -383,7 +384,8 @@ if (sync_operations["status"] == "success" and
     ])
     
     try:
-        retention_date = (end_time + timedelta(days=7)).date()
+        retention_days = int(daily_checkpoint_retention_days)
+        retention_date = (end_time + timedelta(days=retention_days)).date()
         
         checkpoint_entry = [(
             str(uuid.uuid4()),
@@ -405,6 +407,7 @@ if (sync_operations["status"] == "success" and
         execution_results["logs_written"]["checkpoint_history"] = 1
         checkpoint_created = True
         print(f"✅ Created checkpoint entry for {schema_name}.{table_name} with {total_processed_records} total processed records")
+        print(f"   Retention: {retention_days} days (expires {retention_date})")
         
     except Exception as e:
         execution_results["errors"].append(f"Error creating checkpoint: {str(e)}")
