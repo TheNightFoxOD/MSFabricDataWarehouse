@@ -1,11 +1,12 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
   "metadata": {
-    "type": "DataPipeline",
-    "displayName": "Checkpoint Retention Maintenance (Scheduled)"
+    "type": "Notebook",
+    "displayName": "Rollback scripts",
+    "description": "New notebook"
   },
   "config": {
     "version": "2.0",
-    "logicalId": "98b18e4b-3ab0-aade-462f-818ff4c53474"
+    "logicalId": "6a1d1e74-5593-b50f-4aea-869c00b9b3f2"
   }
 }

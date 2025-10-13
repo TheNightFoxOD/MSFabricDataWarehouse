@@ -24,6 +24,8 @@
 
 # MAGIC %%sql
 # MAGIC select * from metadata.checkpointhistory
+# MAGIC where RetentionDate < CURRENT_DATE()
+# MAGIC and IsActive = true
 # MAGIC ORDER by CreatedDate desc
 
 # METADATA ********************
@@ -36,12 +38,8 @@
 # CELL ********************
 
 # MAGIC %%sql
-# MAGIC ALTER TABLE metadata.CheckpointHistory 
-# MAGIC ADD COLUMNS (
-# MAGIC     PipelineRunId STRING,
-# MAGIC     SchemaName STRING,
-# MAGIC     TableName STRING
-# MAGIC );
+# MAGIC update metadata.CheckpointHistory 
+# MAGIC set IsActive = true
 
 # METADATA ********************
 
