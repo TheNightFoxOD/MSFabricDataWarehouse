@@ -26,9 +26,10 @@
 # MAGIC -- ============================================================
 # MAGIC -- SECTION 1: FINDING CHECKPOINTS
 # MAGIC -- ============================================================
-# MAGIC 
-# MAGIC -- 1.1: Find all active checkpoints
-# MAGIC SELECT 
+# MAGIC
+# MAGIC -- 1.1: Find all active checkpoints (WITH CheckpointId for rollback pipeline)
+# MAGIC SELECT
+# MAGIC     CheckpointId,        -- Use this for pipeline parameter!
 # MAGIC     CheckpointName,
 # MAGIC     CheckpointType,
 # MAGIC     CreatedDate,
@@ -36,9 +37,8 @@
 # MAGIC     TotalRows,
 # MAGIC     ValidationStatus,
 # MAGIC     RetentionDate,
-# MAGIC     DATEDIFF(day, CreatedDate, GETDATE()) as days_old,
-# MAGIC     DATEDIFF(day, GETDATE(), RetentionDate) as days_until_expiry,
-# MAGIC     Notes
+# MAGIC     DATEDIFF(CURRENT_DATE(), CAST(CreatedDate AS DATE)) as days_old,
+# MAGIC     DATEDIFF(CAST(RetentionDate AS DATE), CURRENT_DATE()) as days_until_expiry
 # MAGIC FROM metadata.CheckpointHistory
 # MAGIC WHERE IsActive = true
 # MAGIC ORDER BY CreatedDate DESC;
@@ -53,9 +53,10 @@
 # CELL ********************
 
 # MAGIC %%sql
-# MAGIC -- 1.2: Find checkpoints from a specific date range
-# MAGIC SELECT 
-# MAGIC     CheckpointName,
+# MAGIC -- 1.2: Find checkpoints from a specific date range (USE CheckpointId for pipeline!)
+# MAGIC SELECT
+# MAGIC     CheckpointId,        -- Pipeline parameter value
+# MAGIC     CheckpointName,      -- For readability
 # MAGIC     CheckpointType,
 # MAGIC     CreatedDate,
 # MAGIC     ValidationStatus
@@ -74,8 +75,9 @@
 # CELL ********************
 
 # MAGIC %%sql
-# MAGIC -- 1.3: Find the most recent checkpoint by type
-# MAGIC SELECT TOP 1
+# MAGIC -- 1.3: Find the most recent checkpoint by type (USE CheckpointId!)
+# MAGIC SELECT
+# MAGIC     CheckpointId,        -- This is what you pass to the pipeline
 # MAGIC     CheckpointName,
 # MAGIC     CheckpointType,
 # MAGIC     CreatedDate,
@@ -83,7 +85,8 @@
 # MAGIC FROM metadata.CheckpointHistory
 # MAGIC WHERE CheckpointType = 'DailyBatch'
 # MAGIC AND IsActive = true
-# MAGIC ORDER BY CreatedDate DESC;
+# MAGIC ORDER BY CreatedDate DESC
+# MAGIC LIMIT 1;
 
 # METADATA ********************
 
@@ -96,13 +99,14 @@
 
 # MAGIC %%sql
 # MAGIC -- 1.4: Find all PrePurge checkpoints (for rollback after purge issues)
-# MAGIC SELECT 
+# MAGIC SELECT
+# MAGIC     CheckpointId,
 # MAGIC     CheckpointName,
 # MAGIC     CreatedDate,
 # MAGIC     TablesIncluded,
 # MAGIC     TotalRows,
 # MAGIC     ValidationStatus,
-# MAGIC     Notes
+# MAGIC     RetentionDate
 # MAGIC FROM metadata.CheckpointHistory
 # MAGIC WHERE CheckpointType = 'PrePurge'
 # MAGIC AND IsActive = true
@@ -119,16 +123,17 @@
 
 # MAGIC %%sql
 # MAGIC -- 1.5: Check if specific checkpoint is restorable
-# MAGIC SELECT 
+# MAGIC SELECT
+# MAGIC     c.CheckpointId,
 # MAGIC     c.CheckpointName,
 # MAGIC     c.CreatedDate,
 # MAGIC     c.IsActive,
 # MAGIC     c.ValidationStatus,
 # MAGIC     c.RetentionDate,
-# MAGIC     CASE 
+# MAGIC     CASE
 # MAGIC         WHEN c.IsActive = false THEN 'EXPIRED'
 # MAGIC         WHEN c.ValidationStatus != 'Validated' THEN 'NOT VALIDATED'
-# MAGIC         WHEN GETDATE() > c.RetentionDate THEN 'PAST RETENTION DATE'
+# MAGIC         WHEN CURRENT_TIMESTAMP() > c.RetentionDate THEN 'PAST RETENTION DATE'
 # MAGIC         ELSE 'OK TO RESTORE'
 # MAGIC     END AS RestorabilityStatus
 # MAGIC FROM metadata.CheckpointHistory c
@@ -145,15 +150,16 @@
 
 # MAGIC %%sql
 # MAGIC -- 1.6: Find checkpoints expiring soon (next 7 days)
-# MAGIC SELECT 
+# MAGIC SELECT
+# MAGIC     CheckpointId,
 # MAGIC     CheckpointName,
 # MAGIC     CheckpointType,
 # MAGIC     CreatedDate,
 # MAGIC     RetentionDate,
-# MAGIC     DATEDIFF(day, GETDATE(), RetentionDate) as days_until_expiry
+# MAGIC     DATEDIFF(CAST(RetentionDate AS DATE), CURRENT_DATE()) as days_until_expiry
 # MAGIC FROM metadata.CheckpointHistory
 # MAGIC WHERE IsActive = true
-# MAGIC AND RetentionDate BETWEEN GETDATE() AND DATEADD(day, 7, GETDATE())
+# MAGIC AND CAST(RetentionDate AS DATE) BETWEEN CURRENT_DATE() AND DATE_ADD(CURRENT_DATE(), 7)
 # MAGIC ORDER BY RetentionDate ASC;
 
 # METADATA ********************
@@ -169,11 +175,12 @@
 # MAGIC -- ============================================================
 # MAGIC -- SECTION 2: ROLLBACK HISTORY & MONITORING
 # MAGIC -- ============================================================
-# MAGIC 
-# MAGIC -- 2.1: View all rollback operations (summary)
-# MAGIC SELECT 
+# MAGIC
+# MAGIC -- 2.1: View all rollback operations (summary) with checkpoint details
+# MAGIC SELECT
 # MAGIC     r.ReportId,
-# MAGIC     r.CheckpointName,
+# MAGIC     r.CheckpointId,      -- FK to CheckpointHistory
+# MAGIC     r.CheckpointName,    -- For readability
 # MAGIC     r.RollbackDate,
 # MAGIC     r.TablesAffected,
 # MAGIC     r.TablesSucceeded,
@@ -182,7 +189,7 @@
 # MAGIC     r.RecordsRemoved,
 # MAGIC     r.QualityScore,
 # MAGIC     r.ValidationPassed,
-# MAGIC     CASE 
+# MAGIC     CASE
 # MAGIC         WHEN r.ValidationPassed = true AND r.TablesFailed = 0 THEN 'Complete Success'
 # MAGIC         WHEN r.ValidationPassed = true AND r.TablesFailed > 0 THEN 'Partial Success'
 # MAGIC         ELSE 'Failed'
@@ -200,8 +207,32 @@
 # CELL ********************
 
 # MAGIC %%sql
+# MAGIC -- 2.1b: Join with CheckpointHistory to get full checkpoint details
+# MAGIC SELECT
+# MAGIC     r.RollbackDate,
+# MAGIC     r.CheckpointName,
+# MAGIC     c.CheckpointType,
+# MAGIC     c.CreatedDate as CheckpointCreatedDate,
+# MAGIC     r.TablesAffected,
+# MAGIC     r.TablesSucceeded,
+# MAGIC     r.QualityScore,
+# MAGIC     r.ValidationPassed
+# MAGIC FROM metadata.RollbackComparisonReports r
+# MAGIC INNER JOIN metadata.CheckpointHistory c ON r.CheckpointId = c.CheckpointId
+# MAGIC ORDER BY r.RollbackDate DESC;
+
+# METADATA ********************
+
+# META {
+# META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# MAGIC %%sql
 # MAGIC -- 2.2: Rollback success metrics (last 30 days)
-# MAGIC SELECT 
+# MAGIC SELECT
 # MAGIC     COUNT(*) as total_rollbacks,
 # MAGIC     SUM(CASE WHEN ValidationPassed = true THEN 1 ELSE 0 END) as successful,
 # MAGIC     SUM(CASE WHEN ValidationPassed = false THEN 1 ELSE 0 END) as failed,
@@ -212,7 +243,7 @@
 # MAGIC     SUM(RecordsRestored) as total_records_restored,
 # MAGIC     SUM(RecordsRemoved) as total_records_removed
 # MAGIC FROM metadata.RollbackComparisonReports
-# MAGIC WHERE RollbackDate >= DATEADD(day, -30, GETDATE());
+# MAGIC WHERE RollbackDate >= DATE_SUB(CURRENT_DATE(), 30);
 
 # METADATA ********************
 
@@ -225,7 +256,7 @@
 
 # MAGIC %%sql
 # MAGIC -- 2.3: Find failed rollbacks
-# MAGIC SELECT 
+# MAGIC SELECT
 # MAGIC     r.ReportId,
 # MAGIC     r.CheckpointName,
 # MAGIC     r.RollbackDate,
@@ -250,12 +281,12 @@
 # MAGIC %%sql
 # MAGIC -- 2.4: Detailed audit trail for specific rollback
 # MAGIC -- Replace 'YOUR_PIPELINE_RUN_ID' with actual PipelineRunId
-# MAGIC SELECT 
+# MAGIC SELECT
 # MAGIC     Operation,
 # MAGIC     TableName,
 # MAGIC     StartTime,
 # MAGIC     EndTime,
-# MAGIC     DATEDIFF(second, StartTime, EndTime) as duration_seconds,
+# MAGIC     CAST((UNIX_TIMESTAMP(EndTime) - UNIX_TIMESTAMP(StartTime)) AS INT) as duration_seconds,
 # MAGIC     RowsProcessed,
 # MAGIC     Status,
 # MAGIC     ErrorMessage,
@@ -276,16 +307,16 @@
 
 # MAGIC %%sql
 # MAGIC -- 2.5: Find all table restoration attempts (success and failed)
-# MAGIC SELECT 
+# MAGIC SELECT
 # MAGIC     PipelineRunId,
 # MAGIC     TableName,
 # MAGIC     StartTime,
 # MAGIC     Status,
 # MAGIC     ErrorMessage,
-# MAGIC     DATEDIFF(second, StartTime, EndTime) as duration_seconds
+# MAGIC     CAST((UNIX_TIMESTAMP(EndTime) - UNIX_TIMESTAMP(StartTime)) AS INT) as duration_seconds
 # MAGIC FROM metadata.SyncAuditLog
 # MAGIC WHERE Operation = 'TableRestore'
-# MAGIC AND StartTime >= DATEADD(day, -7, GETDATE())
+# MAGIC AND StartTime >= DATE_SUB(CURRENT_DATE(), 7)
 # MAGIC ORDER BY StartTime DESC;
 
 # METADATA ********************
@@ -299,13 +330,13 @@
 
 # MAGIC %%sql
 # MAGIC -- 2.6: Rollback frequency by checkpoint type
-# MAGIC SELECT 
+# MAGIC SELECT
 # MAGIC     c.CheckpointType,
 # MAGIC     COUNT(r.ReportId) as rollback_count,
 # MAGIC     AVG(r.QualityScore) as avg_quality_score
 # MAGIC FROM metadata.RollbackComparisonReports r
 # MAGIC INNER JOIN metadata.CheckpointHistory c ON r.CheckpointName = c.CheckpointName
-# MAGIC WHERE r.RollbackDate >= DATEADD(month, -1, GETDATE())
+# MAGIC WHERE r.RollbackDate >= ADD_MONTHS(CURRENT_DATE(), -1)
 # MAGIC GROUP BY c.CheckpointType
 # MAGIC ORDER BY rollback_count DESC;
 
@@ -404,7 +435,7 @@
 # MAGIC     r.Issues
 # MAGIC FROM metadata.RollbackComparisonReports r
 # MAGIC WHERE r.ValidationPassed = false
-# MAGIC AND r.RollbackDate >= DATEADD(day, -30, GETDATE())
+# MAGIC AND r.RollbackDate >= DATE_SUB(CURRENT_DATE(), 30)
 # MAGIC ORDER BY r.RollbackDate DESC;
 
 # METADATA ********************
@@ -426,7 +457,7 @@
 # MAGIC     Notes
 # MAGIC FROM metadata.SyncAuditLog
 # MAGIC WHERE Operation LIKE 'Rollback%'
-# MAGIC AND StartTime >= DATEADD(day, -7, GETDATE())
+# MAGIC AND StartTime >= DATE_SUB(CURRENT_DATE(), 7)
 # MAGIC ORDER BY StartTime DESC;
 
 # METADATA ********************
@@ -448,7 +479,7 @@
 # MAGIC FROM metadata.SyncAuditLog
 # MAGIC WHERE Operation = 'TableRestore'
 # MAGIC AND Status = 'Error'
-# MAGIC AND StartTime >= DATEADD(day, -7, GETDATE())
+# MAGIC AND StartTime >= DATE_SUB(CURRENT_DATE(), 7)
 # MAGIC ORDER BY StartTime DESC;
 
 # METADATA ********************
@@ -554,7 +585,7 @@
 # MAGIC     ValidationContext
 # MAGIC FROM metadata.DataValidation
 # MAGIC WHERE ValidationContext = 'PostRollback'
-# MAGIC AND ValidationDate >= DATEADD(day, -7, GETDATE())
+# MAGIC AND ValidationDate >= DATE_SUB(CURRENT_DATE(), 7)
 # MAGIC ORDER BY ValidationDate DESC;
 
 # METADATA ********************
@@ -594,6 +625,7 @@
 # MAGIC %%sql
 # MAGIC -- 5.2: Find checkpoints created on specific date
 # MAGIC SELECT
+# MAGIC     CheckpointId,
 # MAGIC     CheckpointName,
 # MAGIC     CheckpointType,
 # MAGIC     CreatedDate,
@@ -615,12 +647,13 @@
 # MAGIC %%sql
 # MAGIC -- 5.3: Find post-rollback checkpoints
 # MAGIC SELECT
+# MAGIC     CheckpointId,
 # MAGIC     CheckpointName,
 # MAGIC     CreatedDate,
 # MAGIC     TablesIncluded,
 # MAGIC     TotalRows,
 # MAGIC     ValidationStatus,
-# MAGIC     Notes
+# MAGIC     RetentionDate
 # MAGIC FROM metadata.CheckpointHistory
 # MAGIC WHERE CheckpointType = 'PostRollback'
 # MAGIC ORDER BY CreatedDate DESC;
@@ -661,7 +694,7 @@
 # MAGIC
 # MAGIC -- 6.1: Monthly rollback activity report
 # MAGIC SELECT
-# MAGIC     FORMAT(r.RollbackDate, 'yyyy-MM') as rollback_month,
+# MAGIC     DATE_FORMAT(r.RollbackDate, 'yyyy-MM') as rollback_month,
 # MAGIC     COUNT(*) as total_rollbacks,
 # MAGIC     SUM(r.TablesAffected) as tables_affected,
 # MAGIC     SUM(r.TablesSucceeded) as tables_succeeded,
@@ -669,7 +702,7 @@
 # MAGIC     AVG(r.QualityScore) as avg_quality_score,
 # MAGIC     SUM(CASE WHEN r.ValidationPassed = true THEN 1 ELSE 0 END) as successful_rollbacks
 # MAGIC FROM metadata.RollbackComparisonReports r
-# MAGIC GROUP BY FORMAT(r.RollbackDate, 'yyyy-MM')
+# MAGIC GROUP BY DATE_FORMAT(r.RollbackDate, 'yyyy-MM')
 # MAGIC ORDER BY rollback_month DESC;
 
 # METADATA ********************
@@ -690,7 +723,7 @@
 # MAGIC     SUM(CASE WHEN a.Status = 'Error' THEN 1 ELSE 0 END) as failed
 # MAGIC FROM metadata.SyncAuditLog a
 # MAGIC WHERE a.Operation = 'TableRestore'
-# MAGIC AND a.StartTime >= DATEADD(month, -3, GETDATE())
+# MAGIC AND a.StartTime >= ADD_MONTHS(CURRENT_DATE(), -3)
 # MAGIC GROUP BY a.TableName
 # MAGIC ORDER BY restore_attempts DESC;
 
@@ -711,11 +744,11 @@
 # MAGIC     r.TablesAffected,
 # MAGIC     MIN(a.StartTime) as rollback_start,
 # MAGIC     MAX(a.EndTime) as rollback_end,
-# MAGIC     DATEDIFF(minute, MIN(a.StartTime), MAX(a.EndTime)) as total_duration_minutes
+# MAGIC     CAST((UNIX_TIMESTAMP(MAX(a.EndTime)) - UNIX_TIMESTAMP(MIN(a.StartTime))) / 60 AS INT) as total_duration_minutes
 # MAGIC FROM metadata.RollbackComparisonReports r
 # MAGIC INNER JOIN metadata.SyncAuditLog a ON r.PipelineRunId = a.PipelineRunId
 # MAGIC WHERE a.Operation IN ('RollbackValidation', 'TableRestore', 'PostRollbackValidation')
-# MAGIC AND r.RollbackDate >= DATEADD(month, -1, GETDATE())
+# MAGIC AND r.RollbackDate >= ADD_MONTHS(CURRENT_DATE(), -1)
 # MAGIC GROUP BY r.CheckpointName, r.RollbackDate, r.TablesAffected, r.PipelineRunId
 # MAGIC ORDER BY total_duration_minutes DESC;
 
@@ -731,14 +764,14 @@
 # MAGIC %%sql
 # MAGIC -- 6.4: Data change summary from rollbacks
 # MAGIC SELECT
-# MAGIC     FORMAT(r.RollbackDate, 'yyyy-MM-dd') as rollback_date,
+# MAGIC     DATE_FORMAT(r.RollbackDate, 'yyyy-MM-dd') as rollback_date,
 # MAGIC     r.CheckpointName,
 # MAGIC     r.RecordsRestored,
 # MAGIC     r.RecordsRemoved,
 # MAGIC     (r.RecordsRestored - r.RecordsRemoved) as net_change,
 # MAGIC     r.QualityScore
 # MAGIC FROM metadata.RollbackComparisonReports r
-# MAGIC WHERE r.RollbackDate >= DATEADD(month, -1, GETDATE())
+# MAGIC WHERE r.RollbackDate >= ADD_MONTHS(CURRENT_DATE(), -1)
 # MAGIC ORDER BY r.RollbackDate DESC;
 
 # METADATA ********************
@@ -766,21 +799,21 @@
 # MAGIC     'Rollbacks (Last 7 Days)',
 # MAGIC     COUNT(*)
 # MAGIC FROM metadata.RollbackComparisonReports
-# MAGIC WHERE RollbackDate >= DATEADD(day, -7, GETDATE())
+# MAGIC WHERE RollbackDate >= DATE_SUB(CURRENT_DATE(), 7)
 # MAGIC UNION ALL
 # MAGIC SELECT
 # MAGIC     'Failed Rollbacks (Last 30 Days)',
 # MAGIC     COUNT(*)
 # MAGIC FROM metadata.RollbackComparisonReports
 # MAGIC WHERE ValidationPassed = false
-# MAGIC AND RollbackDate >= DATEADD(day, -30, GETDATE())
+# MAGIC AND RollbackDate >= DATE_SUB(CURRENT_DATE(), 30)
 # MAGIC UNION ALL
 # MAGIC SELECT
 # MAGIC     'Checkpoints Expiring Soon (7 Days)',
 # MAGIC     COUNT(*)
 # MAGIC FROM metadata.CheckpointHistory
 # MAGIC WHERE IsActive = true
-# MAGIC AND RetentionDate BETWEEN GETDATE() AND DATEADD(day, 7, GETDATE());
+# MAGIC AND CAST(RetentionDate AS DATE) BETWEEN CURRENT_DATE() AND DATE_ADD(CURRENT_DATE(), 7);
 
 # METADATA ********************
 
@@ -806,7 +839,7 @@
 # MAGIC     COUNT(*)
 # MAGIC FROM metadata.CheckpointHistory
 # MAGIC WHERE IsActive = true
-# MAGIC AND RetentionDate < GETDATE()
+# MAGIC AND RetentionDate < CURRENT_TIMESTAMP()
 # MAGIC
 # MAGIC UNION ALL
 # MAGIC SELECT
@@ -816,7 +849,7 @@
 # MAGIC FROM metadata.SyncAuditLog
 # MAGIC WHERE Operation = 'TableRestore'
 # MAGIC AND Status = 'Error'
-# MAGIC AND StartTime >= DATEADD(day, -7, GETDATE())
+# MAGIC AND StartTime >= DATE_SUB(CURRENT_DATE(), 7)
 # MAGIC
 # MAGIC UNION ALL
 # MAGIC SELECT
@@ -825,7 +858,7 @@
 # MAGIC     COUNT(*)
 # MAGIC FROM metadata.RollbackComparisonReports
 # MAGIC WHERE QualityScore < 90
-# MAGIC AND RollbackDate >= DATEADD(day, -30, GETDATE());
+# MAGIC AND RollbackDate >= DATE_SUB(CURRENT_DATE(), 30);
 
 # METADATA ********************
 
@@ -848,9 +881,9 @@
 # MAGIC     s.PipelineRunId,
 # MAGIC     s.TableName,
 # MAGIC     s.SnapshotDate,
-# MAGIC     DATEDIFF(day, s.SnapshotDate, GETDATE()) as days_old
+# MAGIC     DATEDIFF(CURRENT_DATE(), CAST(s.SnapshotDate AS DATE)) as days_old
 # MAGIC FROM metadata.RollbackStateSnapshots s
-# MAGIC WHERE s.SnapshotDate < DATEADD(day, -90, GETDATE())
+# MAGIC WHERE s.SnapshotDate < DATE_SUB(CURRENT_DATE(), 90)
 # MAGIC ORDER BY s.SnapshotDate;
 
 # METADATA ********************
@@ -869,9 +902,9 @@
 # MAGIC     r.ReportId,
 # MAGIC     r.RollbackDate,
 # MAGIC     r.CheckpointName,
-# MAGIC     DATEDIFF(day, r.RollbackDate, GETDATE()) as days_old
+# MAGIC     DATEDIFF(CURRENT_DATE(), CAST(r.RollbackDate AS DATE)) as days_old
 # MAGIC FROM metadata.RollbackComparisonReports r
-# MAGIC WHERE r.RollbackDate < DATEADD(year, -1, GETDATE())
+# MAGIC WHERE r.RollbackDate < ADD_MONTHS(CURRENT_DATE(), -12)
 # MAGIC ORDER BY r.RollbackDate;
 
 # METADATA ********************
