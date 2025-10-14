@@ -24,7 +24,8 @@
 
 # MAGIC %%sql
 # MAGIC select * from metadata.checkpointhistory
-# MAGIC where RetentionDate < CURRENT_DATE()
+# MAGIC where 1=1
+# MAGIC -- and RetentionDate < CURRENT_DATE()
 # MAGIC and IsActive = true
 # MAGIC ORDER by CreatedDate desc
 
@@ -40,6 +41,33 @@
 # MAGIC %%sql
 # MAGIC update metadata.CheckpointHistory 
 # MAGIC set IsActive = true
+
+# METADATA ********************
+
+# META {
+# META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark",
+# META   "frozen": true,
+# META   "editable": false
+# META }
+
+# CELL ********************
+
+# MAGIC %%sql
+# MAGIC SELECT
+# MAGIC     CheckpointId,        -- Use this for pipeline parameter!
+# MAGIC     CheckpointName,
+# MAGIC     CheckpointType,
+# MAGIC     CreatedDate,
+# MAGIC     TablesIncluded,
+# MAGIC     TotalRows,
+# MAGIC     ValidationStatus,
+# MAGIC     RetentionDate,
+# MAGIC     DATEDIFF(CURRENT_DATE(), CAST(CreatedDate AS DATE)) as days_old,
+# MAGIC     DATEDIFF(CAST(RetentionDate AS DATE), CURRENT_DATE()) as days_until_expiry
+# MAGIC FROM metadata.CheckpointHistory
+# MAGIC WHERE IsActive = true
+# MAGIC ORDER BY CreatedDate DESC;
 
 # METADATA ********************
 

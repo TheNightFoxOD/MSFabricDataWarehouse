@@ -8,15 +8,24 @@
           "workspaceId": "00000000-0000-0000-0000-000000000000",
           "parameters": {
             "checkpoint_id": {
-              "value": "@pipeline().parameters.CheckpointId",
+              "value": {
+                "value": "@pipeline().parameters.CheckpointId",
+                "type": "Expression"
+              },
               "type": "string"
             },
             "tables_scope": {
-              "value": "@pipeline().parameters.TablesScope",
+              "value": {
+                "value": "@pipeline().parameters.TablesScope",
+                "type": "Expression"
+              },
               "type": "string"
             },
             "pipeline_run_id": {
-              "value": "@pipeline().RunId",
+              "value": {
+                "value": "@pipeline().RunId",
+                "type": "Expression"
+              },
               "type": "string"
             }
           }
@@ -46,23 +55,38 @@
                 "workspaceId": "00000000-0000-0000-0000-000000000000",
                 "parameters": {
                   "checkpoint_id": {
-                    "value": "@pipeline().parameters.CheckpointId",
+                    "value": {
+                      "value": "@pipeline().parameters.CheckpointId",
+                      "type": "Expression"
+                    },
                     "type": "string"
                   },
                   "checkpoint_name": {
-                    "value": "@json(activity('Validate Checkpoint and Generate Impact').output.result.exitValue).checkpoint_info.name",
+                    "value": {
+                      "value": "@json(activity('Validate Checkpoint and Impact Analysis').output.result.exitValue).checkpoint_info.name",
+                      "type": "Expression"
+                    },
                     "type": "string"
                   },
                   "checkpoint_timestamp": {
-                    "value": "@json(activity('Validate Checkpoint and Generate Impact').output.result.exitValue).checkpoint_info.created_date",
+                    "value": {
+                      "value": "@json(activity('Validate Checkpoint and Impact Analysis').output.result.exitValue).checkpoint_info.created_date",
+                      "type": "Expression"
+                    },
                     "type": "string"
                   },
                   "tables_json": {
-                    "value": "@string(json(activity('Validate Checkpoint and Generate Impact').output.result.exitValue).tables_affected)",
+                    "value": {
+                      "value": "@string(json(activity('Validate Checkpoint and Impact Analysis').output.result.exitValue).tables_affected)",
+                      "type": "Expression"
+                    },
                     "type": "string"
                   },
                   "pipeline_run_id": {
-                    "value": "@pipeline().RunId",
+                    "value": {
+                      "value": "@pipeline().RunId",
+                      "type": "Expression"
+                    },
                     "type": "string"
                   }
                 }
@@ -84,23 +108,38 @@
                 "workspaceId": "00000000-0000-0000-0000-000000000000",
                 "parameters": {
                   "checkpoint_id": {
-                    "value": "@pipeline().parameters.CheckpointId",
+                    "value": {
+                      "value": "@pipeline().parameters.CheckpointId",
+                      "type": "Expression"
+                    },
                     "type": "string"
                   },
                   "checkpoint_name": {
-                    "value": "@json(activity('Validate Checkpoint and Generate Impact').output.result.exitValue).checkpoint_info.name",
+                    "value": {
+                      "value": "@json(activity('Validate Checkpoint and Impact Analysis').output.result.exitValue).checkpoint_info.name",
+                      "type": "Expression"
+                    },
                     "type": "string"
                   },
                   "restoration_details_json": {
-                    "value": "@string(json(activity('Execute Rollback').output.result.exitValue).restoration_details)",
+                    "value": {
+                      "value": "@string(json(activity('Execute Rollback').output.result.exitValue).restoration_details)",
+                      "type": "Expression"
+                    },
                     "type": "string"
                   },
                   "tables_json": {
-                    "value": "@string(json(activity('Validate Checkpoint and Generate Impact').output.result.exitValue).tables_affected)",
+                    "value": {
+                      "value": "@string(json(activity('Validate Checkpoint and Impact Analysis').output.result.exitValue).tables_affected)",
+                      "type": "Expression"
+                    },
                     "type": "string"
                   },
                   "pipeline_run_id": {
-                    "value": "@pipeline().RunId",
+                    "value": {
+                      "value": "@pipeline().RunId",
+                      "type": "Expression"
+                    },
                     "type": "string"
                   }
                 }
@@ -138,7 +177,8 @@
     ],
     "parameters": {
       "CheckpointId": {
-        "type": "string"
+        "type": "string",
+        "defaultValue": "7691b0f5-88a8-4539-9597-33297a3c5211"
       },
       "TablesScope": {
         "type": "string",
@@ -146,7 +186,7 @@
       },
       "DryRun": {
         "type": "bool",
-        "defaultValue": true
+        "defaultValue": false
       },
       "RequireApproval": {
         "type": "bool",

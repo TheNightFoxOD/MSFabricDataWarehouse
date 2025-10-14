@@ -43,6 +43,40 @@ pipeline_run_id = ""
 # CELL ********************
 
 # ============================================================
+# CR-002: Manual Rollback to Checkpoint
+# Notebook 2: Execute Rollback with RESTORE TABLE
+# ============================================================
+#
+# PURPOSE: Captures pre-rollback state, executes Delta Lake RESTORE
+#          for each table, handles failures gracefully
+#
+# INPUTS (Pipeline Parameters - defined in PARAMETERS cell below):
+#   - checkpoint_id: Unique CheckpointId to restore to (required)
+#   - checkpoint_name: Checkpoint name for display/logging (required)
+#   - checkpoint_timestamp: Timestamp to restore to (from validation notebook)
+#   - tables_json: JSON array of table names to restore
+#   - pipeline_run_id: Unique identifier for this rollback operation
+#
+# OUTPUTS (exitValue JSON):
+#   - execution_passed: true/false
+#   - tables_succeeded: count of successful restorations
+#   - tables_failed: count of failed restorations
+#   - restoration_details: per-table results
+#
+# ============================================================
+
+# CELL 1: PARAMETERS
+# ============================================================
+# Toggle this cell to "Parameters" type in MS Fabric
+# Pipeline will inject parameter values into these variables
+# ============================================================
+# checkpoint_id = ""
+# checkpoint_name = ""
+# checkpoint_timestamp = ""
+# tables_json = "[]"
+# pipeline_run_id = ""
+
+# ============================================================
 # CELL 2: IMPORTS AND SETUP
 # ============================================================
 import json
@@ -60,7 +94,7 @@ print("="*60)
 # Validate required parameters
 if not checkpoint_id or not checkpoint_timestamp or not tables_json:
     error_msg = "Missing required parameters: checkpoint_id, checkpoint_timestamp, or tables_json"
-    print(f"\n✗ {error_msg}")
+    print("\n✗ {0}".format(error_msg))
     mssparkutils.notebook.exit(json.dumps({
         "execution_passed": False,
         "error": error_msg,
@@ -72,8 +106,8 @@ if not checkpoint_id or not checkpoint_timestamp or not tables_json:
 try:
     table_list = json.loads(tables_json)
 except Exception as e:
-    error_msg = f"Failed to parse tables_json: {str(e)}"
-    print(f"\n✗ {error_msg}")
+    error_msg = "Failed to parse tables_json: {0}".format(str(e))
+    print("\n✗ {0}".format(error_msg))
     mssparkutils.notebook.exit(json.dumps({
         "execution_passed": False,
         "error": error_msg,
@@ -82,12 +116,12 @@ except Exception as e:
         "restoration_details": []
     }))
 
-print(f"\nParameters:")
-print(f"  Checkpoint ID: {checkpoint_id}")
-print(f"  Checkpoint Name: {checkpoint_name}")
-print(f"  Checkpoint Timestamp: {checkpoint_timestamp}")
-print(f"  Tables to Restore: {len(table_list)}")
-print(f"  Pipeline Run ID: {pipeline_run_id}")
+print("\nParameters:")
+print("  Checkpoint ID: {0}".format(checkpoint_id))
+print("  Checkpoint Name: {0}".format(checkpoint_name))
+print("  Checkpoint Timestamp: {0}".format(checkpoint_timestamp))
+print("  Tables to Restore: {0}".format(len(table_list)))
+print("  Pipeline Run ID: {0}".format(pipeline_run_id))
 
 # ==========================================
 # STEP 1: Capture Pre-Rollback State for All Tables
@@ -101,7 +135,7 @@ snapshot_failures = []
 
 for table_name in table_list:
     try:
-        print(f"\nCapturing state: {table_name}")
+        print("\nCapturing state: {0}".format(table_name))
         
         # Get current statistics
         stats_query = """
@@ -128,36 +162,36 @@ for table_name in table_list:
             delta_version = None
         
         # Get sample record IDs (top 100 for validation)
+        sample_ids = None
         try:
             config_query = """
                 SELECT PrimaryKeyColumn 
                 FROM metadata.PipelineConfig 
                 WHERE TableName = '{table_name}'
-            """.format(table_name=table_name)
-            config_df = spark.sql(config_query)
-            pk_column = config_df.collect()[0].PrimaryKeyColumn if config_df.count() > 0 else None
+            """.format(table_name=table_name.split('.')[-1])
             
-            if pk_column:
-                sample_query = """
-                    SELECT {pk_column} 
-                    FROM {table_name} 
-                    LIMIT 100
-                """.format(table_name=table_name, pk_column=pk_column)
+            config_df = spark.sql(config_query)
+            if config_df.count() > 0:
+                pk_column = config_df.collect()[0].PrimaryKeyColumn
+                sample_query = "SELECT {pk} FROM {table} LIMIT 100".format(
+                    pk=pk_column, 
+                    table=table_name
+                )
                 sample_df = spark.sql(sample_query)
-                sample_ids = [str(row[0]) for row in sample_df.collect()]
-            else:
-                sample_ids = []
+                sample_ids_list = [str(row[0]) for row in sample_df.collect()]
+                sample_ids = json.dumps(sample_ids_list)
         except:
-            sample_ids = []
+            sample_ids = None
         
-        snapshot_id = "{0}_{1}_pre".format(pipeline_run_id, table_name)
-        sample_ids_json = json.dumps(sample_ids).replace("'", "''")
+        # Insert into RollbackStateSnapshots
+        snapshot_id = "{0}_{1}_pre".format(pipeline_run_id, table_name.replace('.', '_'))
+        sample_ids_value = "'{0}'".format(sample_ids.replace("'", "''")) if sample_ids else "NULL"
+        delta_version_value = delta_version if delta_version is not None else "NULL"
         
-        # Insert snapshot record
         insert_snapshot_query = """
             INSERT INTO metadata.RollbackStateSnapshots (
                 SnapshotId, PipelineRunId, TableName, SnapshotType, SnapshotDate,
-                TotalRows, ActiveRows, DeletedRows, PurgedRows, 
+                TotalRows, ActiveRows, DeletedRows, PurgedRows,
                 DeltaVersion, SampleRecordIds, CreatedDate
             ) VALUES (
                 '{snapshot_id}',
@@ -170,7 +204,7 @@ for table_name in table_list:
                 {deleted_rows},
                 {purged_rows},
                 {delta_version},
-                '{sample_ids_json}',
+                {sample_ids},
                 current_timestamp()
             )
         """.format(
@@ -181,8 +215,8 @@ for table_name in table_list:
             active_rows=active_rows,
             deleted_rows=deleted_rows,
             purged_rows=purged_rows,
-            delta_version=delta_version if delta_version is not None else 'NULL',
-            sample_ids_json=sample_ids_json
+            delta_version=delta_version_value,
+            sample_ids=sample_ids_value
         )
         spark.sql(insert_snapshot_query)
         
@@ -195,18 +229,20 @@ for table_name in table_list:
             "delta_version": delta_version
         })
         
-        print(f"  ✓ State captured: {total_rows:,} total rows (Version {delta_version})")
+        print("  ✓ State captured: {0:,} total rows (Version {1})".format(total_rows, delta_version))
     
     except Exception as e:
         error = "Failed to capture pre-rollback state for '{0}': {1}".format(table_name, str(e))
-        print(f"  ✗ {error}")
+        print("  ✗ {0}".format(error))
         snapshot_failures.append(error)
 
 if snapshot_failures:
     print("\n⚠ Warning: Failed to capture state for {0} table(s)".format(len(snapshot_failures)))
     print("Continuing with rollback execution...")
 
-print("\n✓ Pre-rollback state captured for {0}/{1} table(s)".format(len(pre_rollback_snapshots), len(table_list)))
+print("\n✓ Pre-rollback state captured for {0}/{1} table(s)".format(
+    len(pre_rollback_snapshots), len(table_list)
+))
 
 # ==========================================
 # STEP 2: Execute Delta Lake RESTORE for Each Table
@@ -228,7 +264,9 @@ for idx, table_name in enumerate(table_list, 1):
     
     try:
         # Execute RESTORE TABLE command
-        restore_command = "RESTORE TABLE {0} TO TIMESTAMP AS OF '{1}'".format(table_name, checkpoint_timestamp)
+        restore_command = "RESTORE TABLE {0} TO TIMESTAMP AS OF '{1}'".format(
+            table_name, checkpoint_timestamp
+        )
         
         print("  Command: {0}".format(restore_command))
         
@@ -254,10 +292,16 @@ for idx, table_name in enumerate(table_list, 1):
         print("    New Delta version: {0}".format(new_version))
         
         # Log success to audit trail
+        log_id = "{0}_{1}_restore".format(pipeline_run_id, table_name.replace('.', '_'))
+        notes = "Restored to checkpoint: {0}. Duration: {1:.2f}s".format(
+            checkpoint_name, duration_seconds
+        )
+        notes_escaped = notes.replace("'", "''")
+        
         insert_success_query = """
             INSERT INTO metadata.SyncAuditLog (
                 LogId, PipelineRunId, PipelineName, TableName, Operation,
-                StartTime, EndTime, RowsProcessed, Status, Notes, CreatedDate
+                StartTime, EndTime, RowsProcessed, Status, Notes, RetryCount, CreatedDate
             ) VALUES (
                 '{log_id}',
                 '{pipeline_run_id}',
@@ -268,18 +312,18 @@ for idx, table_name in enumerate(table_list, 1):
                 timestamp'{end_time}',
                 {post_restore_count},
                 'Success',
-                'Restored to checkpoint: {checkpoint_name}. Duration: {duration:.2f}s',
+                '{notes_escaped}',
+                0,
                 current_timestamp()
             )
         """.format(
-            log_id="{0}_{1}_restore".format(pipeline_run_id, table_name),
+            log_id=log_id,
             pipeline_run_id=pipeline_run_id,
             table_name=table_name,
             start_time=restore_start.strftime('%Y-%m-%d %H:%M:%S'),
             end_time=restore_end.strftime('%Y-%m-%d %H:%M:%S'),
             post_restore_count=post_restore_count,
-            checkpoint_name=checkpoint_name,
-            duration=duration_seconds
+            notes_escaped=notes_escaped
         )
         spark.sql(insert_success_query)
         
@@ -301,11 +345,14 @@ for idx, table_name in enumerate(table_list, 1):
         
         print("  ✗ Restore failed: {0}".format(error_msg))
         
+        # Log failure to audit trail
         error_msg_escaped = error_msg.replace("'", "''")
+        log_id = "{0}_{1}_restore".format(pipeline_run_id, table_name.replace('.', '_'))
+        
         insert_error_query = """
             INSERT INTO metadata.SyncAuditLog (
                 LogId, PipelineRunId, PipelineName, TableName, Operation,
-                StartTime, EndTime, RowsProcessed, Status, ErrorMessage, CreatedDate
+                StartTime, EndTime, RowsProcessed, Status, ErrorMessage, RetryCount, CreatedDate
             ) VALUES (
                 '{log_id}',
                 '{pipeline_run_id}',
@@ -316,16 +363,17 @@ for idx, table_name in enumerate(table_list, 1):
                 timestamp'{end_time}',
                 0,
                 'Error',
-                '{error_msg}',
+                '{error_msg_escaped}',
+                0,
                 current_timestamp()
             )
         """.format(
-            log_id="{0}_{1}_restore".format(pipeline_run_id, table_name),
+            log_id=log_id,
             pipeline_run_id=pipeline_run_id,
             table_name=table_name,
             start_time=restore_start.strftime('%Y-%m-%d %H:%M:%S'),
             end_time=restore_end.strftime('%Y-%m-%d %H:%M:%S'),
-            error_msg=error_msg_escaped
+            error_msg_escaped=error_msg_escaped
         )
         spark.sql(insert_error_query)
         
@@ -354,7 +402,7 @@ print("\n📊 EXECUTION SUMMARY:")
 print("  Tables Attempted: {0}".format(len(table_list)))
 print("  Tables Succeeded: {0}".format(tables_succeeded))
 print("  Tables Failed: {0}".format(tables_failed))
-print("  Success Rate: {0:.1f}%".format(tables_succeeded/len(table_list)*100))
+print("  Success Rate: {0:.1f}%".format(tables_succeeded/len(table_list)*100 if len(table_list) > 0 else 0))
 print("  Total Duration: {0:.2f} seconds ({1:.1f} minutes)".format(total_duration, total_duration/60))
 
 if tables_failed > 0:

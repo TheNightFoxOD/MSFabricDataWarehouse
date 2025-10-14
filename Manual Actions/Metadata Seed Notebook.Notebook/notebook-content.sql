@@ -834,6 +834,34 @@ OPTIMIZE [metadata].DataValidation;
 -- CELL ********************
 
 -- MAGIC %%pyspark
+-- MAGIC spark.sql("""
+-- MAGIC     CREATE TABLE IF NOT EXISTS metadata.RollbackStateSnapshots (
+-- MAGIC         SnapshotId STRING NOT NULL COMMENT 'Unique identifier for snapshot',
+-- MAGIC         PipelineRunId STRING NOT NULL COMMENT 'Links to SyncAuditLog for traceability',
+-- MAGIC         TableName STRING NOT NULL COMMENT 'Bronze table being captured',
+-- MAGIC         SnapshotType STRING NOT NULL COMMENT 'PreRollback or PostRollback',
+-- MAGIC         SnapshotDate TIMESTAMP NOT NULL COMMENT 'When snapshot was captured',
+-- MAGIC         TotalRows BIGINT COMMENT 'Total records in table',
+-- MAGIC         ActiveRows BIGINT COMMENT 'Records with IsDeleted=false and IsPurged=false',
+-- MAGIC         DeletedRows BIGINT COMMENT 'Records with IsDeleted=true',
+-- MAGIC         PurgedRows BIGINT COMMENT 'Records with IsPurged=true',
+-- MAGIC         DeltaVersion BIGINT COMMENT 'Delta Lake version number at snapshot time',
+-- MAGIC         SampleRecordIds STRING COMMENT 'JSON array of top 100 primary key values',
+-- MAGIC         CreatedDate TIMESTAMP COMMENT 'Record creation timestamp'
+-- MAGIC     ) USING DELTA
+-- MAGIC     COMMENT 'Captures table state before and after rollback operations for validation'
+-- MAGIC """)
+
+-- METADATA ********************
+
+-- META {
+-- META   "language": "python",
+-- META   "language_group": "synapse_pyspark"
+-- META }
+
+-- CELL ********************
+
+-- MAGIC %%pyspark
 -- MAGIC # ============================================================
 -- MAGIC # CR-002: Enhanced Manual Rollback Capability
 -- MAGIC # Setup Cell 2 of 2: Optimize Rollback Metadata Tables

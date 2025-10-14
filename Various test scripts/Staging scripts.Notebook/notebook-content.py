@@ -29,7 +29,8 @@
 # MAGIC where 1=1
 # MAGIC -- and IsDeleted = true
 # MAGIC and (od_donationid = 'ca5c36ca-3511-ea11-a811-000d3a4aa1c2' -- purged
-# MAGIC     or od_donationid = 'db7810ed-ab90-4d51-ad2f-52f2e2da3dd0') -- deleted
+# MAGIC     or od_donationid = 'db7810ed-ab90-4d51-ad2f-52f2e2da3dd0' -- deleted
+# MAGIC     or od_donationid = '308a44af-6381-4f76-84fe-da38872cc7e5') -- new
 # MAGIC -- order by modifiedon desc 
 
 # METADATA ********************

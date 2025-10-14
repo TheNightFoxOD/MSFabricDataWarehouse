@@ -26,7 +26,7 @@
 # MAGIC -- ============================================================
 # MAGIC -- SECTION 1: FINDING CHECKPOINTS
 # MAGIC -- ============================================================
-# MAGIC
+# MAGIC 
 # MAGIC -- 1.1: Find all active checkpoints (WITH CheckpointId for rollback pipeline)
 # MAGIC SELECT
 # MAGIC     CheckpointId,        -- Use this for pipeline parameter!
@@ -81,12 +81,13 @@
 # MAGIC     CheckpointName,
 # MAGIC     CheckpointType,
 # MAGIC     CreatedDate,
-# MAGIC     ValidationStatus
+# MAGIC     ValidationStatus,
+# MAGIC     IsActive
 # MAGIC FROM metadata.CheckpointHistory
 # MAGIC WHERE CheckpointType = 'DailyBatch'
 # MAGIC AND IsActive = true
 # MAGIC ORDER BY CreatedDate DESC
-# MAGIC LIMIT 1;
+# MAGIC -- LIMIT 1;
 
 # METADATA ********************
 
@@ -175,7 +176,7 @@
 # MAGIC -- ============================================================
 # MAGIC -- SECTION 2: ROLLBACK HISTORY & MONITORING
 # MAGIC -- ============================================================
-# MAGIC
+# MAGIC 
 # MAGIC -- 2.1: View all rollback operations (summary) with checkpoint details
 # MAGIC SELECT
 # MAGIC     r.ReportId,
@@ -353,7 +354,7 @@
 # MAGIC -- ============================================================
 # MAGIC -- SECTION 3: TROUBLESHOOTING QUERIES
 # MAGIC -- ============================================================
-# MAGIC
+# MAGIC 
 # MAGIC -- 3.1: Check Delta Lake time travel availability for a table
 # MAGIC -- Run DESCRIBE HISTORY in a notebook, this shows retention info:
 # MAGIC -- DESCRIBE HISTORY account;
@@ -364,6 +365,9 @@
 # META   "language": "sparksql",
 # META   "language_group": "synapse_pyspark"
 # META }
+
+# MARKDOWN ********************
+
 
 # CELL ********************
 
@@ -495,7 +499,7 @@
 # MAGIC -- ============================================================
 # MAGIC -- SECTION 4: DATA VALIDATION QUERIES
 # MAGIC -- ============================================================
-# MAGIC
+# MAGIC 
 # MAGIC -- 4.1: Check current data integrity for a table
 # MAGIC SELECT
 # MAGIC     'account' as TableName,  -- Replace with table name
@@ -601,7 +605,7 @@
 # MAGIC -- ============================================================
 # MAGIC -- SECTION 5: CHECKPOINT MANAGEMENT
 # MAGIC -- ============================================================
-# MAGIC
+# MAGIC 
 # MAGIC -- 5.1: Count checkpoints by type and status
 # MAGIC SELECT
 # MAGIC     CheckpointType,
@@ -691,7 +695,7 @@
 # MAGIC -- ============================================================
 # MAGIC -- SECTION 6: REPORTING QUERIES
 # MAGIC -- ============================================================
-# MAGIC
+# MAGIC 
 # MAGIC -- 6.1: Monthly rollback activity report
 # MAGIC SELECT
 # MAGIC     DATE_FORMAT(r.RollbackDate, 'yyyy-MM') as rollback_month,
@@ -787,7 +791,7 @@
 # MAGIC -- ============================================================
 # MAGIC -- SECTION 7: HEALTH CHECK QUERIES
 # MAGIC -- ============================================================
-# MAGIC
+# MAGIC 
 # MAGIC -- 7.1: Overall system health check
 # MAGIC SELECT
 # MAGIC     'Active Checkpoints' as metric,
@@ -831,7 +835,7 @@
 # MAGIC     'Description' as description,
 # MAGIC     0 as count
 # MAGIC WHERE 1=0  -- Template structure
-# MAGIC
+# MAGIC 
 # MAGIC UNION ALL
 # MAGIC SELECT
 # MAGIC     'Expired Checkpoints Not Deactivated',
@@ -840,7 +844,7 @@
 # MAGIC FROM metadata.CheckpointHistory
 # MAGIC WHERE IsActive = true
 # MAGIC AND RetentionDate < CURRENT_TIMESTAMP()
-# MAGIC
+# MAGIC 
 # MAGIC UNION ALL
 # MAGIC SELECT
 # MAGIC     'Failed Restores',
@@ -850,7 +854,7 @@
 # MAGIC WHERE Operation = 'TableRestore'
 # MAGIC AND Status = 'Error'
 # MAGIC AND StartTime >= DATE_SUB(CURRENT_DATE(), 7)
-# MAGIC
+# MAGIC 
 # MAGIC UNION ALL
 # MAGIC SELECT
 # MAGIC     'Low Quality Rollbacks',
@@ -873,7 +877,7 @@
 # MAGIC -- ============================================================
 # MAGIC -- SECTION 8: CLEANUP & MAINTENANCE QUERIES
 # MAGIC -- ============================================================
-# MAGIC
+# MAGIC 
 # MAGIC -- 8.1: Find old completed rollback snapshots (for potential cleanup)
 # MAGIC -- These can be archived after 90 days
 # MAGIC SELECT

@@ -41,6 +41,37 @@ pipeline_run_id = ""
 # CELL ********************
 
 # ============================================================
+# CR-002: Manual Rollback to Checkpoint
+# Notebook 1: Validate Checkpoint & Generate Impact Analysis
+# ============================================================
+#
+# PURPOSE: Validates checkpoint exists and generates comprehensive 
+#          impact report showing what will change during rollback
+#
+# INPUTS (Pipeline Parameters - defined in PARAMETERS cell below):
+#   - checkpoint_id: Unique CheckpointId to restore to (required)
+#   - tables_scope: "All" or comma-separated table names (default: "All")
+#   - pipeline_run_id: Unique identifier for this rollback operation
+#
+# OUTPUTS (exitValue JSON):
+#   - validation_passed: true/false
+#   - checkpoint_info: metadata about checkpoint (includes checkpoint_timestamp)
+#   - impact_summary: aggregate metrics
+#   - tables_affected: list of tables with individual impacts
+#   - warnings: list of warning messages
+#
+# ============================================================
+
+# CELL 1: PARAMETERS
+# ============================================================
+# Toggle this cell to "Parameters" type in MS Fabric
+# Pipeline will inject parameter values into these variables
+# ============================================================
+# checkpoint_id = ""
+# tables_scope = "All"
+# pipeline_run_id = ""
+
+# ============================================================
 # CELL 2: IMPORTS AND SETUP
 # ============================================================
 import json
@@ -52,355 +83,492 @@ from notebookutils import mssparkutils
 # STEP 0: Validate Input Parameters
 # ==========================================
 print("="*60)
-print("POST-ROLLBACK VALIDATION & SUMMARY")
+print("ROLLBACK VALIDATION & IMPACT ANALYSIS")
 print("="*60)
 
-try:
-    table_list = json.loads(tables_json)
-    restoration_details = json.loads(restoration_details_json)
-except Exception as e:
-    error_msg = f"Failed to parse JSON parameters: {str(e)}"
-    print(f"\n✗ {error_msg}")
+# Validate required parameters
+if not checkpoint_id:
+    error_msg = "checkpoint_id parameter is required"
+    print("\n✗ {0}".format(error_msg))
     mssparkutils.notebook.exit(json.dumps({
         "validation_passed": False,
         "error": error_msg,
-        "quality_score": 0,
-        "checkpoint_created": False,
-        "comparison_report": {}
+        "checkpoint_info": {},
+        "impact_summary": {},
+        "tables_affected": [],
+        "warnings": []
     }))
 
-print(f"\nParameters:")
-print(f"  Checkpoint ID: {checkpoint_id}")
-print(f"  Checkpoint Name: {checkpoint_name}")
-print(f"  Tables to Validate: {len(table_list)}")
-print(f"  Restoration Details: {len(restoration_details)} table(s)")
-print(f"  Pipeline Run ID: {pipeline_run_id}")
+if not pipeline_run_id:
+    pipeline_run_id = "rollback_{0}".format(datetime.now().strftime('%Y%m%d_%H%M%S'))
 
-# Identify successfully restored tables
-succeeded_tables = [d["table_name"] for d in restoration_details if d["status"] == "Success"]
-failed_tables = [d["table_name"] for d in restoration_details if d["status"] == "Failed"]
+print("\nParameters:")
+print("  Checkpoint ID: {0}".format(checkpoint_id))
+print("  Tables Scope: {0}".format(tables_scope))
+print("  Pipeline Run ID: {0}".format(pipeline_run_id))
 
-print(f"\nRestoration Results:")
-print(f"  Succeeded: {len(succeeded_tables)} table(s)")
-print(f"  Failed: {len(failed_tables)} table(s)")
+# Parse tables_scope string into table list
+if tables_scope.upper() == "ALL":
+    table_list = None  # Will get all tables from PipelineConfig
+    print("  → Rolling back ALL tables")
+else:
+    # Parse comma-separated table names
+    table_list = [t.strip() for t in tables_scope.split(",") if t.strip()]
+    print("  → Rolling back {0} specific table(s): {1}".format(len(table_list), ', '.join(table_list)))
+
+warnings = []
 
 # ==========================================
-# STEP 1: Capture Post-Rollback State
+# STEP 1: Validate Checkpoint Exists and Is Valid
 # ==========================================
 print("\n" + "="*60)
-print("STEP 1: Capturing Post-Rollback State")
+print("STEP 1: Validating Checkpoint")
 print("="*60)
 
-post_rollback_snapshots = []
-
-for table_name in succeeded_tables:
-    try:
-        print(f"\nCapturing state: {table_name}")
+try:
+    # Query by CheckpointId (unique identifier)
+    checkpoint_query = """
+        SELECT 
+            CheckpointId,
+            CheckpointName,
+            CheckpointType,
+            CreatedDate,
+            TablesIncluded,
+            TotalRows,
+            ValidationStatus,
+            RetentionDate,
+            IsActive,
+            PipelineRunId,
+            SchemaName,
+            TableName
+        FROM metadata.CheckpointHistory
+        WHERE CheckpointId = '{checkpoint_id}'
+    """.format(checkpoint_id=checkpoint_id)
+    
+    checkpoint_df = spark.sql(checkpoint_query)
+    
+    if checkpoint_df.count() == 0:
+        error_msg = "Checkpoint with ID '{0}' not found".format(checkpoint_id)
+        print("\n✗ {0}".format(error_msg))
         
-        # Get current statistics
-        query = """
+        # Log validation failure
+        log_id = "{0}_validation_failed".format(pipeline_run_id)
+        error_msg_escaped = error_msg.replace("'", "''")
+        
+        insert_log_query = """
+            INSERT INTO metadata.SyncAuditLog (
+                LogId, PipelineRunId, PipelineName, TableName, Operation,
+                StartTime, EndTime, RowsProcessed, Status, ErrorMessage, RetryCount, CreatedDate
+            ) VALUES (
+                '{log_id}',
+                '{pipeline_run_id}',
+                'ManualRollback',
+                NULL,
+                'RollbackValidation',
+                current_timestamp(),
+                current_timestamp(),
+                0,
+                'Error',
+                '{error_msg_escaped}',
+                0,
+                current_timestamp()
+            )
+        """.format(
+            log_id=log_id,
+            pipeline_run_id=pipeline_run_id,
+            error_msg_escaped=error_msg_escaped
+        )
+        spark.sql(insert_log_query)
+        
+        mssparkutils.notebook.exit(json.dumps({
+            "validation_passed": False,
+            "error": error_msg,
+            "checkpoint_info": {},
+            "impact_summary": {},
+            "tables_affected": [],
+            "warnings": []
+        }))
+    
+    checkpoint = checkpoint_df.collect()[0]
+    
+    print("\n✓ Checkpoint found:")
+    print("  ID: {0}".format(checkpoint.CheckpointId))
+    print("  Name: {0}".format(checkpoint.CheckpointName))
+    print("  Type: {0}".format(checkpoint.CheckpointType))
+    print("  Created: {0}".format(checkpoint.CreatedDate))
+    print("  Tables Included: {0}".format(checkpoint.TablesIncluded))
+    print("  Total Rows: {0:,}".format(checkpoint.TotalRows))
+    print("  Validation Status: {0}".format(checkpoint.ValidationStatus))
+    
+    # Check if checkpoint is active
+    if not checkpoint.IsActive:
+        error_msg = "Checkpoint ID '{0}' (Name: '{1}') is not active (expired or deactivated)".format(
+            checkpoint_id, checkpoint.CheckpointName
+        )
+        print("\n✗ {0}".format(error_msg))
+        print("  Retention Date: {0}".format(checkpoint.RetentionDate))
+        
+        error_msg_escaped = error_msg.replace("'", "''")
+        log_id = "{0}_validation_failed".format(pipeline_run_id)
+        
+        insert_log_query = """
+            INSERT INTO metadata.SyncAuditLog (
+                LogId, PipelineRunId, PipelineName, TableName, Operation,
+                StartTime, EndTime, Status, ErrorMessage, RetryCount, CreatedDate
+            ) VALUES (
+                '{log_id}',
+                '{pipeline_run_id}',
+                'ManualRollback',
+                NULL,
+                'RollbackValidation',
+                current_timestamp(),
+                current_timestamp(),
+                'Error',
+                '{error_msg_escaped}',
+                0,
+                current_timestamp()
+            )
+        """.format(
+            log_id=log_id,
+            pipeline_run_id=pipeline_run_id,
+            error_msg_escaped=error_msg_escaped
+        )
+        spark.sql(insert_log_query)
+        
+        mssparkutils.notebook.exit(json.dumps({
+            "validation_passed": False,
+            "error": error_msg,
+            "checkpoint_info": {
+                "name": checkpoint.CheckpointName,
+                "type": checkpoint.CheckpointType,
+                "created_date": str(checkpoint.CreatedDate),
+                "is_active": False
+            },
+            "impact_summary": {},
+            "tables_affected": [],
+            "warnings": []
+        }))
+    
+    # Check if checkpoint passed validation
+    if checkpoint.ValidationStatus != 'Validated':
+        warning = "Checkpoint validation status is '{0}' (not 'Validated'). Proceed with caution.".format(
+            checkpoint.ValidationStatus
+        )
+        warnings.append(warning)
+        print("\n⚠ {0}".format(warning))
+    
+    print("\n✓ Checkpoint is valid and active")
+    
+except Exception as e:
+    error_msg = "Failed to validate checkpoint: {0}".format(str(e))
+    print("\n✗ {0}".format(error_msg))
+    
+    error_msg_escaped = str(e).replace("'", "''")
+    log_id = "{0}_validation_failed".format(pipeline_run_id)
+    
+    insert_log_query = """
+        INSERT INTO metadata.SyncAuditLog (
+            LogId, PipelineRunId, PipelineName, Operation, Status, ErrorMessage, CreatedDate
+        ) VALUES (
+            '{log_id}',
+            '{pipeline_run_id}',
+            'ManualRollback',
+            'RollbackValidation',
+            'Error',
+            '{error_msg_escaped}',
+            current_timestamp()
+        )
+    """.format(
+        log_id=log_id,
+        pipeline_run_id=pipeline_run_id,
+        error_msg_escaped=error_msg_escaped
+    )
+    spark.sql(insert_log_query)
+    
+    mssparkutils.notebook.exit(json.dumps({
+        "validation_passed": False,
+        "error": error_msg,
+        "checkpoint_info": {},
+        "impact_summary": {},
+        "tables_affected": [],
+        "warnings": []
+    }))
+
+# ==========================================
+# STEP 2: Get List of Tables to Analyze
+# ==========================================
+print("\n" + "="*60)
+print("STEP 2: Determining Tables in Scope")
+print("="*60)
+
+try:
+    if table_list is None:
+        # Get all enabled tables from PipelineConfig
+        tables_query = """
+            SELECT TableName, SchemaName, PrimaryKeyColumn
+            FROM metadata.PipelineConfig
+            WHERE SyncEnabled = true
+            ORDER BY TableName
+        """
+        tables_df = spark.sql(tables_query)
+        table_list = [row.TableName for row in tables_df.collect()]
+        print("\n✓ Found {0} enabled tables in configuration".format(len(table_list)))
+    else:
+        # Validate specified tables exist in config
+        valid_tables = []
+        for table_name in table_list:
+            check_query = """
+                SELECT TableName 
+                FROM metadata.PipelineConfig
+                WHERE TableName = '{table_name}' AND SyncEnabled = true
+            """.format(table_name=table_name)
+            check_df = spark.sql(check_query)
+            
+            if check_df.count() > 0:
+                valid_tables.append(table_name)
+            else:
+                warning = "Table '{0}' not found in configuration or not enabled - skipping".format(table_name)
+                print("  ⚠ {0}".format(warning))
+                warnings.append(warning)
+        
+        table_list = valid_tables
+        if len(table_list) == 0:
+            error_msg = "No valid tables found in scope"
+            print("\n✗ {0}".format(error_msg))
+            mssparkutils.notebook.exit(json.dumps({
+                "validation_passed": False,
+                "error": error_msg,
+                "checkpoint_info": {},
+                "impact_summary": {},
+                "tables_affected": [],
+                "warnings": warnings
+            }))
+        
+        print("\n✓ Validated {0} table(s) in scope".format(len(table_list)))
+    
+    print("\nTables to analyze:")
+    for table_name in table_list:
+        print("  • {0}".format(table_name))
+
+except Exception as e:
+    error_msg = "Failed to determine tables in scope: {0}".format(str(e))
+    print("\n✗ {0}".format(error_msg))
+    mssparkutils.notebook.exit(json.dumps({
+        "validation_passed": False,
+        "error": error_msg,
+        "checkpoint_info": {},
+        "impact_summary": {},
+        "tables_affected": [],
+        "warnings": warnings
+    }))
+
+# ==========================================
+# STEP 3: Generate Impact Analysis for Each Table
+# ==========================================
+print("\n" + "="*60)
+print("STEP 3: Generating Impact Analysis")
+print("="*60)
+print("Checkpoint Timestamp: {0}".format(checkpoint.CreatedDate))
+print("="*60)
+
+impact_analysis = []
+total_current_rows = 0
+total_checkpoint_rows = 0
+
+for idx, table_name in enumerate(table_list, 1):
+    print("\n[{0}/{1}] Analyzing: {2}".format(idx, len(table_list), table_name))
+    
+    try:
+        # Get schema name from PipelineConfig
+        schema_query = """
+            SELECT SchemaName 
+            FROM metadata.PipelineConfig 
+            WHERE TableName = '{table_name}'
+        """.format(table_name=table_name)
+        schema_df = spark.sql(schema_query)
+        
+        if schema_df.count() == 0:
+            warning = "No schema found for table '{0}' - skipping".format(table_name)
+            warnings.append(warning)
+            print("  ⚠ {0}".format(warning))
+            continue
+        
+        schema_name = schema_df.collect()[0].SchemaName
+        full_table_name = "{0}.{1}".format(schema_name, table_name)
+        
+        # Get current state
+        current_query = """
             SELECT 
                 COUNT(*) as total_rows,
                 SUM(CASE WHEN IsDeleted = false AND IsPurged = false THEN 1 ELSE 0 END) as active_rows,
                 SUM(CASE WHEN IsDeleted = true THEN 1 ELSE 0 END) as deleted_rows,
                 SUM(CASE WHEN IsPurged = true THEN 1 ELSE 0 END) as purged_rows
-            FROM {table_name}
-        """.format(table_name=table_name)
-        stats_df = spark.sql(query)
+            FROM {full_table_name}
+        """.format(full_table_name=full_table_name)
         
-        stats = stats_df.collect()[0]
-        total_rows = stats.total_rows if stats.total_rows else 0
-        active_rows = stats.active_rows if stats.active_rows else 0
-        deleted_rows = stats.deleted_rows if stats.deleted_rows else 0
-        purged_rows = stats.purged_rows if stats.purged_rows else 0
+        current_df = spark.sql(current_query)
+        current = current_df.collect()[0]
         
-        # Get Delta Lake version
-        try:
-            version_df = spark.sql("DESCRIBE DETAIL {0}".format(table_name))
-            delta_version = version_df.select("version").collect()[0].version
-        except:
-            delta_version = None
+        current_total = current.total_rows if current.total_rows else 0
+        current_active = current.active_rows if current.active_rows else 0
+        current_deleted = current.deleted_rows if current.deleted_rows else 0
+        current_purged = current.purged_rows if current.purged_rows else 0
         
-        # Get sample record IDs
-        try:
-            config_query = """
-                SELECT PrimaryKeyColumn 
-                FROM metadata.PipelineConfig 
-                WHERE TableName = '{table_name}'
-            """.format(table_name=table_name)
-            config_df = spark.sql(config_query)
-            pk_column = config_df.collect()[0].PrimaryKeyColumn if config_df.count() > 0 else None
-            
-            if pk_column:
-                sample_query = """
-                    SELECT {pk_column} 
-                    FROM {table_name} 
-                    LIMIT 100
-                """.format(table_name=table_name, pk_column=pk_column)
-                sample_df = spark.sql(sample_query)
-                sample_ids = [str(row[0]) for row in sample_df.collect()]
-            else:
-                sample_ids = []
-        except:
-            sample_ids = []
+        # Get checkpoint state (at that timestamp)
+        checkpoint_timestamp_str = checkpoint.CreatedDate.strftime('%Y-%m-%dT%H:%M:%S')
         
-        snapshot_id = f"{pipeline_run_id}_{table_name}_post"
-        sample_ids_json = json.dumps(sample_ids).replace("'", "''")
+        checkpoint_query = """
+            SELECT COUNT(*) as total_rows
+            FROM {full_table_name}
+            TIMESTAMP AS OF '{checkpoint_timestamp_str}'
+        """.format(full_table_name=full_table_name, checkpoint_timestamp_str=checkpoint_timestamp_str)
         
-        insert_query = """
-            INSERT INTO metadata.RollbackStateSnapshots (
-                SnapshotId, PipelineRunId, TableName, SnapshotType, SnapshotDate,
-                TotalRows, ActiveRows, DeletedRows, PurgedRows, 
-                DeltaVersion, SampleRecordIds, CreatedDate
-            ) VALUES (
-                '{snapshot_id}',
-                '{pipeline_run_id}',
-                '{table_name}',
-                'PostRollback',
-                current_timestamp(),
-                {total_rows},
-                {active_rows},
-                {deleted_rows},
-                {purged_rows},
-                {delta_version},
-                '{sample_ids_json}',
-                current_timestamp()
-            )
-        """.format(
-            snapshot_id=snapshot_id,
-            pipeline_run_id=pipeline_run_id,
-            table_name=table_name,
-            total_rows=total_rows,
-            active_rows=active_rows,
-            deleted_rows=deleted_rows,
-            purged_rows=purged_rows,
-            delta_version=delta_version if delta_version is not None else 'NULL',
-            sample_ids_json=sample_ids_json
-        )
-        spark.sql(insert_query)
+        checkpoint_df = spark.sql(checkpoint_query)
+        checkpoint_total = checkpoint_df.collect()[0].total_rows
         
-        post_rollback_snapshots.append({
-            "table_name": table_name,
-            "total_rows": total_rows,
-            "active_rows": active_rows,
-            "deleted_rows": deleted_rows,
-            "purged_rows": purged_rows,
-            "delta_version": delta_version
+        # Calculate impact
+        rows_delta = checkpoint_total - current_total
+        
+        # Determine risk level
+        if abs(rows_delta) > 10000:
+            risk_level = "High"
+        elif abs(rows_delta) > 1000:
+            risk_level = "Medium"
+        else:
+            risk_level = "Low"
+        
+        # Calculate time span
+        now = datetime.now()
+        checkpoint_dt = checkpoint.CreatedDate
+        time_span_hours = (now - checkpoint_dt).total_seconds() / 3600
+        time_span_days = time_span_hours / 24
+        
+        if time_span_days >= 1:
+            time_span = "{0:.1f} days".format(time_span_days)
+        else:
+            time_span = "{0:.1f} hours".format(time_span_hours)
+        
+        impact_analysis.append({
+            "table_name": full_table_name,
+            "current_total_rows": current_total,
+            "current_active_rows": current_active,
+            "current_deleted_rows": current_deleted,
+            "current_purged_rows": current_purged,
+            "checkpoint_total_rows": checkpoint_total,
+            "rows_delta": rows_delta,
+            "time_span": time_span,
+            "risk_level": risk_level
         })
         
-        print(f"  ✓ State captured: {total_rows:,} total rows (Version {delta_version})")
+        total_current_rows += current_total
+        total_checkpoint_rows += checkpoint_total
+        
+        print("  Current: {0:,} rows ({1:,} active, {2:,} deleted, {3:,} purged)".format(
+            current_total, current_active, current_deleted, current_purged
+        ))
+        print("  Checkpoint: {0:,} rows".format(checkpoint_total))
+        print("  Delta: {0:+,} rows".format(rows_delta))
+        print("  Time span: {0}".format(time_span))
+        print("  Risk: {0}".format(risk_level))
     
     except Exception as e:
-        print(f"  ✗ Failed to capture post-rollback state: {str(e)}")
-
-print(f"\n✓ Post-rollback state captured for {len(post_rollback_snapshots)} table(s)")
-
-# ==========================================
-# STEP 2: Validate Data Integrity
-# ==========================================
-print("\n" + "="*60)
-print("STEP 2: Validating Data Integrity")
-print("="*60)
-
-validation_results = []
-validation_failures = []
-
-for table_name in succeeded_tables:
-    print(f"\nValidating: {table_name}")
-    
-    try:
-        post_snapshot = next((s for s in post_rollback_snapshots if s["table_name"] == table_name), None)
-        if not post_snapshot:
-            validation_failures.append(f"{table_name}: No post-rollback snapshot found")
-            continue
-        
-        total_rows = post_snapshot["total_rows"]
-        active_rows = post_snapshot["active_rows"]
-        deleted_rows = post_snapshot["deleted_rows"]
-        purged_rows = post_snapshot["purged_rows"]
-        
-        checks = []
-        
-        # Check 1: Internal consistency
-        calculated_total = active_rows + deleted_rows + purged_rows
-        if calculated_total == total_rows:
-            checks.append({"check": "Internal Consistency", "status": "PASS"})
-            print(f"  ✓ Internal Consistency: {active_rows} + {deleted_rows} + {purged_rows} = {total_rows}")
-        else:
-            error = f"Consistency check failed: {active_rows} + {deleted_rows} + {purged_rows} = {calculated_total}, expected {total_rows}"
-            checks.append({"check": "Internal Consistency", "status": "FAIL", "error": error})
-            validation_failures.append(f"{table_name}: {error}")
-            print(f"  ✗ Internal Consistency: {error}")
-        
-        # Check 2: No null primary keys
-        try:
-            config_query = """
-                SELECT PrimaryKeyColumn 
-                FROM metadata.PipelineConfig 
-                WHERE TableName = '{table_name}'
-            """.format(table_name=table_name)
-            config_df = spark.sql(config_query)
-            pk_column = config_df.collect()[0].PrimaryKeyColumn if config_df.count() > 0 else None
-            
-            if pk_column:
-                null_pk_query = """
-                    SELECT COUNT(*) as null_count 
-                    FROM {table_name} 
-                    WHERE {pk_column} IS NULL
-                """.format(table_name=table_name, pk_column=pk_column)
-                null_pk_df = spark.sql(null_pk_query)
-                null_count = null_pk_df.collect()[0].null_count
-                
-                if null_count == 0:
-                    checks.append({"check": "No Null Primary Keys", "status": "PASS"})
-                    print("  ✓ No Null Primary Keys")
-                else:
-                    error = f"Found {null_count} null primary keys"
-                    checks.append({"check": "No Null Primary Keys", "status": "FAIL", "error": error})
-                    validation_failures.append(f"{table_name}: {error}")
-                    print(f"  ✗ No Null Primary Keys: {error}")
-        except Exception as e:
-            checks.append({"check": "No Null Primary Keys", "status": "SKIP", "error": str(e)})
-        
-        # Check 3: Tracking columns consistency
-        inconsistent_query = """
-            SELECT COUNT(*) as inconsistent_count
-            FROM {table_name}
-            WHERE (IsDeleted = true AND IsPurged = true)
-        """.format(table_name=table_name)
-        inconsistent_df = spark.sql(inconsistent_query)
-        inconsistent_count = inconsistent_df.collect()[0].inconsistent_count
-        
-        if inconsistent_count == 0:
-            checks.append({"check": "Tracking Column Consistency", "status": "PASS"})
-            print("  ✓ Tracking Column Consistency")
-        else:
-            error = f"Found {inconsistent_count} records with inconsistent tracking flags"
-            checks.append({"check": "Tracking Column Consistency", "status": "FAIL", "error": error})
-            validation_failures.append(f"{table_name}: {error}")
-            print(f"  ✗ Tracking Column Consistency: {error}")
-        
-        passed_checks = sum(1 for c in checks if c["status"] == "PASS")
-        total_checks = len([c for c in checks if c["status"] in ["PASS", "FAIL"]])
-        table_quality_score = (passed_checks / total_checks * 100) if total_checks > 0 else 0
-        
-        validation_id = f"{pipeline_run_id}_{table_name}_postrollback"
-        validation_passed = len([c for c in checks if c["status"] == "FAIL"]) == 0
-        notes_json = json.dumps(checks).replace("'", "''")
-        
-        insert_validation_query = """
-            INSERT INTO metadata.DataValidation (
-                ValidationId, ValidationDate, TableName,
-                BronzeRowCount, ActiveRowCount, DeletedRowCount, PurgedRowCount,
-                ValidationPassed, Notes, ValidationContext
-            ) VALUES (
-                '{validation_id}',
-                current_timestamp(),
-                '{table_name}',
-                {total_rows},
-                {active_rows},
-                {deleted_rows},
-                {purged_rows},
-                {validation_passed},
-                '{notes_json}',
-                'PostRollback'
-            )
-        """.format(
-            validation_id=validation_id,
-            table_name=table_name,
-            total_rows=total_rows,
-            active_rows=active_rows,
-            deleted_rows=deleted_rows,
-            purged_rows=purged_rows,
-            validation_passed=str(validation_passed).lower(),
-            notes_json=notes_json
-        )
-        spark.sql(insert_validation_query)
-        
-        validation_results.append({
-            "table_name": table_name,
-            "quality_score": round(table_quality_score, 2),
-            "validation_passed": validation_passed,
-            "checks": checks
-        })
-        
-        print(f"  Quality Score: {table_quality_score:.2f}%")
-    
-    except Exception as e:
-        error = f"Validation error for '{table_name}': {str(e)}"
-        print(f"  ✗ {error}")
-        validation_failures.append(error)
+        error_msg = "Failed to analyze table '{0}': {1}".format(table_name, str(e))
+        print("  ✗ {0}".format(error_msg))
+        warnings.append(error_msg)
 
 # ==========================================
-# STEP 3: Aggregate Quality Score
+# STEP 4: Generate Summary and Log Results
 # ==========================================
 print("\n" + "="*60)
-print("STEP 3: Aggregating Quality Scores")
+print("IMPACT ANALYSIS SUMMARY")
 print("="*60)
 
-total_quality_score = sum([r["quality_score"] for r in validation_results])
-num_tables = len(validation_results)
-overall_quality_score = round(total_quality_score / num_tables, 2) if num_tables > 0 else 0
+total_delta = total_checkpoint_rows - total_current_rows
+high_risk_count = len([t for t in impact_analysis if t["risk_level"] == "High"])
+medium_risk_count = len([t for t in impact_analysis if t["risk_level"] == "Medium"])
+low_risk_count = len([t for t in impact_analysis if t["risk_level"] == "Low"])
 
-print(f"\nOverall Quality Score: {overall_quality_score:.2f}%")
-print(f"Tables Passed: {sum(1 for r in validation_results if r['validation_passed'])}/{num_tables}")
-print(f"Tables Failed: {len(validation_failures)}")
+print("\n📊 Aggregate Metrics:")
+print("  Tables Affected: {0}".format(len(impact_analysis)))
+print("  Current Total Rows: {0:,}".format(total_current_rows))
+print("  Checkpoint Total Rows: {0:,}".format(total_checkpoint_rows))
+print("  Net Change: {0:+,} rows".format(total_delta))
+print("\n⚠ Risk Distribution:")
+print("  High Risk: {0} table(s)".format(high_risk_count))
+print("  Medium Risk: {0} table(s)".format(medium_risk_count))
+print("  Low Risk: {0} table(s)".format(low_risk_count))
 
-# ==========================================
-# STEP 4: Log Aggregate Results
-# ==========================================
-print("\n" + "="*60)
-print("STEP 4: Logging Aggregate Results")
-print("="*60)
+if len(warnings) > 0:
+    print("\n⚠ Warnings ({0}):".format(len(warnings)))
+    for warning in warnings:
+        print("  • {0}".format(warning))
 
+# Log validation success
 try:
-    summary_notes = json.dumps({
-        "validation_failures": validation_failures[:10],
-        "total_tables": num_tables,
-        "overall_quality_score": overall_quality_score
-    }).replace("'", "''")
+    log_id = "{0}_validation_success".format(pipeline_run_id)
+    notes = "Impact analysis completed. {0} tables analyzed.".format(len(impact_analysis))
+    notes_escaped = notes.replace("'", "''")
     
-    spark.sql("""
-        INSERT INTO metadata.DataValidationSummary (
-            SummaryId, PipelineRunId, ValidationDate,
-            OverallQualityScore, TotalTables, Notes
+    insert_log_query = """
+        INSERT INTO metadata.SyncAuditLog (
+            LogId, PipelineRunId, PipelineName, TableName, Operation,
+            StartTime, EndTime, RowsProcessed, Status, Notes, RetryCount, CreatedDate
         ) VALUES (
-            '{summary_id}',
+            '{log_id}',
             '{pipeline_run_id}',
+            'ManualRollback',
+            'Multiple',
+            'RollbackValidation',
             current_timestamp(),
-            {overall_quality_score},
-            {num_tables},
-            '{summary_notes}'
+            current_timestamp(),
+            {total_checkpoint_rows},
+            'Success',
+            '{notes_escaped}',
+            0,
+            current_timestamp()
         )
     """.format(
-        summary_id=f"{pipeline_run_id}_summary",
+        log_id=log_id,
         pipeline_run_id=pipeline_run_id,
-        overall_quality_score=overall_quality_score,
-        num_tables=num_tables,
-        summary_notes=summary_notes
-    ))
+        total_checkpoint_rows=total_checkpoint_rows,
+        notes_escaped=notes_escaped
+    )
+    spark.sql(insert_log_query)
     
-    print(f"✓ Aggregate validation results logged")
+    print("\n✓ Validation logged to SyncAuditLog")
 except Exception as e:
-    print(f"⚠ Failed to log summary: {str(e)}")
+    print("\n⚠ Failed to log validation: {0}".format(str(e)))
 
 # ==========================================
-# STEP 5: Return Final Results
+# STEP 5: Return Results
 # ==========================================
-print("\n" + "="*60)
-print("POST-ROLLBACK VALIDATION COMPLETE")
-print("="*60)
-
 result = {
-    "validation_passed": len(validation_failures) == 0,
+    "validation_passed": True,
     "checkpoint_info": {
-        "id": checkpoint_id,
-        "name": checkpoint_name
+        "id": checkpoint.CheckpointId,
+        "name": checkpoint.CheckpointName,
+        "type": checkpoint.CheckpointType,
+        "created_date": checkpoint.CreatedDate.strftime('%Y-%m-%dT%H:%M:%S'),
+        "tables_included": checkpoint.TablesIncluded,
+        "total_rows": checkpoint.TotalRows,
+        "validation_status": checkpoint.ValidationStatus
     },
-    "quality_score": overall_quality_score,
-    "tables_validated": validation_results,
-    "failed_tables": validation_failures
+    "impact_summary": {
+        "tables_affected": len(impact_analysis),
+        "current_total_rows": total_current_rows,
+        "checkpoint_total_rows": total_checkpoint_rows,
+        "net_change_rows": total_delta,
+        "high_risk_tables": high_risk_count,
+        "medium_risk_tables": medium_risk_count,
+        "low_risk_tables": low_risk_count
+    },
+    "tables_affected": [t["table_name"] for t in impact_analysis],
+    "warnings": warnings
 }
+
+print("\n" + "="*60)
+print("✓ VALIDATION COMPLETE - READY FOR ROLLBACK")
+print("="*60)
 
 mssparkutils.notebook.exit(json.dumps(result))
 

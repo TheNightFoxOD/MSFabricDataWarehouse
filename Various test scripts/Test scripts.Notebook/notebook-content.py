@@ -30,8 +30,7 @@
 # MAGIC -- and IsDeleted = true
 # MAGIC and (accountid = '0a204a8b-03f0-ee11-904b-000d3a498565' -- address updated
 # MAGIC     or accountid = 'd6c03ef4-de74-ea11-a811-000d3a4aadc8' -- purged
-# MAGIC     or accountid = 'e4ac267e-2a40-ef11-8409-000d3a4c66d5' -- deleted
-# MAGIC     or accountid = '23d25b45-5ba4-f011-bbd2-000d3a27f8e4') -- new
+# MAGIC     or accountid = 'e4ac267e-2a40-ef11-8409-000d3a4c66d5') -- deleted
 # MAGIC -- order by modifiedon desc 
 
 # METADATA ********************
@@ -50,7 +49,8 @@
 # MAGIC where 1=1
 # MAGIC -- and IsDeleted = true
 # MAGIC and (od_donationid = 'ca5c36ca-3511-ea11-a811-000d3a4aa1c2' -- purged
-# MAGIC     or od_donationid = 'db7810ed-ab90-4d51-ad2f-52f2e2da3dd0') -- deleted
+# MAGIC     or od_donationid = 'db7810ed-ab90-4d51-ad2f-52f2e2da3dd0' -- deleted
+# MAGIC     or od_donationid = '308a44af-6381-4f76-84fe-da38872cc7e5') -- new
 # MAGIC -- order by modifiedon desc 
 
 # METADATA ********************
