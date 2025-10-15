@@ -10,18 +10,14 @@
 # META     "lakehouse": {
 # META       "default_lakehouse": "4aee8a32-be91-489f-89f3-1a819b188807",
 # META       "default_lakehouse_name": "Master_Bronze",
-# META       "default_lakehouse_workspace_id": "b0f83c07-a701-49bb-a165-e06ca0ee4000",
-# META       "known_lakehouses": [
-# META         {
-# META           "id": "4aee8a32-be91-489f-89f3-1a819b188807"
-# META         }
-# META       ]
+# META       "default_lakehouse_workspace_id": "b0f83c07-a701-49bb-a165-e06ca0ee4000"
 # META     }
 # META   }
 # META }
 
 # PARAMETERS CELL ********************
 
+# ============================================================
 # CELL 1: PARAMETERS
 # ============================================================
 # Toggle this cell to "Parameters" type in MS Fabric
@@ -48,33 +44,23 @@ pipeline_run_id = ""
 # ============================================================
 #
 # PURPOSE: Captures pre-rollback state, executes Delta Lake RESTORE
-#          for each table, handles failures gracefully
+#          for each table, captures detailed post-restore state
 #
-# INPUTS (Pipeline Parameters - defined in PARAMETERS cell below):
-#   - checkpoint_id: Unique CheckpointId to restore to (required)
-#   - checkpoint_name: Checkpoint name for display/logging (required)
-#   - checkpoint_timestamp: Timestamp to restore to (from validation notebook)
+# INPUTS (Pipeline Parameters):
+#   - checkpoint_id: Unique CheckpointId (for audit trail)
+#   - checkpoint_name: Checkpoint name (for display/logging)
+#   - checkpoint_timestamp: Timestamp to restore to
 #   - tables_json: JSON array of table names to restore
-#   - pipeline_run_id: Unique identifier for this rollback operation
+#   - pipeline_run_id: Unique identifier for this operation
 #
 # OUTPUTS (exitValue JSON):
 #   - execution_passed: true/false
 #   - tables_succeeded: count of successful restorations
 #   - tables_failed: count of failed restorations
-#   - restoration_details: per-table results
+#   - restoration_details: detailed per-table results with counts
+#   - pre_rollback_snapshots: pre-state for all tables
 #
 # ============================================================
-
-# CELL 1: PARAMETERS
-# ============================================================
-# Toggle this cell to "Parameters" type in MS Fabric
-# Pipeline will inject parameter values into these variables
-# ============================================================
-# checkpoint_id = ""
-# checkpoint_name = ""
-# checkpoint_timestamp = ""
-# tables_json = "[]"
-# pipeline_run_id = ""
 
 # ============================================================
 # CELL 2: IMPORTS AND SETUP
@@ -137,53 +123,55 @@ for table_name in table_list:
     try:
         print("\nCapturing state: {0}".format(table_name))
         
-        # Get current statistics
-        stats_query = """
+        # Get comprehensive state metrics
+        state_query = """
             SELECT 
                 COUNT(*) as total_rows,
-                SUM(CASE WHEN COALESCE(IsDeleted, false) = false AND COALESCE(IsPurged, false) = false THEN 1 ELSE 0 END) as active_rows,
-                SUM(CASE WHEN COALESCE(IsDeleted, false) = true THEN 1 ELSE 0 END) as deleted_rows,
-                SUM(CASE WHEN COALESCE(IsPurged, false) = true THEN 1 ELSE 0 END) as purged_rows
+                SUM(CASE WHEN IsDeleted = false AND IsPurged = false THEN 1 ELSE 0 END) as active_rows,
+                SUM(CASE WHEN IsDeleted = true THEN 1 ELSE 0 END) as deleted_rows,
+                SUM(CASE WHEN IsPurged = true THEN 1 ELSE 0 END) as purged_rows
             FROM {table_name}
         """.format(table_name=table_name)
-        stats_df = spark.sql(stats_query)
         
-        stats = stats_df.collect()[0]
-        total_rows = stats.total_rows if stats.total_rows else 0
-        active_rows = stats.active_rows if stats.active_rows else 0
-        deleted_rows = stats.deleted_rows if stats.deleted_rows else 0
-        purged_rows = stats.purged_rows if stats.purged_rows else 0
+        state_df = spark.sql(state_query)
+        state_row = state_df.collect()[0]
         
-        # Get Delta Lake version
+        total_rows = state_row.total_rows
+        active_rows = state_row.active_rows if state_row.active_rows else 0
+        deleted_rows = state_row.deleted_rows if state_row.deleted_rows else 0
+        purged_rows = state_row.purged_rows if state_row.purged_rows else 0
+        
+        # Get Delta version
         try:
             version_df = spark.sql("DESCRIBE DETAIL {0}".format(table_name))
             delta_version = version_df.select("version").collect()[0].version
         except:
             delta_version = None
         
-        # Get sample record IDs (top 100 for validation)
-        sample_ids = None
+        # Get sample record IDs (first 10 for validation)
         try:
             config_query = """
                 SELECT PrimaryKeyColumn 
                 FROM metadata.PipelineConfig 
                 WHERE TableName = '{table_name}'
             """.format(table_name=table_name.split('.')[-1])
+            config_result = spark.sql(config_query).collect()
             
-            config_df = spark.sql(config_query)
-            if config_df.count() > 0:
-                pk_column = config_df.collect()[0].PrimaryKeyColumn
-                sample_query = "SELECT {pk} FROM {table} LIMIT 100".format(
-                    pk=pk_column, 
-                    table=table_name
-                )
-                sample_df = spark.sql(sample_query)
-                sample_ids_list = [str(row[0]) for row in sample_df.collect()]
-                sample_ids = json.dumps(sample_ids_list)
+            if config_result:
+                pk_col = config_result[0].PrimaryKeyColumn
+                sample_query = """
+                    SELECT {pk_col} 
+                    FROM {table_name} 
+                    LIMIT 10
+                """.format(pk_col=pk_col, table_name=table_name)
+                sample_ids_df = spark.sql(sample_query)
+                sample_ids = json.dumps([row[0] for row in sample_ids_df.collect()])
+            else:
+                sample_ids = None
         except:
             sample_ids = None
         
-        # Insert into RollbackStateSnapshots
+        # Insert snapshot into RollbackStateSnapshots
         snapshot_id = "{0}_{1}_pre".format(pipeline_run_id, table_name.replace('.', '_'))
         sample_ids_value = "'{0}'".format(sample_ids.replace("'", "''")) if sample_ids else "NULL"
         delta_version_value = delta_version if delta_version is not None else "NULL"
@@ -229,7 +217,9 @@ for table_name in table_list:
             "delta_version": delta_version
         })
         
-        print("  ✓ State captured: {0:,} total rows (Version {1})".format(total_rows, delta_version))
+        print("  ✓ State captured: {0:,} total ({1:,} active, {2:,} deleted, {3:,} purged)".format(
+            total_rows, active_rows, deleted_rows, purged_rows
+        ))
     
     except Exception as e:
         error = "Failed to capture pre-rollback state for '{0}': {1}".format(table_name, str(e))
@@ -243,6 +233,15 @@ if snapshot_failures:
 print("\n✓ Pre-rollback state captured for {0}/{1} table(s)".format(
     len(pre_rollback_snapshots), len(table_list)
 ))
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
 
 # ==========================================
 # STEP 2: Execute Delta Lake RESTORE for Each Table
@@ -275,9 +274,23 @@ for idx, table_name in enumerate(table_list, 1):
         restore_end = datetime.now()
         duration_seconds = (restore_end - restore_start).total_seconds()
         
-        # Get post-restore row count
-        count_df = spark.sql("SELECT COUNT(*) as cnt FROM {0}".format(table_name))
-        post_restore_count = count_df.collect()[0].cnt
+        # Get DETAILED post-restore state (total + breakdown)
+        post_state_query = """
+            SELECT 
+                COUNT(*) as total_rows,
+                SUM(CASE WHEN IsDeleted = false AND IsPurged = false THEN 1 ELSE 0 END) as active_rows,
+                SUM(CASE WHEN IsDeleted = true THEN 1 ELSE 0 END) as deleted_rows,
+                SUM(CASE WHEN IsPurged = true THEN 1 ELSE 0 END) as purged_rows
+            FROM {table_name}
+        """.format(table_name=table_name)
+        
+        post_state_df = spark.sql(post_state_query)
+        post_state_row = post_state_df.collect()[0]
+        
+        post_total = post_state_row.total_rows
+        post_active = post_state_row.active_rows if post_state_row.active_rows else 0
+        post_deleted = post_state_row.deleted_rows if post_state_row.deleted_rows else 0
+        post_purged = post_state_row.purged_rows if post_state_row.purged_rows else 0
         
         # Get new Delta version
         try:
@@ -288,7 +301,9 @@ for idx, table_name in enumerate(table_list, 1):
         
         print("  ✓ Restore successful!")
         print("    Duration: {0:.2f} seconds".format(duration_seconds))
-        print("    Post-restore rows: {0:,}".format(post_restore_count))
+        print("    Post-restore: {0:,} total ({1:,} active, {2:,} deleted, {3:,} purged)".format(
+            post_total, post_active, post_deleted, post_purged
+        ))
         print("    New Delta version: {0}".format(new_version))
         
         # Log success to audit trail
@@ -310,7 +325,7 @@ for idx, table_name in enumerate(table_list, 1):
                 'TableRestore',
                 timestamp'{start_time}',
                 timestamp'{end_time}',
-                {post_restore_count},
+                {post_total},
                 'Success',
                 '{notes_escaped}',
                 0,
@@ -322,16 +337,20 @@ for idx, table_name in enumerate(table_list, 1):
             table_name=table_name,
             start_time=restore_start.strftime('%Y-%m-%d %H:%M:%S'),
             end_time=restore_end.strftime('%Y-%m-%d %H:%M:%S'),
-            post_restore_count=post_restore_count,
+            post_total=post_total,
             notes_escaped=notes_escaped
         )
         spark.sql(insert_success_query)
         
+        # Store detailed restoration result
         restoration_details.append({
             "table_name": table_name,
             "status": "Success",
             "duration_seconds": round(duration_seconds, 2),
-            "post_restore_rows": post_restore_count,
+            "post_restore_total": post_total,
+            "post_restore_active": post_active,
+            "post_restore_deleted": post_deleted,
+            "post_restore_purged": post_purged,
             "new_delta_version": new_version,
             "error": None
         })
@@ -381,13 +400,25 @@ for idx, table_name in enumerate(table_list, 1):
             "table_name": table_name,
             "status": "Failed",
             "duration_seconds": round(duration_seconds, 2),
-            "post_restore_rows": None,
+            "post_restore_total": None,
+            "post_restore_active": None,
+            "post_restore_deleted": None,
+            "post_restore_purged": None,
             "new_delta_version": None,
             "error": error_msg
         })
         
         tables_failed += 1
         print("  → Continuing with next table...")
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
 
 # ==========================================
 # STEP 3: Generate Execution Summary
