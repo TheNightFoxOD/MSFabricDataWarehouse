@@ -605,7 +605,7 @@ try:
     insert_summary_query = """
         INSERT INTO metadata.SyncAuditLog (
             LogId, PipelineRunId, PipelineName, Operation, 
-            StartTime, EndTime, Status, Notes, CreatedDate
+            StartTime, EndTime, Status, RetryCount, Notes, CreatedDate
         ) VALUES (
             '{log_id}',
             '{pipeline_run_id}',
@@ -614,6 +614,7 @@ try:
             current_timestamp(),
             current_timestamp(),
             '{status}',
+            0,
             '{notes}',
             current_timestamp()
         )
