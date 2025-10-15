@@ -285,9 +285,9 @@ for table_name in succeeded_tables:
             flags_query = """
                 SELECT 
                     SUM(CASE WHEN IsDeleted = true AND DeletedDate IS NULL THEN 1 ELSE 0 END) as deleted_no_date,
-                    SUM(CASE WHEN IsPurged = true AND PurgeDate IS NULL THEN 1 ELSE 0 END) as purged_no_date,
+                    SUM(CASE WHEN IsPurged = true AND PurgedDate IS NULL THEN 1 ELSE 0 END) as purged_no_date,
                     SUM(CASE WHEN IsDeleted = false AND DeletedDate IS NOT NULL THEN 1 ELSE 0 END) as active_has_deleted_date,
-                    SUM(CASE WHEN IsPurged = false AND PurgeDate IS NOT NULL THEN 1 ELSE 0 END) as not_purged_has_purge_date
+                    SUM(CASE WHEN IsPurged = false AND PurgedDate IS NOT NULL THEN 1 ELSE 0 END) as not_purged_has_purge_date
                 FROM {table_name}
             """.format(table_name=table_name)
             flags_result = spark.sql(flags_query).collect()[0]
@@ -328,8 +328,9 @@ for table_name in succeeded_tables:
         
         insert_validation_query = """
             INSERT INTO metadata.DataValidation (
-                ValidationId, ValidationDate, TableName, BronzeRowCount,
-                ActiveRowCount, DeletedRowCount, PurgedRowCount, ValidationPassed, Notes
+                ValidationId, ValidationDate, TableName, 
+                BronzeRowCount, ActiveRowCount, DeletedRowCount, PurgedRowCount, 
+                ValidationPassed, Notes
             ) VALUES (
                 '{validation_id}',
                 current_timestamp(),
@@ -403,8 +404,7 @@ try:
     insert_checkpoint_query = """
         INSERT INTO metadata.CheckpointHistory (
             CheckpointId, CheckpointName, CheckpointType, CreatedDate,
-            TablesIncluded, TotalRows, ValidationStatus, IsActive,
-            RetentionDate, Notes
+            TablesIncluded, TotalRows, ValidationStatus, RetentionDate, IsActive
         ) VALUES (
             '{checkpoint_id}',
             '{checkpoint_name}',
@@ -413,17 +413,15 @@ try:
             {tables_included},
             {total_rows},
             'Validated',
-            true,
-            timestamp'{retention_date}',
-            'Post-rollback checkpoint for: {original_checkpoint}'
+            date'{retention_date}',
+            true
         )
     """.format(
         checkpoint_id=post_checkpoint_id,
         checkpoint_name=post_checkpoint_name,
         tables_included=tables_count,
         total_rows=total_post_rows,
-        retention_date=retention_date.strftime('%Y-%m-%d %H:%M:%S'),
-        original_checkpoint=checkpoint_name.replace("'", "''")
+        retention_date=retention_date.strftime('%Y-%m-%d')
     )
     spark.sql(insert_checkpoint_query)
     
@@ -606,12 +604,15 @@ try:
     
     insert_summary_query = """
         INSERT INTO metadata.SyncAuditLog (
-            LogId, PipelineRunId, PipelineName, Operation, Status, Notes, CreatedDate
+            LogId, PipelineRunId, PipelineName, Operation, 
+            StartTime, EndTime, Status, Notes, CreatedDate
         ) VALUES (
             '{log_id}',
             '{pipeline_run_id}',
             'ManualRollback',
             'PostRollbackSummary',
+            current_timestamp(),
+            current_timestamp(),
             '{status}',
             '{notes}',
             current_timestamp()
