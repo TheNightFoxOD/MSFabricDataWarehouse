@@ -383,8 +383,8 @@
 # MAGIC     s.PurgedRows,
 # MAGIC     s.DeltaVersion
 # MAGIC FROM metadata.RollbackStateSnapshots s
-# MAGIC WHERE s.PipelineRunId = 'YOUR_PIPELINE_RUN_ID'
-# MAGIC AND s.TableName = 'account'  -- Replace with table of interest
+# MAGIC WHERE s.PipelineRunId = '073d5237-1469-4e34-a48d-a876c91b1719'
+# MAGIC AND s.TableName = 'od_donation'  -- Replace with table of interest
 # MAGIC ORDER BY s.SnapshotType;  -- PreRollback first, then PostRollback
 
 # METADATA ********************

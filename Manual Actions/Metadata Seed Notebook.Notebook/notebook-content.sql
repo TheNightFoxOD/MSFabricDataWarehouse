@@ -690,6 +690,21 @@ select count(*) from dbo.entity_definitions
 
 -- CELL ********************
 
+ALTER TABLE metadata.DataValidation 
+ADD COLUMNS (
+    Notes STRING COMMENT 'JSON array of validation check details',
+    ValidationContext STRING COMMENT 'Context: PostRollback, Daily, PrePurge, etc.'
+);
+
+-- METADATA ********************
+
+-- META {
+-- META   "language": "sparksql",
+-- META   "language_group": "synapse_pyspark"
+-- META }
+
+-- CELL ********************
+
 OPTIMIZE [metadata].PipelineConfig;
 OPTIMIZE [metadata].SyncAuditLog;
 OPTIMIZE [metadata].CheckpointHistory;

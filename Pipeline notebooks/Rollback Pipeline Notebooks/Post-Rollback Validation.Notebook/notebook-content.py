@@ -93,11 +93,11 @@ pipeline_run_id = ""
 # Toggle this cell to "Parameters" type in MS Fabric
 # Pipeline will inject parameter values into these variables
 # ============================================================
-# checkpoint_id = ""
-# checkpoint_name = ""
-# restoration_details_json = "[]"
-# tables_json = "[]"
-# pipeline_run_id = ""
+checkpoint_id = ""
+checkpoint_name = ""
+restoration_details_json = "[]"
+tables_json = "[]"
+pipeline_run_id = ""
 
 # ============================================================
 # CELL 2: IMPORTS AND SETUP
@@ -106,6 +106,14 @@ import json
 from datetime import datetime, timedelta
 from pyspark.sql.functions import col
 from notebookutils import mssparkutils
+
+# Initialize all variables early to prevent NameError
+validation_passed = True
+avg_quality_score = 0
+checkpoint_created = False
+post_checkpoint_name = None
+total_records_restored = 0
+total_records_removed = 0
 
 # ==========================================
 # STEP 0: Validate Input Parameters
@@ -156,13 +164,13 @@ for table_name in succeeded_tables:
     try:
         print("\nCapturing state: {0}".format(table_name))
         
-        # Get current statistics
+        # Get current statistics with COALESCE for NULL handling
         query = """
             SELECT 
                 COUNT(*) as total_rows,
-                SUM(CASE WHEN IsDeleted = false AND IsPurged = false THEN 1 ELSE 0 END) as active_rows,
-                SUM(CASE WHEN IsDeleted = true THEN 1 ELSE 0 END) as deleted_rows,
-                SUM(CASE WHEN IsPurged = true THEN 1 ELSE 0 END) as purged_rows
+                SUM(CASE WHEN COALESCE(IsDeleted, false) = false AND COALESCE(IsPurged, false) = false THEN 1 ELSE 0 END) as active_rows,
+                SUM(CASE WHEN COALESCE(IsDeleted, false) = true THEN 1 ELSE 0 END) as deleted_rows,
+                SUM(CASE WHEN COALESCE(IsPurged, false) = true THEN 1 ELSE 0 END) as purged_rows
             FROM {table_name}
         """.format(table_name=table_name)
         stats_df = spark.sql(query)
@@ -240,10 +248,6 @@ print("="*60)
 
 validation_results = []
 validation_failures = []
-validation_passed = True
-avg_quality_score = 0
-checkpoint_created = False
-post_checkpoint_name = None
 
 for table_name in succeeded_tables:
     print("\nValidating: {0}".format(table_name))
@@ -310,7 +314,7 @@ for table_name in succeeded_tables:
             flag_query = """
                 SELECT COUNT(*) as cnt 
                 FROM {table_name}
-                WHERE IsDeleted = true AND DeletedDate IS NULL
+                WHERE COALESCE(IsDeleted, false) = true AND DeletedDate IS NULL
             """.format(table_name=table_name)
             flag_df = spark.sql(flag_query)
             invalid_flag_count = flag_df.collect()[0].cnt
@@ -331,8 +335,9 @@ for table_name in succeeded_tables:
         passed_checks = len([c for c in checks if c["status"] == "PASS"])
         table_quality_score = (passed_checks / total_checks * 100) if total_checks > 0 else 0
         
+        # Create DataValidation entry with Notes column
         validation_id = "{0}_{1}_postrollback".format(pipeline_run_id, table_name.replace('.', '_'))
-        validation_passed = len([c for c in checks if c["status"] == "FAIL"]) == 0
+        validation_passed_bool = len([c for c in checks if c["status"] == "FAIL"]) == 0
         notes_json = json.dumps(checks).replace("'", "''")
         
         insert_validation_query = """
@@ -359,7 +364,7 @@ for table_name in succeeded_tables:
             active_rows=active_rows,
             deleted_rows=deleted_rows,
             purged_rows=purged_rows,
-            validation_passed=str(validation_passed).lower(),
+            validation_passed=str(validation_passed_bool).lower(),
             notes_json=notes_json
         )
         spark.sql(insert_validation_query)
@@ -367,7 +372,7 @@ for table_name in succeeded_tables:
         validation_results.append({
             "table_name": table_name,
             "quality_score": round(table_quality_score, 2),
-            "validation_passed": validation_passed,
+            "validation_passed": validation_passed_bool,
             "checks": checks
         })
         
@@ -392,8 +397,6 @@ print("\n" + "="*60)
 print("STEP 3: Creating Post-Rollback Checkpoint")
 print("="*60)
 
-checkpoint_created = False
-
 try:
     post_checkpoint_name = "{0}_post_rollback".format(checkpoint_name)
     post_checkpoint_id = "{0}_post_checkpoint".format(pipeline_run_id)
@@ -404,7 +407,7 @@ try:
         INSERT INTO metadata.CheckpointHistory (
             CheckpointId, CheckpointName, CheckpointType, CreatedDate,
             TablesIncluded, TotalRows, ValidationStatus, RetentionDate,
-            IsActive, Notes, CreatedBy
+            IsActive, PipelineRunId, SchemaName, TableName
         ) VALUES (
             '{post_checkpoint_id}',
             '{post_checkpoint_name}',
@@ -415,17 +418,18 @@ try:
             '{validation_status}',
             date'{retention_date}',
             true,
-            '{notes_escaped}',
-            'System'
+            '{pipeline_run_id}',
+            NULL,
+            NULL
         )
     """.format(
         post_checkpoint_id=post_checkpoint_id,
         post_checkpoint_name=post_checkpoint_name,
         tables_included=len(succeeded_tables),
         total_rows=total_rows_restored,
-        validation_status="Validated" if len(validation_failures) == 0 else "ValidationFailed",
+        validation_status="Validated" if validation_passed else "ValidationFailed",
         retention_date=retention_date,
-        notes_escaped=notes_escaped
+        pipeline_run_id=pipeline_run_id
     )
     spark.sql(insert_checkpoint_query)
     
@@ -456,8 +460,6 @@ try:
     pre_snapshots_dict = {row.TableName: row.asDict() for row in pre_snapshots_df.collect()}
     
     table_comparisons = []
-    total_records_restored = 0
-    total_records_removed = 0
     
     for post_snapshot in post_rollback_snapshots:
         table_name = post_snapshot["table_name"]
@@ -483,14 +485,9 @@ try:
                 "version_changed": pre_snapshot["DeltaVersion"] != post_snapshot["delta_version"]
             })
     
+    # Create comparison report in RollbackComparisonReports
     report_id = "{0}_comparison".format(pipeline_run_id)
-    issues_json = json.dumps(validation_failures).replace("'", "''")
-    
-    avg_quality_score = round(
-        sum(v["quality_score"] for v in validation_results)/len(validation_results), 2
-    ) if validation_results else 0
-    
-    validation_passed = len(validation_failures) == 0
+    issues_json = json.dumps(validation_failures).replace("'", "''") if validation_failures else "[]"
 
     insert_report_query = """
         INSERT INTO metadata.RollbackComparisonReports (
@@ -510,9 +507,9 @@ try:
             {records_restored},
             {records_removed},
             {quality_score},
-            {validation_passed},
+            {validation_passed_bool},
             '{issues_json}',
-            'Rollback execution completed',
+            'Rollback execution completed with full state comparison',
             current_timestamp()
         )
     """.format(
@@ -526,7 +523,7 @@ try:
         records_restored=total_records_restored,
         records_removed=total_records_removed,
         quality_score=avg_quality_score,
-        validation_passed=str(validation_passed).lower(),
+        validation_passed_bool=str(validation_passed).lower(),
         issues_json=issues_json
     )
     spark.sql(insert_report_query)
@@ -557,9 +554,6 @@ try:
     summary_notes_escaped = summary_notes.replace("'", "''")
     log_id = "{0}_final_summary".format(pipeline_run_id)
     
-    # Use safe variable access
-    total_rows_for_log = total_records_restored if 'total_records_restored' in locals() else 0
-    
     insert_summary_query = """
         INSERT INTO metadata.SyncAuditLog (
             LogId, PipelineRunId, PipelineName, TableName, Operation,
@@ -581,7 +575,7 @@ try:
     """.format(
         log_id=log_id,
         pipeline_run_id=pipeline_run_id,
-        total_rows=total_rows_for_log,
+        total_rows=total_rows_restored,
         status='Success' if validation_passed else 'Warning',
         notes_escaped=summary_notes_escaped
     )
@@ -607,7 +601,7 @@ print("  Tables Validated: {0}/{1}".format(len(succeeded_tables), len(table_list
 
 if validation_failures:
     print("\n⚠ Validation Issues ({0}):".format(len(validation_failures)))
-    for issue in validation_failures[:5]:  # Show first 5
+    for issue in validation_failures[:5]:
         print("  • {0}".format(issue))
     if len(validation_failures) > 5:
         print("  ... and {0} more".format(len(validation_failures) - 5))
@@ -616,13 +610,13 @@ result = {
     "validation_passed": validation_passed,
     "quality_score": avg_quality_score,
     "checkpoint_created": checkpoint_created,
-    "post_checkpoint_name": post_checkpoint_name if checkpoint_created else None,
+    "post_checkpoint_name": post_checkpoint_name,
     "tables_validated": len(succeeded_tables),
     "validation_failures": len(validation_failures),
     "comparison_report": {
-        "records_restored": total_records_restored if 'total_records_restored' in locals() else 0,
-        "records_removed": total_records_removed if 'total_records_removed' in locals() else 0,
-        "net_change": (total_records_restored - total_records_removed) if ('total_records_restored' in locals() and 'total_records_removed' in locals()) else 0
+        "records_restored": total_records_restored,
+        "records_removed": total_records_removed,
+        "net_change": total_records_restored - total_records_removed
     }
 }
 

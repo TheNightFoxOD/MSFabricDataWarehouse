@@ -141,9 +141,9 @@ for table_name in table_list:
         stats_query = """
             SELECT 
                 COUNT(*) as total_rows,
-                SUM(CASE WHEN IsDeleted = false AND IsPurged = false THEN 1 ELSE 0 END) as active_rows,
-                SUM(CASE WHEN IsDeleted = true THEN 1 ELSE 0 END) as deleted_rows,
-                SUM(CASE WHEN IsPurged = true THEN 1 ELSE 0 END) as purged_rows
+                SUM(CASE WHEN COALESCE(IsDeleted, false) = false AND COALESCE(IsPurged, false) = false THEN 1 ELSE 0 END) as active_rows,
+                SUM(CASE WHEN COALESCE(IsDeleted, false) = true THEN 1 ELSE 0 END) as deleted_rows,
+                SUM(CASE WHEN COALESCE(IsPurged, false) = true THEN 1 ELSE 0 END) as purged_rows
             FROM {table_name}
         """.format(table_name=table_name)
         stats_df = spark.sql(stats_query)
