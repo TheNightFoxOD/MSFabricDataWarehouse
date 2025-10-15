@@ -93,11 +93,11 @@ pipeline_run_id = ""
 # Toggle this cell to "Parameters" type in MS Fabric
 # Pipeline will inject parameter values into these variables
 # ============================================================
-checkpoint_id = ""
-checkpoint_name = ""
-restoration_details_json = "[]"
-tables_json = "[]"
-pipeline_run_id = ""
+# checkpoint_id = ""
+# checkpoint_name = ""
+# restoration_details_json = "[]"
+# tables_json = "[]"
+# pipeline_run_id = ""
 
 # ============================================================
 # CELL 2: IMPORTS AND SETUP
@@ -466,13 +466,31 @@ try:
         pre_snapshot = pre_snapshots_dict.get(table_name)
         
         if pre_snapshot:
+            # Calculate ALL deltas (total, active, deleted, purged)
             rows_delta = post_snapshot["total_rows"] - pre_snapshot["TotalRows"]
             active_delta = post_snapshot["active_rows"] - pre_snapshot["ActiveRows"]
+            deleted_delta = post_snapshot["deleted_rows"] - pre_snapshot["DeletedRows"]
+            purged_delta = post_snapshot["purged_rows"] - pre_snapshot["PurgedRows"]
             
+            # Track ACTUAL state changes (not just row count changes)
+            # Positive deltas mean records moved TO that state
+            # Negative deltas mean records moved FROM that state
+            if active_delta > 0:
+                total_records_restored += active_delta  # Records became active
+            elif active_delta < 0:
+                total_records_removed += abs(active_delta)  # Records left active state
+                
+            if deleted_delta < 0:
+                total_records_restored += abs(deleted_delta)  # Records un-deleted
+                
+            if purged_delta < 0:
+                total_records_restored += abs(purged_delta)  # Records un-purged
+            
+            # Track raw row additions/removals (rare with soft deletes)
             if rows_delta > 0:
-                total_records_restored += rows_delta
-            else:
-                total_records_removed += abs(rows_delta)
+                total_records_restored += rows_delta  # New physical rows added
+            elif rows_delta < 0:
+                total_records_removed += abs(rows_delta)  # Physical rows removed
             
             table_comparisons.append({
                 "table_name": table_name,
@@ -482,6 +500,12 @@ try:
                 "pre_active": pre_snapshot["ActiveRows"],
                 "post_active": post_snapshot["active_rows"],
                 "active_delta": active_delta,
+                "pre_deleted": pre_snapshot["DeletedRows"],  # NEW
+                "post_deleted": post_snapshot["deleted_rows"],  # NEW
+                "deleted_delta": deleted_delta,  # NEW
+                "pre_purged": pre_snapshot["PurgedRows"],  # NEW
+                "post_purged": post_snapshot["purged_rows"],  # NEW
+                "purged_delta": purged_delta,  # NEW
                 "version_changed": pre_snapshot["DeltaVersion"] != post_snapshot["delta_version"]
             })
     

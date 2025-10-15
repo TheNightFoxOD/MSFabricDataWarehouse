@@ -178,7 +178,7 @@
     "parameters": {
       "CheckpointId": {
         "type": "string",
-        "defaultValue": "7691b0f5-88a8-4539-9597-33297a3c5211"
+        "defaultValue": "95073388-a88d-4f7a-8d75-1f8d00dd66dd"
       },
       "TablesScope": {
         "type": "string",

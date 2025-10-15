@@ -920,10 +920,130 @@
 
 # CELL ********************
 
+# MAGIC %%sql
+# MAGIC SELECT 'RollbackStateSnapshots' as table_name, COUNT(*) as row_count 
+# MAGIC FROM metadata.RollbackStateSnapshots
+# MAGIC UNION ALL
+# MAGIC SELECT 'RollbackComparisonReports', COUNT(*) 
+# MAGIC FROM metadata.RollbackComparisonReports;
 
 # METADATA ********************
 
 # META {
-# META   "language": "python",
+# META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# MAGIC %%sql
+# MAGIC SELECT 
+# MAGIC     CheckpointName,
+# MAGIC     RollbackDate,
+# MAGIC     TablesAffected,
+# MAGIC     TablesSucceeded,
+# MAGIC     TablesFailed,
+# MAGIC     RecordsRestored,
+# MAGIC     RecordsRemoved,
+# MAGIC     QualityScore,
+# MAGIC     ValidationPassed,
+# MAGIC     Issues
+# MAGIC FROM metadata.RollbackComparisonReports
+# MAGIC ORDER BY RollbackDate DESC
+# MAGIC LIMIT 1;
+
+# METADATA ********************
+
+# META {
+# META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# MAGIC %%sql
+# MAGIC WITH PrePost AS (
+# MAGIC     SELECT 
+# MAGIC         TableName,
+# MAGIC         MAX(CASE WHEN SnapshotType = 'PreRollback' THEN TotalRows END) as before_rows,
+# MAGIC         MAX(CASE WHEN SnapshotType = 'PostRollback' THEN TotalRows END) as after_rows
+# MAGIC     FROM metadata.RollbackStateSnapshots
+# MAGIC     WHERE PipelineRunId = (
+# MAGIC         SELECT PipelineRunId 
+# MAGIC         FROM metadata.RollbackComparisonReports 
+# MAGIC         ORDER BY RollbackDate DESC 
+# MAGIC         LIMIT 1
+# MAGIC     )
+# MAGIC     GROUP BY TableName
+# MAGIC )
+# MAGIC SELECT 
+# MAGIC     TableName,
+# MAGIC     before_rows,
+# MAGIC     after_rows,
+# MAGIC     (after_rows - before_rows) as net_change
+# MAGIC FROM PrePost
+# MAGIC WHERE before_rows != after_rows
+# MAGIC ORDER BY ABS(after_rows - before_rows) DESC;
+
+# METADATA ********************
+
+# META {
+# META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# MAGIC %%sql
+# MAGIC -- 1. Note current state
+# MAGIC SELECT COUNT(*) as current_count FROM dataverse.account WHERE IsDeleted is NULL;
+
+# METADATA ********************
+
+# META {
+# META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# MAGIC %%sql
+# MAGIC -- 2. Delete a record (we'll restore it)
+# MAGIC UPDATE dataverse.account 
+# MAGIC SET IsDeleted = true, DeletedDate = CURRENT_TIMESTAMP()
+# MAGIC WHERE accountid = "0a204a8b-03f0-ee11-904b-000d3a498565";
+
+# METADATA ********************
+
+# META {
+# META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# MAGIC %%sql
+# MAGIC -- 4. After rollback, check if record is back
+# MAGIC SELECT IsDeleted, DeletedDate FROM dataverse.account
+# MAGIC WHERE accountid = "0a204a8b-03f0-ee11-904b-000d3a498565";
+
+# METADATA ********************
+
+# META {
+# META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# MAGIC %%sql
+# MAGIC 
+# MAGIC -- 4. After rollback, check if record is back
+# MAGIC SELECT COUNT(*) as after_rollback FROM dataverse.account WHERE IsDeleted is NULL;
+
+# METADATA ********************
+
+# META {
+# META   "language": "sparksql",
 # META   "language_group": "synapse_pyspark"
 # META }
