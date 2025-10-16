@@ -9,7 +9,7 @@
 # META   "dependencies": {
 # META     "lakehouse": {
 # META       "default_lakehouse": "4aee8a32-be91-489f-89f3-1a819b188807",
-# META       "default_lakehouse_name": "Master_Bronze",
+# META       "default_lakehouse_name": "Bronze",
 # META       "default_lakehouse_workspace_id": "b0f83c07-a701-49bb-a165-e06ca0ee4000",
 # META       "known_lakehouses": [
 # META         {
@@ -93,7 +93,7 @@ try:
     
     # Step 2: Verify staging table exists (source of truth for current schema)
     print(f"\n--- Step 2: Verify staging table existence ---")
-    staging_tables = spark.sql(f"SHOW TABLES IN Dataverse_Master_Staging.dbo").collect()
+    staging_tables = spark.sql(f"SHOW TABLES IN {staging_lakehouse}.dbo").collect()
     staging_table_exists = any(row['tableName'].lower() == safe_table_name.lower() for row in staging_tables)
     
     if not staging_table_exists:

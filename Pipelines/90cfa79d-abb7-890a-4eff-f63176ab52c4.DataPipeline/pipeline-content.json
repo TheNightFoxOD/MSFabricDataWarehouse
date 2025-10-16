@@ -15,7 +15,7 @@
             },
             "schema": [],
             "linkedService": {
-              "name": "Master_Bronze",
+              "name": "Bronze",
               "properties": {
                 "type": "Lakehouse",
                 "typeProperties": {
@@ -112,7 +112,7 @@
                           },
                           "schema": [],
                           "linkedService": {
-                            "name": "Dataverse_Master_Staging",
+                            "name": "Dataverse_Staging",
                             "properties": {
                               "type": "Lakehouse",
                               "typeProperties": {
@@ -144,7 +144,7 @@
                           },
                           "schema": [],
                           "linkedService": {
-                            "name": "Master_Bronze",
+                            "name": "Bronze",
                             "properties": {
                               "type": "Lakehouse",
                               "typeProperties": {
@@ -936,11 +936,11 @@
       },
       "staging_lakehouse": {
         "type": "string",
-        "defaultValue": "Dataverse_Master_Staging"
+        "defaultValue": "Dataverse_Staging"
       },
       "bronze_lakehouse": {
         "type": "string",
-        "defaultValue": "Master_Bronze"
+        "defaultValue": "Bronze"
       },
       "daily_checkpoint_retention_days": {
         "type": "int",
