@@ -124,12 +124,13 @@ for table_name in table_list:
         print("\nCapturing state: {0}".format(table_name))
         
         # Get comprehensive state metrics
+        # CRITICAL: Use COALESCE to handle NULL values (NULL = false for boolean flags)
         state_query = """
             SELECT 
                 COUNT(*) as total_rows,
-                SUM(CASE WHEN IsDeleted = false AND IsPurged = false THEN 1 ELSE 0 END) as active_rows,
-                SUM(CASE WHEN IsDeleted = true THEN 1 ELSE 0 END) as deleted_rows,
-                SUM(CASE WHEN IsPurged = true THEN 1 ELSE 0 END) as purged_rows
+                SUM(CASE WHEN COALESCE(IsDeleted, false) = false AND COALESCE(IsPurged, false) = false THEN 1 ELSE 0 END) as active_rows,
+                SUM(CASE WHEN COALESCE(IsDeleted, false) = true THEN 1 ELSE 0 END) as deleted_rows,
+                SUM(CASE WHEN COALESCE(IsPurged, false) = true THEN 1 ELSE 0 END) as purged_rows
             FROM {table_name}
         """.format(table_name=table_name)
         

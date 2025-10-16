@@ -79,6 +79,12 @@ total_records_removed = 0
 total_active_restored = 0
 total_deleted_restored = 0
 total_purged_restored = 0
+pre_total_active = 0
+pre_total_deleted = 0
+pre_total_purged = 0
+post_total_active = 0
+post_total_deleted = 0
+post_total_purged = 0
 
 # ==========================================
 # STEP 0: Validate Input Parameters
@@ -463,6 +469,15 @@ try:
     pre_snapshots_df = spark.sql(pre_snapshots_query)
     pre_snapshots_dict = {row.TableName: row.asDict() for row in pre_snapshots_df.collect()}
     
+    # Calculate aggregate pre/post totals for display
+    pre_total_active = sum(pre_snapshots_dict.get(s["table_name"], {}).get("ActiveRows", 0) for s in post_rollback_snapshots)
+    pre_total_deleted = sum(pre_snapshots_dict.get(s["table_name"], {}).get("DeletedRows", 0) for s in post_rollback_snapshots)
+    pre_total_purged = sum(pre_snapshots_dict.get(s["table_name"], {}).get("PurgedRows", 0) for s in post_rollback_snapshots)
+    
+    post_total_active = sum(s["active_rows"] for s in post_rollback_snapshots)
+    post_total_deleted = sum(s["deleted_rows"] for s in post_rollback_snapshots)
+    post_total_purged = sum(s["purged_rows"] for s in post_rollback_snapshots)
+    
     table_comparisons = []
     
     for post_snapshot in post_rollback_snapshots:
@@ -513,12 +528,13 @@ try:
                 "version_changed": pre_snapshot["DeltaVersion"] != post_snapshot["delta_version"]
             })
     
+    # Calculate total state changes for the report
+    # State changes = net changes in active, deleted, and purged states
+    total_state_changes = total_active_restored + total_deleted_restored + total_purged_restored
+    
     # Create comparison report in RollbackComparisonReports
     report_id = "{0}_comparison".format(pipeline_run_id)
     issues_json = json.dumps(validation_failures).replace("'", "''") if validation_failures else "[]"
-    
-    # Calculate total state changes (more meaningful than row count changes with soft deletes)
-    total_state_changes = total_active_restored + total_deleted_restored + total_purged_restored
     
     insert_report_query = """
         INSERT INTO metadata.RollbackComparisonReports (
@@ -540,7 +556,7 @@ try:
             {quality_score},
             {validation_passed_bool},
             '{issues_json}',
-            'State changes: {active} active, {deleted} un-deleted, {purged} un-purged',
+            'Net deltas: Active {active:+,}, Deleted {deleted:+,}, Purged {purged:+,}',
             current_timestamp()
         )
     """.format(
@@ -556,22 +572,35 @@ try:
         quality_score=avg_quality_score,
         validation_passed_bool=str(validation_passed).lower(),
         issues_json=issues_json,
-        active=total_active_restored,
-        deleted=total_deleted_restored,
-        purged=total_purged_restored
+        active=post_total_active - pre_total_active,
+        deleted=post_total_deleted - pre_total_deleted,
+        purged=post_total_purged - pre_total_purged
     )
     spark.sql(insert_report_query)
     
     print("✓ Comparison report created")
-    print("\n📊 STATE CHANGES:")
-    print("  Records Became Active: {0:,}".format(total_active_restored))
-    print("  Records Un-Deleted: {0:,}".format(total_deleted_restored))
-    print("  Records Un-Purged: {0:,}".format(total_purged_restored))
-    print("  Total State Changes: {0:,}".format(total_state_changes))
+    print("\n📊 STATE CHANGES (Net Deltas):")
+    print("  Active Records: {0:+,} ({1:,} → {2:,})".format(
+        post_total_active - pre_total_active,
+        pre_total_active,
+        post_total_active
+    ))
+    print("  Deleted Records: {0:+,} ({1:,} → {2:,})".format(
+        post_total_deleted - pre_total_deleted,
+        pre_total_deleted,
+        post_total_deleted
+    ))
+    print("  Purged Records: {0:+,} ({1:,} → {2:,})".format(
+        post_total_purged - pre_total_purged,
+        pre_total_purged,
+        post_total_purged
+    ))
+    
+    # Only show physical row changes if they occurred (rare with soft deletes)
     if total_records_restored > 0 or total_records_removed > 0:
-        print("\n📊 ROW COUNT CHANGES:")
-        print("  Physical Rows Added: {0:,}".format(total_records_restored))
-        print("  Physical Rows Removed: {0:,}".format(total_records_removed))
+        print("\n📊 PHYSICAL ROW CHANGES:")
+        print("  Rows Added: {0:,}".format(total_records_restored))
+        print("  Rows Removed: {0:,}".format(total_records_removed))
 
 except Exception as e:
     print("✗ Failed to generate comparison report: {0}".format(str(e)))
@@ -593,14 +622,19 @@ print("STEP 5: Logging Final Summary")
 print("="*60)
 
 try:
-    summary_notes = "Validation: {0}. Quality Score: {1:.2f}%. {2} tables succeeded, {3} failed. State changes: {4:,}".format(
+    summary_notes = "Validation: {0}. Quality Score: {1:.2f}%. {2} tables succeeded, {3} failed. Net deltas: Active {4:+,}, Deleted {5:+,}, Purged {6:+,}".format(
         "PASSED" if validation_passed else "FAILED",
         avg_quality_score,
         len(succeeded_tables),
         len(failed_tables),
-        total_state_changes
+        post_total_active - pre_total_active,
+        post_total_deleted - pre_total_deleted,
+        post_total_purged - pre_total_purged
     )
     summary_notes_escaped = summary_notes.replace("'", "''")
+    
+    # No retries for summary logging operation
+    retry_count = 0
     
     insert_summary_query = """
         INSERT INTO metadata.SyncAuditLog (
@@ -614,7 +648,7 @@ try:
             current_timestamp(),
             current_timestamp(),
             '{status}',
-            0,
+            {retry_count},
             '{notes}',
             current_timestamp()
         )
@@ -622,6 +656,7 @@ try:
         log_id="{0}_summary".format(pipeline_run_id),
         pipeline_run_id=pipeline_run_id,
         status='Success' if validation_passed else 'Warning',
+        retry_count=retry_count,
         notes=summary_notes_escaped
     )
     spark.sql(insert_summary_query)
@@ -659,9 +694,9 @@ exit_value = {
     "validation_failures": len(validation_failures),
     "comparison_report": {
         "total_state_changes": total_state_changes,
-        "active_restored": total_active_restored,
-        "deleted_restored": total_deleted_restored,
-        "purged_restored": total_purged_restored,
+        "active_delta": post_total_active - pre_total_active,
+        "deleted_delta": post_total_deleted - pre_total_deleted,
+        "purged_delta": post_total_purged - pre_total_purged,
         "rows_added": total_records_restored,
         "rows_removed": total_records_removed
     }
