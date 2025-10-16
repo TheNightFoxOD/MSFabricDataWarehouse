@@ -188,7 +188,7 @@ BRONZE_LAKEHOUSE = "BRONZE_LAKEHOUSE_default"
 # MAGIC 
 # MAGIC def check_existing_tables():
 # MAGIC     try:
-# MAGIC         existing_df = spark.sql("SELECT TableName FROM Master_Bronze.metadata.pipelineconfig")
+# MAGIC         existing_df = spark.sql(f"SELECT TableName FROM {BRONZE_LAKEHOUSE}.metadata.pipelineconfig")
 # MAGIC         existing_tables = [row.TableName for row in existing_df.collect()]
 # MAGIC         return set(existing_tables)
 # MAGIC     except Exception as e:
@@ -239,7 +239,7 @@ BRONZE_LAKEHOUSE = "BRONZE_LAKEHOUSE_default"
 # MAGIC           .format("delta") \
 # MAGIC           .mode("append") \
 # MAGIC           .option("mergeSchema", "true") \
-# MAGIC           .saveAsTable("Master_Bronze.metadata.pipelineconfig")
+# MAGIC           .saveAsTable(f"{BRONZE_LAKEHOUSE}.metadata.pipelineconfig")
 # MAGIC         
 # MAGIC         print(f"✅ Successfully inserted {len(new_records)} records")
 # MAGIC         print(f"\n🎉 Seeding Complete!")
@@ -257,11 +257,14 @@ BRONZE_LAKEHOUSE = "BRONZE_LAKEHOUSE_default"
 # MAGIC ## Verify Results
 # MAGIC 
 # MAGIC print("\n🔍 Current PipelineConfig State:")
-# MAGIC current_config = spark.sql("""
+# MAGIC current_config_query = """
 # MAGIC     SELECT TableName, SchemaName, PrimaryKeyColumn, SyncEnabled, CreatedDate
-# MAGIC     FROM Master_Bronze.metadata.pipelineconfig
+# MAGIC     FROM {BRONZE_LAKEHOUSE}.metadata.pipelineconfig
 # MAGIC     ORDER BY TableName
-# MAGIC """)
+# MAGIC """.format(
+# MAGIC     BRONZE_LAKEHOUSE=BRONZE_LAKEHOUSE,
+# MAGIC )
+# MAGIC current_config = spark.sql(current_config_query)
 # MAGIC 
 # MAGIC print(f"\nTotal tables in PipelineConfig: {current_config.count()}")
 # MAGIC current_config.show(20, truncate=False)
