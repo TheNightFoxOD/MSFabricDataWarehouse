@@ -121,8 +121,11 @@ Manual Purge in Dataverse → Update Metadata → Next Sync Handles Automaticall
 ### Phase 4: Advanced Features & Recovery (Week 5)
 **Objective**: Checkpoint, recovery, and comprehensive error handling systems
 
-### Phase 5: Production Deployment (Week 6)
-**Objective**: ACC/UAT testing and production release
+### Phase 5: Production Deployment with Multi-Country Pilot (Weeks 6-8)
+**Objective**: Deploy production-ready multi-workspace infrastructure with 2-3 pilot countries in ACC and PROD (shadow mode)
+
+### Phase 6: Full Multi-Country Expansion (Future - Post-Pilot Validation)
+**Objective**: Scale validated pilot infrastructure to remaining 9 countries with enterprise consolidation
 
 ## Enhanced Feature & User Story Breakdown
 
@@ -192,15 +195,28 @@ Manual Purge in Dataverse → Update Metadata → Next Sync Handles Automaticall
 | SO-002 | As a data engineer, I need performance optimization for enhanced pipeline | 12h | - Query optimization<br>- Index tuning<br>- Pipeline timing optimization |
 | SO-003 | As a QA analyst, I need comprehensive integration testing | 8h | - All features tested together<br>- Load testing completed<br>- Performance benchmarks met |
 
-### Feature 7: Production Deployment
-**Estimated Effort**: 48 hours
+### Feature 7: Production Deployment with Multi-Country Pilot
+**Estimated Effort**: 92 hours
 
 | ID | Story | Estimate | Acceptance Criteria |
 |----|-------|----------|-------------------|
-| PD-001 | As a DevOps engineer, I need ACC environment setup with enhanced features | 16h | - Enhanced pipelines deployed to ACC<br>- Connections configured<br>- Security permissions set<br>- Test data scenarios ready |
-| PD-002 | As a QA analyst, I need comprehensive UAT test scenarios | 12h | - Test cases executed for all features<br>- Defects logged and fixed<br>- Business sign-off obtained |
-| PD-003 | As a DevOps engineer, I need production deployment | 8h | - Pipelines migrated<br>- Schedules activated<br>- Monitoring enabled |
-| PD-004 | As a support analyst, I need enhanced operational documentation | 12h | - Comprehensive runbook created<br>- Troubleshooting guide<br>- Training completed<br>- Support processes defined |
+| MC-001 | As a data engineer, I need workspace-agnostic code parameterization | 8h | - Pipeline parameters updated (Bronze, Dataverse_Staging)<br>- Notebook references updated<br>- Hardcoded lakehouse parameters removed<br>- Git commit completed<br>- Zero regression in Master workspace |
+| MC-002 | As a DevOps engineer, I need Deployment Pipeline infrastructure | 12h | - Deployment Pipeline created (Master → Countries)<br>- Three country stages configured<br>- Deployment rules for Dataverse connections<br>- Git sync → Deploy → Verify flow tested<br>- Initial deployment successful to all countries |
+| MC-003 | As a platform admin, I need pilot country workspace provisioning | 16h | - 2-3 country workspaces created<br>- Lakehouses created (Bronze, Dataverse_Staging)<br>- Dataverse connections configured<br>- Workspace permissions set<br>- Metadata schemas initialized |
+| PD-001 | As a DevOps engineer, I need ACC environment setup with multi-workspace | 16h | - Enhanced pipelines deployed to ACC (Master + Countries)<br>- Connections configured per workspace<br>- Security permissions set<br>- Test data scenarios ready |
+| PD-002 | As a QA analyst, I need comprehensive UAT and multi-workspace validation | 16h | - UAT scenarios executed across Master + Countries<br>- Data isolation validated<br>- Concurrent execution tested<br>- Audit trails verified per workspace |
+| PD-003 | As a DevOps engineer, I need production deployment to multiple workspaces | 12h | - Pipelines deployed to PROD (Master + Countries)<br>- Schedules activated for shadow mode<br>- Monitoring enabled per workspace<br>- Parallel operation to Dataverse confirmed |
+| PD-004 | As a support analyst, I need multi-workspace operational documentation | 12h | - Comprehensive runbook for multi-workspace<br>- Troubleshooting guide per country<br>- Workspace provisioning templates<br>- Country team training materials |
+
+### Feature 8: Full Multi-Country Expansion (Future)
+**Estimated Effort**: 72 hours
+
+| ID | Story | Estimate | Acceptance Criteria |
+|----|-------|----------|-------------------|
+| MC-005 | As a platform admin, I need remaining country workspace provisioning | 36h | - 9 additional country workspaces created<br>- Templated provisioning process<br>- Deployment Pipeline extended<br>- All workspaces operational |
+| MC-006 | As a data architect, I need enterprise aggregation workspace | 16h | - Enterprise workspace created<br>- OneLake shortcuts to all countries<br>- Consolidated views implemented<br>- RLS configured for reporting |
+| MC-007 | As a QA analyst, I need full multi-country testing and validation | 12h | - All 12 countries tested<br>- Enterprise consolidation validated<br>- Performance benchmarks per country<br>- Data governance verified |
+| MC-008 | As a platform admin, I need country team enablement | 8h | - Country-specific training delivered<br>- Self-service templates provided<br>- Support handover completed<br>- Monitoring across all countries |
 
 ## Enhanced Timeline & Milestones
 
@@ -230,10 +246,47 @@ Week 5: Advanced Features & Recovery
 ├── Wed-Thu: Comprehensive monitoring and rollback capabilities
 └── Fri: Scale testing and performance optimization
 
-Week 6: Production Deployment
-├── Mon-Tue: ACC environment with all enhanced features
-├── Wed-Thu: Comprehensive UAT execution and issue resolution
-└── Fri: Production deployment and operational handover
+Week 6: Multi-Country Infrastructure & Parameterization
+├── Mon-Tue: Workspace-agnostic code refactor (MC-001)
+├── Wed: Deployment Pipeline setup - Part 1 (MC-002)
+└── Thu-Fri: Deployment Pipeline setup - Part 2 & Country workspaces (MC-002, MC-003)
+
+Week 7: Multi-Workspace ACC Testing
+├── Mon: Complete pilot country workspace provisioning (MC-003)
+├── Tue-Wed: ACC environment setup for Master + Countries (PD-001)
+└── Thu-Fri: Comprehensive UAT and multi-workspace validation (PD-002)
+
+Week 8: Production Deployment with Shadow Mode
+├── Mon-Tue: Production workspace provisioning for pilot countries
+├── Wed-Thu: Production deployment and shadow mode activation (PD-003)
+└── Fri: Multi-workspace operational documentation and handover (PD-004)
+
+Future Phase (Post-Pilot Validation - 4-8 weeks shadow testing):
+Week 9-10: Full Multi-Country Expansion (Feature 8)
+├── Remaining 9 country workspaces provisioned (MC-005)
+├── Enterprise aggregation workspace (MC-006)
+├── Full multi-country testing (MC-007)
+└── Country team enablement (MC-008)
+```
+
+## Project Effort Summary
+
+| Phase | Original Effort | Multi-Country Additions | Total Effort |
+|-------|----------------|------------------------|--------------|
+| **Phase 1**: Foundation Setup | 40h | - | 40h |
+| **Phase 2**: Schema Management | 64h | - | 64h |
+| **Phase 3**: Core Synchronization | 72h | - | 72h |
+| **Phase 4**: Advanced Features | 96h | - | 96h |
+| **Phase 5**: Production + Multi-Country Pilot | 48h | +44h | 92h |
+| **Phase 6**: Full Multi-Country Expansion | - | 72h | 72h |
+| **TOTAL (Phase 1-5)** | 320h | +44h | **364h (45.5 days)** |
+| **TOTAL (with Phase 6)** | 320h | +116h | **436h (54.5 days)** |
+
+**Key Milestones**:
+- Week 5 End: Advanced features complete, ready for multi-country expansion
+- Week 8 End: Pilot countries operational in PROD shadow mode
+- Post-Pilot (+4-8 weeks): Validation period for production readiness decision
+- Phase 6 Completion: All 12 countries operational with enterprise consolidation
 ```
 
 ---
