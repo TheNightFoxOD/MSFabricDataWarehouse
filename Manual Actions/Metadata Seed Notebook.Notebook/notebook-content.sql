@@ -229,7 +229,7 @@ SELECT 'c3d4e5f6-g7h8-9012-3456-78901234cdef', 'activitypointer', 'dataverse', '
 -- MAGIC 
 -- MAGIC def check_existing_tables():
 -- MAGIC     try:
--- MAGIC         existing_df = spark.sql("SELECT TableName FROM Master_Bronze.metadata.pipelineconfig")
+-- MAGIC         existing_df = spark.sql("SELECT TableName FROM metadata.pipelineconfig")
 -- MAGIC         existing_tables = [row.TableName for row in existing_df.collect()]
 -- MAGIC         return set(existing_tables)
 -- MAGIC     except Exception as e:
@@ -280,7 +280,7 @@ SELECT 'c3d4e5f6-g7h8-9012-3456-78901234cdef', 'activitypointer', 'dataverse', '
 -- MAGIC           .format("delta") \
 -- MAGIC           .mode("append") \
 -- MAGIC           .option("mergeSchema", "true") \
--- MAGIC           .saveAsTable("Master_Bronze.metadata.pipelineconfig")
+-- MAGIC           .saveAsTable("metadata.pipelineconfig")
 -- MAGIC         
 -- MAGIC         print(f"✅ Successfully inserted {len(new_records)} records")
 -- MAGIC         print(f"\n🎉 Seeding Complete!")
@@ -300,7 +300,7 @@ SELECT 'c3d4e5f6-g7h8-9012-3456-78901234cdef', 'activitypointer', 'dataverse', '
 -- MAGIC print("\n🔍 Current PipelineConfig State:")
 -- MAGIC current_config = spark.sql("""
 -- MAGIC     SELECT TableName, SchemaName, PrimaryKeyColumn, SyncEnabled, CreatedDate
--- MAGIC     FROM Master_Bronze.metadata.pipelineconfig
+-- MAGIC     FROM metadata.pipelineconfig
 -- MAGIC     ORDER BY TableName
 -- MAGIC """)
 -- MAGIC 
@@ -380,7 +380,7 @@ SELECT 'c3d4e5f6-g7h8-9012-3456-78901234cdef', 'activitypointer', 'dataverse', '
 -- MAGIC def generate_pipeline_config_records(entities):
 -- MAGIC     """
 -- MAGIC     Generate PipelineConfig records from Dataverse entities
--- MAGIC     Schema based on: [Master_Bronze].[metadata].[pipelineconfig]
+-- MAGIC     Schema based on: [metadata].[pipelineconfig]
 -- MAGIC     """
 -- MAGIC     records = []
 -- MAGIC     current_time = datetime.now()
@@ -474,7 +474,7 @@ SELECT 'c3d4e5f6-g7h8-9012-3456-78901234cdef', 'activitypointer', 'dataverse', '
 -- MAGIC def check_existing_tables():
 -- MAGIC     """Check which tables already exist in pipelineconfig to prevent duplicates"""
 -- MAGIC     try:
--- MAGIC         existing_df = spark.sql("SELECT TableName FROM Master_Bronze.metadata.pipelineconfig")
+-- MAGIC         existing_df = spark.sql("SELECT TableName FROM metadata.pipelineconfig")
 -- MAGIC         existing_tables = [row.TableName for row in existing_df.collect()]
 -- MAGIC         return set(existing_tables)
 -- MAGIC     except Exception as e:
@@ -534,7 +534,7 @@ SELECT 'c3d4e5f6-g7h8-9012-3456-78901234cdef', 'activitypointer', 'dataverse', '
 -- MAGIC           .format("delta") \
 -- MAGIC           .mode("append") \
 -- MAGIC           .option("mergeSchema", "true") \
--- MAGIC           .saveAsTable("Master_Bronze.metadata.pipelineconfig")
+-- MAGIC           .saveAsTable("metadata.pipelineconfig")
 -- MAGIC         
 -- MAGIC         print(f"✅ Successfully inserted {len(new_records)} new records into pipelineconfig table")
 -- MAGIC         
@@ -564,8 +564,8 @@ SELECT 'c3d4e5f6-g7h8-9012-3456-78901234cdef', 'activitypointer', 'dataverse', '
 -- META {
 -- META   "language": "python",
 -- META   "language_group": "synapse_pyspark",
--- META   "frozen": true,
--- META   "editable": false
+-- META   "frozen": false,
+-- META   "editable": true
 -- META }
 
 -- CELL ********************

@@ -30,6 +30,7 @@ schema_name = "default_schema"
 pipeline_run_id = "default_run_id"
 pipeline_trigger_time = "2024-01-01T00:00:00Z"
 staging_lakehouse = "default_staging_lakehouse"
+bronze_lakehouse = "default_bronze_lakehouse"
 
 # METADATA ********************
 
@@ -69,7 +70,7 @@ results = {
 execution_start = datetime.now()
 safe_table_name = table_name.replace("'", "''")
 safe_schema_name = schema_name.replace("'", "''")
-full_table_name = f"{safe_schema_name}.{safe_table_name}"
+full_table_name = f"{bronze_lakehouse}.{safe_schema_name}.{safe_table_name}"
 staging_table_name = f"{staging_lakehouse}.dbo.{safe_table_name}"
 safe_pipeline_run_id = pipeline_run_id.replace("'", "''")
 
@@ -301,7 +302,7 @@ try:
     # Insert audit log entries
     if log_entries:
         sync_audit_df = spark.createDataFrame(log_entries, sync_audit_schema)
-        sync_audit_df.write.format("delta").mode("append").saveAsTable("metadata.SyncAuditLog")
+        sync_audit_df.write.format("delta").mode("append").saveAsTable(f"{bronze_lakehouse}.metadata.SyncAuditLog")
         print(f"✓ Inserted {len(log_entries)} audit log entries")
     else:
         print("No audit log entries to insert (no schema changes detected)")
@@ -355,7 +356,7 @@ except Exception as e:
         ])
         
         error_df = spark.createDataFrame(error_log, sync_audit_schema)
-        error_df.write.format("delta").mode("append").saveAsTable("metadata.SyncAuditLog")
+        error_df.write.format("delta").mode("append").saveAsTable(f"{bronze_lakehouse}.metadata.SyncAuditLog")
         print("✓ Error logged to SyncAuditLog")
     except Exception as log_error:
         print(f"Failed to log error to SyncAuditLog: {log_error}")

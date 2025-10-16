@@ -9,7 +9,7 @@
 # META   "dependencies": {
 # META     "lakehouse": {
 # META       "default_lakehouse": "4aee8a32-be91-489f-89f3-1a819b188807",
-# META       "default_lakehouse_name": "Master_Bronze",
+# META       "default_lakehouse_name": "Bronze",
 # META       "default_lakehouse_workspace_id": "b0f83c07-a701-49bb-a165-e06ca0ee4000",
 # META       "known_lakehouses": [
 # META         {
@@ -30,6 +30,7 @@ schema_name = "PARAM_NOT_SET_schema_name"
 primary_key_column = "PARAM_NOT_SET_primary_key_column"
 lookback_range = 1
 staging_lakehouse = "PARAM_NOT_SET_staging_lakehouse"
+bronze_lakehouse = "PARAM_NOT_SET_bronze_lakehouse"
 
 # METADATA ********************
 
@@ -52,7 +53,7 @@ from datetime import datetime
 
 try:
     # Build table names
-    target_table = f"Master_Bronze.{schema_name}.{table_name}"
+    target_table = f"{bronze_lakehouse}.{schema_name}.{table_name}"
     staging_table = f"{staging_lakehouse}.dbo.{table_name}"
 
     print(f"Starting MERGE operation:")

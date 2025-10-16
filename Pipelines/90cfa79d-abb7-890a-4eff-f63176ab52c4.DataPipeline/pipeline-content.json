@@ -514,6 +514,10 @@
                             "type": "Expression"
                           },
                           "type": "string"
+                        },
+                        "bronze_lakehouse": {
+                          "value": "@pipeline().parameters.bronze_lakehouse",
+                          "type": "string"
                         }
                       }
                     },
@@ -573,6 +577,10 @@
                             "value": "@pipeline().parameters.staging_lakehouse",
                             "type": "Expression"
                           },
+                          "type": "string"
+                        },
+                        "bronze_lakehouse": {
+                          "value": "@pipeline().parameters.bronze_lakehouse",
                           "type": "string"
                         }
                       }
@@ -698,6 +706,13 @@
                         "staging_lakehouse": {
                           "value": {
                             "value": "@pipeline().parameters.staging_lakehouse",
+                            "type": "Expression"
+                          },
+                          "type": "string"
+                        },
+                        "bronze_lakehouse": {
+                          "value": {
+                            "value": "@pipeline().parameters.bronze_lakehouse",
                             "type": "Expression"
                           },
                           "type": "string"

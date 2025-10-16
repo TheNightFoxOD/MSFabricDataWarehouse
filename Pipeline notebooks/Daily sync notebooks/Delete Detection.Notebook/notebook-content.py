@@ -9,7 +9,7 @@
 # META   "dependencies": {
 # META     "lakehouse": {
 # META       "default_lakehouse": "4aee8a32-be91-489f-89f3-1a819b188807",
-# META       "default_lakehouse_name": "Master_Bronze",
+# META       "default_lakehouse_name": "Bronze",
 # META       "default_lakehouse_workspace_id": "b0f83c07-a701-49bb-a165-e06ca0ee4000",
 # META       "known_lakehouses": [
 # META         {
@@ -30,6 +30,7 @@ table_name = "default_table_name"
 primary_key = "default_primary_key"
 last_purge_date = ""
 staging_lakehouse = "default_staging_lakehouse"
+bronze_lakehouse = "default_bronze_lakehouse"
 
 # METADATA ********************
 
@@ -67,7 +68,7 @@ def purge_aware_delete_detection():
     
     try:
         # Initialize variables
-        target_table = f"Master_Bronze.{schema_name}.{table_name}"
+        target_table = f"{bronze_lakehouse}.{schema_name}.{table_name}"
         staging_table = f"{staging_lakehouse}.dbo.{table_name}"
         
         print(f"Starting purge-aware detection for table: {target_table}")
