@@ -15,7 +15,7 @@
             },
             "schema": [],
             "linkedService": {
-              "name": "Master_Bronze",
+              "name": "Bronze",
               "properties": {
                 "type": "Lakehouse",
                 "typeProperties": {
@@ -128,7 +128,7 @@
                           },
                           "schema": [],
                           "linkedService": {
-                            "name": "Master_Bronze",
+                            "name": "Bronze",
                             "properties": {
                               "type": "Lakehouse",
                               "typeProperties": {
@@ -545,7 +545,7 @@
                           },
                           "schema": [],
                           "linkedService": {
-                            "name": "Master_Bronze",
+                            "name": "Bronze",
                             "properties": {
                               "type": "Lakehouse",
                               "typeProperties": {
@@ -612,7 +612,7 @@
                           },
                           "schema": [],
                           "linkedService": {
-                            "name": "Master_Bronze",
+                            "name": "Bronze",
                             "properties": {
                               "type": "Lakehouse",
                               "typeProperties": {

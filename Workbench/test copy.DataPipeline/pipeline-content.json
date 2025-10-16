@@ -31,7 +31,7 @@
               },
               "schema": [],
               "linkedService": {
-                "name": "Master_Bronze",
+                "name": "Bronze",
                 "properties": {
                   "type": "Lakehouse",
                   "typeProperties": {

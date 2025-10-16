@@ -9,7 +9,7 @@
 # META   "dependencies": {
 # META     "lakehouse": {
 # META       "default_lakehouse": "4aee8a32-be91-489f-89f3-1a819b188807",
-# META       "default_lakehouse_name": "Master_Bronze",
+# META       "default_lakehouse_name": "Bronze",
 # META       "default_lakehouse_workspace_id": "b0f83c07-a701-49bb-a165-e06ca0ee4000",
 # META       "known_lakehouses": [
 # META         {
@@ -23,7 +23,7 @@
 # CELL ********************
 
 # MAGIC %%sql
-# MAGIC truncate table Master_Bronze.dataverse.activitypointer
+# MAGIC truncate table Bronze.dataverse.activitypointer
 
 # METADATA ********************
 
@@ -37,7 +37,7 @@
 # CELL ********************
 
 # MAGIC %%sql
-# MAGIC truncate table Master_Bronze.dataverse.account
+# MAGIC truncate table Bronze.dataverse.account
 
 # METADATA ********************
 
@@ -51,7 +51,7 @@
 # CELL ********************
 
 # MAGIC %%sql
-# MAGIC truncate table Master_Bronze.dataverse.od_donation
+# MAGIC truncate table Bronze.dataverse.od_donation
 
 # METADATA ********************
 
@@ -65,7 +65,7 @@
 # CELL ********************
 
 # MAGIC %%sql
-# MAGIC truncate table Master_Bronze.metadata.checkpointhistory
+# MAGIC truncate table Bronze.metadata.checkpointhistory
 
 # METADATA ********************
 
@@ -77,7 +77,7 @@
 # CELL ********************
 
 # MAGIC %%sql
-# MAGIC truncate table Master_Bronze.metadata.datavalidation
+# MAGIC truncate table Bronze.metadata.datavalidation
 
 # METADATA ********************
 
@@ -89,7 +89,7 @@
 # CELL ********************
 
 # MAGIC %%sql
-# MAGIC truncate table Master_Bronze.metadata.pipelineconfig
+# MAGIC truncate table Bronze.metadata.pipelineconfig
 
 # METADATA ********************
 
@@ -103,7 +103,7 @@
 # CELL ********************
 
 # MAGIC %%sql
-# MAGIC truncate table Master_Bronze.metadata.syncauditlog
+# MAGIC truncate table Bronze.metadata.syncauditlog
 
 # METADATA ********************
 
@@ -117,7 +117,7 @@
 # CELL ********************
 
 # MAGIC %%sql
-# MAGIC -- select * from Master_Bronze.metadata.syncauditlog
+# MAGIC -- select * from Bronze.metadata.syncauditlog
 # MAGIC -- order by CreatedDate DESC
 # MAGIC 
 # MAGIC 
@@ -420,10 +420,10 @@
 # COMMAND ----------
 
 # Get all tables in the dataverse schema
-tables_df = spark.sql("SHOW TABLES IN Master_Bronze.dataverse")
+tables_df = spark.sql("SHOW TABLES IN Bronze.dataverse")
 tables = [row.tableName for row in tables_df.collect()]
 
-print(f"Found {len(tables)} tables in Master_Bronze.dataverse schema:")
+print(f"Found {len(tables)} tables in Bronze.dataverse schema:")
 for i, table in enumerate(tables, 1):
     print(f"  {i}. {table}")
 
@@ -434,7 +434,7 @@ if tables:
     print(f"\n🗑️  Dropping {len(tables)} tables...")
     for table in tables:
         try:
-            spark.sql(f"DROP TABLE IF EXISTS Master_Bronze.dataverse.{table}")
+            spark.sql(f"DROP TABLE IF EXISTS Bronze.dataverse.{table}")
             print(f"✅ Dropped: {table}")
         except Exception as e:
             print(f"❌ Error dropping {table}: {e}")
@@ -446,7 +446,7 @@ else:
 # COMMAND ----------
 
 # Verify all tables are gone
-remaining = spark.sql("SHOW TABLES IN Master_Bronze.dataverse")
+remaining = spark.sql("SHOW TABLES IN Bronze.dataverse")
 remaining_count = remaining.count()
 
 if remaining_count == 0:

@@ -9,7 +9,7 @@
 # META   "dependencies": {
 # META     "lakehouse": {
 # META       "default_lakehouse": "4aee8a32-be91-489f-89f3-1a819b188807",
-# META       "default_lakehouse_name": "Master_Bronze",
+# META       "default_lakehouse_name": "Bronze",
 # META       "default_lakehouse_workspace_id": "b0f83c07-a701-49bb-a165-e06ca0ee4000",
 # META       "known_lakehouses": [
 # META         {
@@ -39,7 +39,7 @@
 # CELL ********************
 
 # MAGIC %%sql
-# MAGIC describe TABLE  Master_Bronze.dataverse.account
+# MAGIC describe TABLE  Bronze.dataverse.account
 
 # METADATA ********************
 
@@ -140,7 +140,7 @@
 # CELL ********************
 
 # MAGIC %%sql
-# MAGIC drop table Master_Bronze.dataverse.od_donation
+# MAGIC drop table Bronze.dataverse.od_donation
 
 
 # METADATA ********************
