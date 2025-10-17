@@ -384,14 +384,29 @@ if (sync_operations["status"] == "success" and
     ])
     
     try:
+        # ==========================================
+        # Get actual Delta commit timestamp instead of wall-clock time
+        # ==========================================
+        from delta.tables import DeltaTable
+        
+        full_table_name = f"{schema_name}.{table_name}"
+        
+        # Get the latest Delta commit timestamp for this table
+        delta_table = DeltaTable.forName(spark, full_table_name)
+        latest_commit = delta_table.history(1).collect()[0]
+        checkpoint_timestamp = latest_commit.timestamp
+        
+        print(f"📍 Using actual Delta commit timestamp: {checkpoint_timestamp}")
+        print(f"   (Delta version: {latest_commit.version})")
+        
         retention_days = int(daily_checkpoint_retention_days)
-        retention_date = (end_time + timedelta(days=retention_days)).date()
+        retention_date = (checkpoint_timestamp + timedelta(days=retention_days)).date()
         
         checkpoint_entry = [(
             str(uuid.uuid4()),
-            f"bronze_backup_{end_time.strftime('%Y-%m-%d')}_{table_name}",  # Include table name
+            f"bronze_backup_{checkpoint_timestamp.strftime('%Y-%m-%d')}_{table_name}",  # Include table name
             'Daily',
-            end_time,
+            checkpoint_timestamp,  # ← uses actual Delta commit time, not end_time
             1,
             total_processed_records,
             'Validated',
@@ -407,6 +422,7 @@ if (sync_operations["status"] == "success" and
         execution_results["logs_written"]["checkpoint_history"] = 1
         checkpoint_created = True
         print(f"✅ Created checkpoint entry for {schema_name}.{table_name} with {total_processed_records} total processed records")
+        print(f"   Checkpoint timestamp: {checkpoint_timestamp} (actual Delta commit)")
         print(f"   Retention: {retention_days} days (expires {retention_date})")
         
     except Exception as e:

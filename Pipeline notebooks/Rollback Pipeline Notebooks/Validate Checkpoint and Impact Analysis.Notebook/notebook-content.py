@@ -309,6 +309,9 @@ total_checkpoint_deleted = 0
 total_current_purged = 0
 total_checkpoint_purged = 0
 
+from delta.tables import DeltaTable
+from pyspark.sql.functions import col as F_col, lit
+
 for idx, table_row in enumerate(tables_list, 1):
     schema_name = table_row.SchemaName
     table_name = table_row.TableName
@@ -336,9 +339,34 @@ for idx, table_row in enumerate(tables_list, 1):
         current_deleted = current.deleted_rows if current.deleted_rows else 0
         current_purged = current.purged_rows if current.purged_rows else 0
         
-        # Get DETAILED checkpoint state (ENHANCED)
-        checkpoint_timestamp_str = checkpoint.CreatedDate.strftime('%Y-%m-%dT%H:%M:%S')
+        # Get Delta table and find appropriate version
+        delta_table = DeltaTable.forName(spark, full_table_name)
         
+        # Find the latest version at or before checkpoint timestamp
+        checkpoint_dt = checkpoint.CreatedDate
+        
+        version_history = delta_table.history() \
+            .select("version", "timestamp") \
+            .filter(F_col("timestamp") <= lit(checkpoint_dt)) \
+            .orderBy(F_col("timestamp").desc()) \
+            .first()
+        
+        if not version_history:
+            warning_msg = "No Delta version found for {0} before checkpoint {1}".format(
+                table_name, checkpoint_dt
+            )
+            print("  ⚠ {0}".format(warning_msg))
+            warnings.append(warning_msg)
+            continue
+        
+        checkpoint_version = version_history.version
+        checkpoint_version_time = version_history.timestamp
+        
+        print("  Using version {0} (timestamp: {1})".format(
+            checkpoint_version, checkpoint_version_time
+        ))
+        
+        # Query using VERSION AS OF (more reliable than timestamp)
         checkpoint_query = """
             SELECT 
                 COUNT(*) as total_rows,
@@ -346,8 +374,8 @@ for idx, table_row in enumerate(tables_list, 1):
                 SUM(CASE WHEN COALESCE(IsDeleted, false) = true THEN 1 ELSE 0 END) as deleted_rows,
                 SUM(CASE WHEN COALESCE(IsPurged, false) = true THEN 1 ELSE 0 END) as purged_rows
             FROM {full_table_name}
-            TIMESTAMP AS OF '{checkpoint_timestamp_str}'
-        """.format(full_table_name=full_table_name, checkpoint_timestamp_str=checkpoint_timestamp_str)
+            VERSION AS OF {version}
+        """.format(full_table_name=full_table_name, version=checkpoint_version)
         
         checkpoint_df = spark.sql(checkpoint_query)
         checkpoint_row = checkpoint_df.collect()[0]
@@ -373,7 +401,6 @@ for idx, table_row in enumerate(tables_list, 1):
         
         # Calculate time span
         now = datetime.now()
-        checkpoint_dt = checkpoint.CreatedDate
         time_span_hours = (now - checkpoint_dt).total_seconds() / 3600
         time_span_days = time_span_hours / 24
         
@@ -384,6 +411,8 @@ for idx, table_row in enumerate(tables_list, 1):
         
         impact_analysis.append({
             "table_name": full_table_name,
+            "delta_version_used": checkpoint_version,
+            "delta_version_timestamp": str(checkpoint_version_time),
             "current_total_rows": current_total,
             "current_active_rows": current_active,
             "current_deleted_rows": current_deleted,
@@ -396,10 +425,11 @@ for idx, table_row in enumerate(tables_list, 1):
             "active_delta": active_delta,
             "deleted_delta": deleted_delta,
             "purged_delta": purged_delta,
-            "time_span": time_span,
-            "risk_level": risk_level
+            "risk_level": risk_level,
+            "time_span": time_span
         })
         
+        # Accumulate totals
         total_current_rows += current_total
         total_checkpoint_rows += checkpoint_total
         total_current_active += current_active
@@ -409,22 +439,30 @@ for idx, table_row in enumerate(tables_list, 1):
         total_current_purged += current_purged
         total_checkpoint_purged += checkpoint_purged
         
-        print("  Current: {0:,} rows ({1:,} active, {2:,} deleted, {3:,} purged)".format(
+        print("  ✓ Analysis complete")
+        print("    Current: {0:,} total ({1:,} active, {2:,} deleted, {3:,} purged)".format(
             current_total, current_active, current_deleted, current_purged
         ))
-        print("  Checkpoint: {0:,} rows ({1:,} active, {2:,} deleted, {3:,} purged)".format(
+        print("    Checkpoint: {0:,} total ({1:,} active, {2:,} deleted, {3:,} purged)".format(
             checkpoint_total, checkpoint_active, checkpoint_deleted, checkpoint_purged
         ))
-        print("  Delta: {0:+,} rows ({1:+,} active, {2:+,} deleted, {3:+,} purged)".format(
+        print("    Delta: {0:+,} total ({1:+,} active, {2:+,} deleted, {3:+,} purged)".format(
             rows_delta, active_delta, deleted_delta, purged_delta
         ))
-        print("  Time span: {0}".format(time_span))
-        print("  Risk: {0}".format(risk_level))
-    
+        print("    Risk: {0}".format(risk_level))
+        
     except Exception as e:
         error_msg = "Failed to analyze table '{0}': {1}".format(table_name, str(e))
         print("  ✗ {0}".format(error_msg))
         warnings.append(error_msg)
+        continue
+
+print("\n" + "="*60)
+print("Impact analysis completed for {0}/{1} tables".format(
+    len(impact_analysis), len(tables_list)
+))
+if len(warnings) > 0:
+    print("⚠ {0} warning(s) encountered".format(len(warnings)))
 
 # METADATA ********************
 

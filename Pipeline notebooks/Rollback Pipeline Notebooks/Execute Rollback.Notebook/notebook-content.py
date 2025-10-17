@@ -248,14 +248,24 @@ print("\n✓ Pre-rollback state captured for {0}/{1} table(s)".format(
 # STEP 2: Execute Delta Lake RESTORE for Each Table
 # ==========================================
 print("\n" + "="*60)
-print("STEP 2: Executing Delta Lake RESTORE")
+print("STEP 2: Executing Delta Lake RESTORE (VERSION-BASED)")
 print("="*60)
-print("Target Timestamp: {0}".format(checkpoint_timestamp))
+print("Target Checkpoint Timestamp: {0}".format(checkpoint_timestamp))
 print("="*60)
 
 restoration_details = []
 tables_succeeded = 0
 tables_failed = 0
+
+# Parse checkpoint timestamp
+try:
+    checkpoint_dt = datetime.fromisoformat(checkpoint_timestamp)
+except Exception as e:
+    # Try alternative formats
+    try:
+        checkpoint_dt = datetime.strptime(checkpoint_timestamp, '%Y-%m-%d %H:%M:%S.%f')
+    except:
+        checkpoint_dt = datetime.strptime(checkpoint_timestamp, '%Y-%m-%d %H:%M:%S')
 
 for idx, table_name in enumerate(table_list, 1):
     print("\n[{0}/{1}] Restoring: {2}".format(idx, len(table_list), table_name))
@@ -263,9 +273,33 @@ for idx, table_name in enumerate(table_list, 1):
     restore_start = datetime.now()
     
     try:
-        # Execute RESTORE TABLE command
-        restore_command = "RESTORE TABLE {0} TO TIMESTAMP AS OF '{1}'".format(
-            table_name, checkpoint_timestamp
+        # ========================================
+        # Find correct Delta version to restore to
+        # ========================================
+        delta_table = DeltaTable.forName(spark, table_name)
+        
+        # Find the latest version at or before checkpoint timestamp
+        version_history = delta_table.history() \
+            .select("version", "timestamp") \
+            .filter(col("timestamp") <= lit(checkpoint_dt)) \
+            .orderBy(col("timestamp").desc()) \
+            .first()
+        
+        if not version_history:
+            raise ValueError("No Delta version found for {0} before checkpoint {1}".format(
+                table_name, checkpoint_dt
+            ))
+        
+        target_version = version_history.version
+        target_version_time = version_history.timestamp
+        
+        print("  Target version: {0} (timestamp: {1})".format(
+            target_version, target_version_time
+        ))
+        
+        # Execute RESTORE TABLE using VERSION AS OF
+        restore_command = "RESTORE TABLE {0} TO VERSION AS OF {1}".format(
+            table_name, target_version
         )
         
         print("  Command: {0}".format(restore_command))
@@ -275,8 +309,7 @@ for idx, table_name in enumerate(table_list, 1):
         restore_end = datetime.now()
         duration_seconds = (restore_end - restore_start).total_seconds()
         
-        # Get DETAILED post-restore state (total + breakdown)
-        # CRITICAL: Use COALESCE to handle NULL values (NULL = false for boolean flags)
+        # Get DETAILED post-restore state
         post_state_query = """
             SELECT 
                 COUNT(*) as total_rows,
@@ -303,6 +336,7 @@ for idx, table_name in enumerate(table_list, 1):
         
         print("  ✓ Restore successful!")
         print("    Duration: {0:.2f} seconds".format(duration_seconds))
+        print("    Restored to version: {0}".format(target_version))
         print("    Post-restore: {0:,} total ({1:,} active, {2:,} deleted, {3:,} purged)".format(
             post_total, post_active, post_deleted, post_purged
         ))
@@ -310,8 +344,8 @@ for idx, table_name in enumerate(table_list, 1):
         
         # Log success to audit trail
         log_id = "{0}_{1}_restore".format(pipeline_run_id, table_name.replace('.', '_'))
-        notes = "Restored to checkpoint: {0}. Duration: {1:.2f}s".format(
-            checkpoint_name, duration_seconds
+        notes = "Restored to checkpoint: {0} (version {1}). Duration: {2:.2f}s".format(
+            checkpoint_name, target_version, duration_seconds
         )
         notes_escaped = notes.replace("'", "''")
         
@@ -348,6 +382,8 @@ for idx, table_name in enumerate(table_list, 1):
         restoration_details.append({
             "table_name": table_name,
             "status": "Success",
+            "target_version": target_version,
+            "target_version_timestamp": str(target_version_time),
             "duration_seconds": round(duration_seconds, 2),
             "post_restore_total": post_total,
             "post_restore_active": post_active,
@@ -370,10 +406,10 @@ for idx, table_name in enumerate(table_list, 1):
         error_msg_escaped = error_msg.replace("'", "''")
         log_id = "{0}_{1}_restore".format(pipeline_run_id, table_name.replace('.', '_'))
         
-        insert_error_query = """
+        insert_failure_query = """
             INSERT INTO metadata.SyncAuditLog (
                 LogId, PipelineRunId, PipelineName, TableName, Operation,
-                StartTime, EndTime, RowsProcessed, Status, ErrorMessage, RetryCount, CreatedDate
+                StartTime, EndTime, Status, ErrorMessage, RetryCount, CreatedDate
             ) VALUES (
                 '{log_id}',
                 '{pipeline_run_id}',
@@ -382,7 +418,6 @@ for idx, table_name in enumerate(table_list, 1):
                 'TableRestore',
                 timestamp'{start_time}',
                 timestamp'{end_time}',
-                0,
                 'Error',
                 '{error_msg_escaped}',
                 0,
@@ -396,11 +431,14 @@ for idx, table_name in enumerate(table_list, 1):
             end_time=restore_end.strftime('%Y-%m-%d %H:%M:%S'),
             error_msg_escaped=error_msg_escaped
         )
-        spark.sql(insert_error_query)
+        spark.sql(insert_failure_query)
         
+        # Store failed restoration result
         restoration_details.append({
             "table_name": table_name,
             "status": "Failed",
+            "target_version": None,
+            "target_version_timestamp": None,
             "duration_seconds": round(duration_seconds, 2),
             "post_restore_total": None,
             "post_restore_active": None,

@@ -157,20 +157,89 @@ except Exception as e:
 # CELL ********************
 
 # ==============================================================================
-# CELL 3: Create Batch Checkpoint Entry (Conditional)
+# CELL 3: Create Batch Checkpoint Entry
 # ==============================================================================
 
 if not should_create_checkpoint:
     print("\n⏭️  Skipping batch checkpoint creation (cell 3)")
 else:
-    # Prepare batch checkpoint data
-    end_time = datetime.utcnow()
+    from delta.tables import DeltaTable
+    
     checkpoint_id = str(uuid.uuid4())
-    checkpoint_name = f"bronze_backup_batch_{end_time.strftime('%Y-%m-%d')}"
+    
+    # ========================================
+    # Use ACTUAL Delta commit timestamps, not wall-clock time
+    # ========================================
+    
+    print(f"\n🔍 Finding actual Delta commit timestamps for checkpoint...")
+    print("="*80)
+    
+    # Query all tables that were processed in this run
+    tables_query = f"""
+        SELECT DISTINCT SchemaName, TableName
+        FROM metadata.CheckpointHistory
+        WHERE PipelineRunId = '{pipeline_run_id}'
+        AND CheckpointType = 'Daily'
+    """
+    
+    tables_in_run = spark.sql(tables_query).collect()
+    
+    # Get the latest Delta commit timestamp across all tables
+    latest_delta_commit = None
+    earliest_delta_commit = None
+    table_timestamps = []
+    
+    for table_row in tables_in_run:
+        schema_name = table_row.SchemaName
+        table_name = table_row.TableName
+        full_table_name = f"{schema_name}.{table_name}"
+        
+        try:
+            # Get the latest Delta commit timestamp for this table
+            delta_table = DeltaTable.forName(spark, full_table_name)
+            history = delta_table.history(1)  # Get only latest commit
+            
+            if history.count() > 0:
+                latest_commit = history.collect()[0]
+                commit_timestamp = latest_commit.timestamp
+                
+                table_timestamps.append({
+                    "table": full_table_name,
+                    "timestamp": commit_timestamp,
+                    "version": latest_commit.version
+                })
+                
+                print(f"   {full_table_name}: version {latest_commit.version} at {commit_timestamp}")
+                
+                # Track earliest and latest across all tables
+                if latest_delta_commit is None or commit_timestamp > latest_delta_commit:
+                    latest_delta_commit = commit_timestamp
+                
+                if earliest_delta_commit is None or commit_timestamp < earliest_delta_commit:
+                    earliest_delta_commit = commit_timestamp
+        
+        except Exception as e:
+            print(f"   ⚠️  Warning: Could not get Delta timestamp for {full_table_name}: {str(e)}")
+            continue
+    
+    # Use the LATEST Delta commit timestamp as the checkpoint timestamp
+    # This ensures the checkpoint timestamp is never AFTER the last actual data change
+    if latest_delta_commit is None:
+        print("\n❌ ERROR: Could not determine Delta commit timestamps for any tables")
+        print("   Falling back to current time (this may cause rollback issues)")
+        checkpoint_timestamp = datetime.utcnow()
+    else:
+        checkpoint_timestamp = latest_delta_commit
+        print(f"\n✅ Checkpoint timestamp determined from actual Delta commits:")
+        print(f"   Earliest table commit: {earliest_delta_commit}")
+        print(f"   Latest table commit: {latest_delta_commit}")
+        print(f"   Using: {checkpoint_timestamp} (latest commit)")
+    
+    checkpoint_name = f"bronze_backup_batch_{checkpoint_timestamp.strftime('%Y-%m-%d_%H%M%S')}"
     
     # Use configurable retention period
     retention_days = int(batch_checkpoint_retention_days)
-    retention_date = (end_time + timedelta(days=retention_days)).date()
+    retention_date = (checkpoint_timestamp + timedelta(days=retention_days)).date()
     
     print(f"\n🔄 Creating Batch Checkpoint:")
     print("="*80)
@@ -178,9 +247,9 @@ else:
     print(f"   Checkpoint Name: {checkpoint_name}")
     print(f"   Tables Included: {tables_included}")
     print(f"   Total Rows: {total_rows:,}")
+    print(f"   Checkpoint Timestamp: {checkpoint_timestamp} (from actual Delta commits)")
     print(f"   Retention Period: {retention_days} days")
     print(f"   Retention Date: {retention_date}")
-    print(f"   Created Date: {end_time}")
     print("="*80)
     
     # Define schema matching CheckpointHistory table
@@ -200,12 +269,12 @@ else:
     ])
     
     try:
-        # Create batch checkpoint entry
+        # Create batch checkpoint entry with CORRECT timestamp
         batch_checkpoint = [(
             checkpoint_id,
             checkpoint_name,
             'DailyBatch',
-            end_time,
+            checkpoint_timestamp,  # ← Now uses actual Delta commit time, not wall-clock time
             int(tables_included),
             int(total_rows),
             'Validated',
@@ -228,8 +297,14 @@ else:
         print(f"\n📋 Checkpoint Details:")
         print(f"   ID: {checkpoint_id}")
         print(f"   Name: {checkpoint_name}")
+        print(f"   Timestamp: {checkpoint_timestamp} (from actual Delta commits)")
         print(f"   Tables: {tables_included}")
         print(f"   Rows: {total_rows:,}")
+        
+        # Also log the per-table timestamps for audit trail
+        print(f"\n📊 Per-Table Delta Timestamps:")
+        for table_info in sorted(table_timestamps, key=lambda x: x['timestamp']):
+            print(f"   {table_info['table']}: v{table_info['version']} @ {table_info['timestamp']}")
         
     except Exception as e:
         error_msg = f"Failed to create batch checkpoint: {str(e)}"
